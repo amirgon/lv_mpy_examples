@@ -1,0 +1,26 @@
+#!/opt/ucc/micros/esp32/lv_micropython/ports/unix/lv_micropython
+import lvgl as lv
+import init_gui
+
+def increment_event_cb(source,evt):
+    if evt == lv.event.SHORT_CLICKED or evt == lv.event.LONG_PRESSED_REPEAT:
+        spinbox.increment()
+        
+def decrement_event_cb(source,evt):
+    if evt == lv.event.SHORT_CLICKED or evt == lv.event.LONG_PRESSED_REPEAT:
+        spinbox.decrement()
+
+spinbox = lv.spinbox(lv.scr_act(),None)
+spinbox.set_range(-1000,90000)
+spinbox.set_digit_format(5,2)
+spinbox.step_prev()
+spinbox.set_width(100)
+spinbox.align(None,lv.ALIGN.CENTER,0,0)
+
+h = spinbox.get_height()
+btn = lv.btn(lv.scr_act(),None)
+btn.set_size(h,h)
+btn.align(spinbox,lv.ALIGN.OUT_RIGHT_MID, 5, 0)
+
+while True:
+    pass
