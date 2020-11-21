@@ -14,6 +14,7 @@ LV_LED_BRIGHT_MAX = 255
 SDL.init(w=480,h=320)
 
 LV_DPI =130
+LV_ANIM_REPEAT_INFINITE = -1
 
 # Register SDL display driver.
         
@@ -35,7 +36,7 @@ indev_drv.init()
 indev_drv.type = lv.INDEV_TYPE.POINTER
 indev_drv.read_cb = SDL.mouse_read
 indev_drv.register()
-print("Running the Unix version")
+# print("Running the Unix version")
 
 # Create a screen and load it
 scr=lv.obj()
@@ -54,6 +55,15 @@ def LV_DPX(n):
         return tmp
     else:
         return 1
+    
+def color_chg_event_cb(sw, e):
+    if e == lv.EVENT.VALUE_CHANGED:
+        flag = lv.THEME_MATERIAL_FLAG.LIGHT
+        if sw.get_state():
+            flag=lv.THEME_MATERIAL_FLAG.DARK
+        theme = lv.theme_material_init(LV_THEME_DEFAULT_COLOR_PRIMARY,LV_THEME_DEFAULT_COLOR_SECONDARY,flag,
+                                       lv.theme_get_font_small(), lv.theme_get_font_normal(), lv.theme_get_font_subtitle(),
+                                       lv.theme_get_font_title())   
 def slider_event_cb(slider, e):
     if e == lv.EVENT.VALUE_CHANGED:
         if slider.get_type() == lv.slider.TYPE.NORMAL:
@@ -63,35 +73,62 @@ def slider_event_cb(slider, e):
             slider_left=slider.get_left_value()
             slider_right=slider.get_value()
             slider_string = str(slider_left) + '-' + str(slider_right)
-            print("slider left value: %d, slider right value: %d"%(slider_left,slider_right))
+            # print("slider left value: %d, slider right value: %d"%(slider_left,slider_right))
             slider.set_style_local_value_str(lv.slider.PART.INDIC, lv.STATE.DEFAULT, slider_string)
             
-def linemeter_anim(linemeter, value):
-    linemeter.set_value(value)
-
-    value_string=str(value)
-    label = linemeter.get_child(None)
-    label.set_text(value_string)
-    label.align(linemeter, lv.ALIGN.CENTER, 0, 0)
-
-def bar_anim(task,bar):
-    x = bar.get_value()
-    max_value = bar.get_max_value()
-    x += 1
-    if x > max_value:
-        x=0
-    cpy_string = "Copying %d/%d"% (x, bar.get_max_value())
-    bar.set_style_local_value_str(lv.bar.PART.BG, lv.STATE.DEFAULT, cpy_string)
-    bar.set_value(x, lv.ANIM.OFF)
+def linemeter_anim(a,lmeter, value):
+    lmeter.set_value(value)
+    label = lmeter.get_child(None)
+    label.set_text(str(value))
+    label.align(lmeter, lv.ALIGN.CENTER, 0, 0)
     
-def arc_anim(task,arc):
-    x = arc.get_value()
-    max_value = arc.get_max_value()
-    x += 1
-    if x > max_value:
-        x=0
+def gauge_anim(a,gauge,val):
+    gauge.set_value(0,val)
+    label=gauge.get_child(None)
+    label.set_text(str(val))
+    label.align(gauge, lv.ALIGN.CENTER, 0, 0)
+    
+def bar_anim(task,bar):
+    val = bar.get_value()
+    # print("bar value: ",val)
+    max_value =  bar.get_max_value()
+    val += 1
+    if val > max_value:
+        val=0
+    bar.set_value(val,lv.ANIM.OFF)    
+    cpy_string = "Copying %d/%d"% (val, max_value)
+    # print(cpy_string)
+    bar.set_style_local_value_str(lv.bar.PART.BG, lv.STATE.DEFAULT, cpy_string)
+    
+def arc_phase1_ready_cb(a,arc):
+    a_arc=lv.anim_t()
+    a_arc.init()
+    a_arc.set_custom_exec_cb(lambda a_arc, val: anim_phase2(a_arc,arc,val))
+    a_arc.set_values(360, 0)
+    a_arc.set_time(1000)
+    a_arc.set_ready_cb(lambda a: arc_phase2_ready_cb(a,arc))
+    lv.anim_t.start(a_arc)
+
+def arc_phase2_ready_cb(a,arc):
+    a_arc=lv.anim_t()
+    a_arc.init()
+    a_arc.set_custom_exec_cb(lambda a_arc, val: anim_phase1(a_arc,arc,val))
+    a_arc.set_time(1000)
+    a_arc.set_values(0, 360)
+    a_arc.set_ready_cb(lambda a: arc_phase1_ready_cb(a,arc))
+    lv.anim_t.start(a_arc)
+    
+def anim_phase1(a,arc,val):
+    arc.set_end_angle(val)
     label = arc.get_child(None)
-    label.set_text(str(x))   
+    label.set_text(str(val))
+    label.align(arc, lv.ALIGN.CENTER, 0, 0)
+    
+def anim_phase2(a,arc,val):
+    arc.set_end_angle(val)
+    label = arc.get_child(None)
+    label.set_text(str(val))
+    label.align(arc, lv.ALIGN.CENTER, 0, 0)
     
 def controls_create(parent):
     lv.page.set_scrl_layout(lv.page.__cast__(parent), lv.LAYOUT.PRETTY_TOP)
@@ -113,10 +150,10 @@ def controls_create(parent):
     disp_size = display.get_size_category()   
     if disp_size <=  lv.DISP_SIZE.SMALL:
         grid_w= lv.page.get_width_grid(lv.page.__cast__(parent),1,1)
-        print("grid_w: ",grid_w)
+        # print("grid_w: ",grid_w)
     else:
         grid_w= lv.page.get_width_grid(lv.page.__cast__(parent),2,1)
-        print("grid_w: ",grid_w)
+        # print("grid_w: ",grid_w)
 
     h.set_fit2(lv.FIT.NONE, lv.FIT.TIGHT)
     h.set_width(grid_w)
@@ -126,7 +163,7 @@ def controls_create(parent):
         button_width=h.get_width_grid(1,1)
     else:
         button_width=h.get_width_grid(2,1)
-    print("button_width: %d"%button_width)
+    # print("button_width: %d"%button_width)
     
     btn.set_width(button_width)
     label = lv.label(btn, None)
@@ -314,6 +351,15 @@ def visuals_create(parent):
     label.align(lmeter, lv.ALIGN.CENTER, 0, 0)
     label.set_style_local_text_font(lv.label.PART.MAIN, lv.STATE.DEFAULT, lv.theme_get_font_title());
 
+    a_lm=lv.anim_t()
+    a_lm.init()
+    a_lm.set_custom_exec_cb(lambda a, val: linemeter_anim(a,lmeter,val))
+    a_lm.set_values(0, 100)
+    a_lm.set_time(4000)
+    a_lm.set_playback_time(1000)
+    a_lm.set_repeat_count(LV_ANIM_REPEAT_INFINITE)
+    lv.anim_t.start(a_lm)
+    
     gauge = lv.gauge(parent, None)
     gauge.set_drag_parent(True)
     gauge.set_size(meter_size, meter_size)
@@ -323,11 +369,17 @@ def visuals_create(parent):
     label = lv.label(gauge, label)
     label.align(gauge, lv.ALIGN.CENTER, 0, grid_w_meter // 3)
 
-    #lv_anim_set_var(&a, gauge);
-    #lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)gauge_anim);
-    #lv_anim_start(&a);
-
-    arc = lv.arc(parent, None)
+    a_ga=lv.anim_t()
+    a_ga.init()
+    a_ga.set_custom_exec_cb(lambda a, val: linemeter_anim(a,lmeter,val))
+    a_ga.set_values(0, 100)
+    a_ga.set_time(4000)
+    a_ga.set_playback_time(1000)
+    a_ga.set_repeat_count(LV_ANIM_REPEAT_INFINITE)
+    a_ga.set_custom_exec_cb(lambda a, val: gauge_anim(a,gauge,val))
+    lv.anim_t.start(a_ga)
+    
+    arc = lv.arc(parent,None)
     arc.set_drag_parent(True)
     arc.set_bg_angles(0, 360)
     arc.set_rotation(270)
@@ -336,16 +388,18 @@ def visuals_create(parent):
     arc.add_style(lv.arc.PART.BG, style_box)
     arc.set_style_local_value_str(lv.arc.PART.BG, lv.STATE.DEFAULT, "Arc");
 
-    label = lv.label(label)
+    label = lv.label(arc)
     label.align(arc, lv.ALIGN.CENTER, 0, 0)
 
-    '''
-    lv_anim_set_var(&a, arc);
-    lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)arc_anim);
-    lv_anim_set_values(&a, 0, 360);
-    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
-    lv_anim_start(&a);
-'''
+    a_arc=lv.anim_t()
+    a_arc.init()
+    a_arc.set_custom_exec_cb(lambda a_arc, val: anim_phase1(a_arc,arc,val))
+    a_arc.set_values(0, 360)
+    a_arc.set_ready_cb(lambda a: arc_phase1_ready_cb(a,arc))
+    # a_arc.set_repeat_count(LV_ANIM_REPEAT_INFINITE)
+    a_arc.set_time(1000)
+    lv.anim_t.start(a_arc)
+
     # Create a bar and use the backgrounds value style property to display the current value
     bar_h = lv.cont(parent, None)
     bar_h.set_fit2(lv.FIT.NONE, lv.FIT.TIGHT)
@@ -359,14 +413,14 @@ def visuals_create(parent):
     else:
         bar_h.set_width(lv.page.get_width_grid(parent, 3, 2))
     
-    bar = lv.bar(bar_h, None)
+    bar = lv.bar(bar_h,None)
     bar.set_width(lv.cont.get_width_fit(bar_h))
     bar.set_style_local_value_font(lv.bar.PART.BG, lv.STATE.DEFAULT, lv.theme_get_font_small())
     bar.set_style_local_value_align(lv.bar.PART.BG, lv.STATE.DEFAULT, lv.ALIGN.OUT_BOTTOM_MID)
     bar.set_style_local_value_ofs_y(lv.bar.PART.BG, lv.STATE.DEFAULT, LV_DPI // 20)
     bar.set_style_local_margin_bottom(lv.bar.PART.BG, lv.STATE.DEFAULT, LV_DPI // 7)
     bar.align(None, lv.ALIGN.CENTER, 0, 0)
-    bar.set_value(0,lv.ANIM.OFF)
+    bar.set_value(30,lv.ANIM.OFF)
     
     led_h = lv.cont(parent, None)
     led_h.set_layout(lv.LAYOUT.PRETTY_MID)
@@ -396,23 +450,11 @@ def visuals_create(parent):
     if disp_size == lv.DISP_SIZE.MEDIUM:
         led_h.add_protect(lv.PROTECT.POS)
         led_h.align(bar_h, lv.ALIGN.OUT_BOTTOM_MID, 0, lv.obj.get_style_margin_top(lv.obj.__cast__(led_h), lv.obj.PART.MAIN) + lv.obj.get_style_pad_inner(parent, lv.page.PART.SCROLLABLE))
-    
+
     task = lv.task_create_basic()
     task.set_cb(lambda task: bar_anim(task, bar))
     task.set_period(100)
     task.set_prio(lv.TASK_PRIO.LOWEST)
-
-'''
-    a=lv.anim_t()
-    a.init()
-    a.set_var(lmeter)
-    a.set_exec_cb(lambda obj,val :linemeter_anim(lmeter,val))
-    a.set_values(0, 100)
-    a.set_time(4000)
-    a.set_playback_time(1000)
-    a.set_repeat_count(lv.anim.REPEAT_INFINITE);
-    a.start()
-'''
 
 def selectors_create(parent):
     page = lv.page.__cast__(parent)
@@ -505,7 +547,10 @@ disp_size = display.get_size_category()
 tv.set_style_local_pad_left(lv.tabview.PART.TAB_BG, lv.STATE.DEFAULT, disp_drv.hor_res // 2)
 
 sw = lv.switch(lv.scr_act(), None)
-sw.set_pos(5, 10)
+if lv.theme_get_flags() & lv.THEME_MATERIAL_FLAG.DARK:
+   sw.on(LV_ANIM_OFF)
+sw.set_event_cb(color_chg_event_cb)   
+sw.set_pos(LV_DPX(10), LV_DPX(10))
 sw.set_style_local_value_str(lv.switch.PART.BG, lv.STATE.DEFAULT, "Dark")
 sw.set_style_local_value_align(lv.switch.PART.BG, lv.STATE.DEFAULT, lv.ALIGN.OUT_RIGHT_MID)
 sw.set_style_local_value_ofs_x(lv.switch.PART.BG, lv.STATE.DEFAULT, LV_DPI//35)
@@ -516,7 +561,7 @@ t3 = tv.add_tab("Selectors")
 
 style_box = lv.style_t()
 style_box.init()
-print("LV_DPX(10): %d, LV_DPX(10): %d"%(LV_DPX(10),LV_DPX(30)))
+# print("LV_DPX(10): %d, LV_DPX(10): %d"%(LV_DPX(10),LV_DPX(30)))
 style_box.set_value_align(lv.STATE.DEFAULT, lv.ALIGN.OUT_TOP_LEFT)
 style_box.set_value_ofs_y(lv.STATE.DEFAULT, - LV_DPX(10))
 style_box.set_margin_top(lv.STATE.DEFAULT, LV_DPX(30))
@@ -527,4 +572,4 @@ selectors_create(t3)
 
 while True:
     lv.task_handler()
-    time.sleep_ms(50)
+    time.sleep_ms(5)
