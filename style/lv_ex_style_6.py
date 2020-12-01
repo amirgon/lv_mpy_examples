@@ -7,17 +7,17 @@ import time
 #
 import lvgl as lv
 import init_gui
-from lv_colors import *
+from lv_colors import lv_colors
 
 style = lv.style_t()
 style.init()
 # Set a background color and a radius
 style.set_radius(lv.STATE.DEFAULT, 5)
 style.set_bg_opa(lv.STATE.DEFAULT, lv.OPA.COVER)
-style.set_bg_color(lv.STATE.DEFAULT, LV_COLOR_SILVER)
+style.set_bg_color(lv.STATE.DEFAULT, lv_colors.SILVER)
 
 # Add a value text properties
-style.set_value_color(lv.STATE.DEFAULT, LV_COLOR_BLUE)
+style.set_value_color(lv.STATE.DEFAULT, lv_colors.BLUE)
 style.set_value_align(lv.STATE.DEFAULT, lv.ALIGN.IN_BOTTOM_RIGHT)
 style.set_value_ofs_x(lv.STATE.DEFAULT, 10)
 style.set_value_ofs_y(lv.STATE.DEFAULT, 10)

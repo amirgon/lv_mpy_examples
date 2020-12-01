@@ -2,7 +2,7 @@
 import lvgl as lv
 import init_gui
 import time
-from lv_colors import *
+from lv_colors import lv_colors
 
 welcome_info = "Welcome to the modal message box demo!\nPress the button to display a message box."
 in_msg_info = "Notice that you cannot touch the button again while the message box is open."
@@ -59,7 +59,7 @@ def btn_event_cb(btn,evt):
         
 style_modal = lv.style_t()
 style_modal.init()
-style_modal.set_bg_color(lv.STATE.DEFAULT, LV_COLOR_BLACK)
+style_modal.set_bg_color(lv.STATE.DEFAULT, lv_colors.BLACK)
 
 # Create a button, then set its position and event callback */
 btn = lv.btn(lv.scr_act(), None)

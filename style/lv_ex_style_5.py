@@ -1,4 +1,4 @@
-#!/opt/bin/micropython
+#!/opt/bin/lv_micropython
 # change the above to the path of your lv_micropython unix binary
 #
 import time
@@ -7,7 +7,7 @@ import time
 #
 import lvgl as lv
 import init_gui
-from lv_colors import *
+from lv_colors import lv_colors
 
 style = lv.style_t()
 style.init()
@@ -15,11 +15,11 @@ style.init()
 # Set a background color and a radius
 style.set_radius(lv.STATE.DEFAULT, 5)
 style.set_bg_opa(lv.STATE.DEFAULT, lv.OPA.COVER)
-style.set_bg_color(lv.STATE.DEFAULT, LV_COLOR_SILVER)
+style.set_bg_color(lv.STATE.DEFAULT, lv_colors.SILVER)
 
 # Add a repeating pattern
 style.set_pattern_image(lv.STATE.DEFAULT, lv.SYMBOL.OK)
-style.set_pattern_recolor(lv.STATE.DEFAULT, LV_COLOR_BLUE)
+style.set_pattern_recolor(lv.STATE.DEFAULT, lv_colors.BLUE)
 style.set_pattern_opa(lv.STATE.DEFAULT, lv.OPA._50);
 style.set_pattern_repeat(lv.STATE.DEFAULT, True)
 

@@ -1,7 +1,7 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
 import init_gui
-from lv_colors import *
+from lv_colors import lv_colors
 import time
 
 # Create an array for the points of the line
@@ -15,7 +15,7 @@ line_points = [ {"x":5, "y":5},
 style_line = lv.style_t()
 style_line.init()
 style_line.set_line_width(lv.STATE.DEFAULT, 8)
-style_line.set_line_color(lv.STATE.DEFAULT, LV_COLOR_BLUE)
+style_line.set_line_color(lv.STATE.DEFAULT, lv_colors.BLUE)
 style_line.set_line_rounded(lv.STATE.DEFAULT, True)
 
 # Copy the previous line and apply the new style

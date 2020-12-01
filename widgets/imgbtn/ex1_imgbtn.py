@@ -2,7 +2,7 @@
 import lvgl as lv
 import init_gui
 import time
-from lv_colors import *
+from lv_colors import lv_colors
 
 with open('imgbtn_green_map.bin','rb') as f:
     green_img_data = f.read()
@@ -33,8 +33,8 @@ imgbtn_blue_dsc = lv.img_dsc_t(
 style=lv.style_t()
 style.init()
 style.set_image_recolor_opa(lv.STATE.PRESSED, lv.OPA._30)
-style.set_image_recolor(lv.STATE.PRESSED, LV_COLOR_BLACK)
-style.set_text_color(lv.STATE.DEFAULT, LV_COLOR_WHITE)
+style.set_image_recolor(lv.STATE.PRESSED, lv_colors.BLACK)
+style.set_text_color(lv.STATE.DEFAULT, lv_colors.WHITE)
 
 # Create an Image button
 imgbtn1 = lv.imgbtn(lv.scr_act(), None)

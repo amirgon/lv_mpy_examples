@@ -1,8 +1,8 @@
-#!//opt/ucc/micros/esp32/lv_micropython/ports/unix/lv_micropython
+#!//opt/bin/lv_micropython
 import lvgl as lv
 import init_gui
 import time
-from l_colors import *
+from lv_colors import lv_colors
 
 CANVAS_WIDTH  = 240
 CANVAS_HEIGHT = 240
@@ -12,22 +12,22 @@ rect_dsc.init()
 rect_dsc.radius = 10
 rect_dsc.bg_opa = lv.OPA.COVER
 rect_dsc.bg_grad_dir = lv.GRAD_DIR.HOR
-rect_dsc.bg_color = LV_COLOR_RED;
-rect_dsc.bg_grad_color = LV_COLOR_BLUE
+rect_dsc.bg_color = lv_colors.RED;
+rect_dsc.bg_grad_color = lv_colors.BLUE
 rect_dsc.border_width = 2
 rect_dsc.border_opa = lv.OPA._90
-rect_dsc.border_color = LV_COLOR_WHITE
+rect_dsc.border_color = lv_colors.WHITE
 rect_dsc.shadow_width = 5
 rect_dsc.shadow_ofs_x = 5
 rect_dsc.shadow_ofs_y = 5
 
 line_dsc = lv.draw_line_dsc_t()
 line_dsc.init()
-line_dsc.color = LV_COLOR_BLACK;
+line_dsc.color = lv_colors.BLACK;
 line_dsc.opa = lv.OPA.COVER
 
 def clear():
-    canvas.fill_bg(LV_COLOR_BLACK, lv.OPA.COVER)
+    canvas.fill_bg(lv_colors.BLACK, lv.OPA.COVER)
 
 def testlines(canvas,color):
     print("Test lines")
@@ -101,15 +101,15 @@ def testlines(canvas,color):
             p2.y = y
             canvas.draw_line(point_array,2,line_dsc)
             
-    cbuf=bytearray(CANVAS_WIDTH * CANVAS_HEIGHT * 4)
+cbuf=bytearray(CANVAS_WIDTH * CANVAS_HEIGHT * 4)
         
-    # create a canvas
-    canvas = lv.canvas(lv.scr_act(),None)
-    canvas.set_buffer(cbuf,CANVAS_WIDTH,CANVAS_HEIGHT,lv.img.CF.TRUE_COLOR)
-    canvas.align(None,lv.ALIGN.CENTER,0,0)
+# create a canvas
+canvas = lv.canvas(lv.scr_act(),None)
+canvas.set_buffer(cbuf,CANVAS_WIDTH,CANVAS_HEIGHT,lv.img.CF.TRUE_COLOR)
+canvas.align(None,lv.ALIGN.CENTER,0,0)
 
-    # test lines
-    testlines(canvas,LV_COLOR_GREEN)
+# test lines
+testlines(canvas,lv_colors.GREEN)
     
 while True:
     pass

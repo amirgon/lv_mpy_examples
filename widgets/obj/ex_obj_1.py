@@ -2,6 +2,7 @@
 import time
 import lvgl as lv
 import init_gui
+from lv_colors import lv_colors
 
 obj1 = lv.obj(lv.scr_act(),None)
 obj1.set_size(100,50)
@@ -18,8 +19,7 @@ style_shadow = lv.style_t()
 style_shadow.init()
 style_shadow.set_shadow_width(lv.STATE.DEFAULT, 10)
 style_shadow.set_shadow_spread(lv.STATE.DEFAULT, 5)
-LV_COLOR_BLUE=lv.color_hex3(0xF)
-style_shadow.set_shadow_color(lv.STATE.DEFAULT,LV_COLOR_BLUE)
+style_shadow.set_shadow_color(lv.STATE.DEFAULT,lv_colors.BLUE)
 
 # Copy the previous object (drag is already enabled)
 obj3 = lv.obj(lv.scr_act(),obj2)

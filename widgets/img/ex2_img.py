@@ -2,7 +2,7 @@
 import time
 import lvgl as lv
 import init_gui
-from lv_colors import *
+from lv_colors import lv_colors
 from imagetools import get_png_info, open_png
 
 SLIDER_WIDTH=15
@@ -32,20 +32,20 @@ def slider_event_cb(slider,event):
 red_slider = lv.slider(lv.scr_act(), None)
 red_slider.set_range(0, 255)
 red_slider.set_size(SLIDER_WIDTH, 200)   # Be sure it's a vertical slider
-red_slider.set_style_local_bg_color(lv.slider.PART.INDIC, lv.STATE.DEFAULT, LV_COLOR_RED)
+red_slider.set_style_local_bg_color(lv.slider.PART.INDIC, lv.STATE.DEFAULT, lv_colors.RED)
 red_slider.set_event_cb(slider_event_cb)
 
 # Copy it for the other three sliders 
 green_slider = lv.slider(lv.scr_act(), red_slider)
-green_slider.set_style_local_bg_color(lv.slider.PART.INDIC, lv.STATE.DEFAULT, LV_COLOR_LIME)
+green_slider.set_style_local_bg_color(lv.slider.PART.INDIC, lv.STATE.DEFAULT, lv_colors.LIME)
 green_slider.set_event_cb(slider_event_cb)
 
 blue_slider = lv.slider(lv.scr_act(), red_slider)
-blue_slider.set_style_local_bg_color(lv.slider.PART.INDIC, lv.STATE.DEFAULT, LV_COLOR_BLUE)
+blue_slider.set_style_local_bg_color(lv.slider.PART.INDIC, lv.STATE.DEFAULT, lv_colors.BLUE)
 blue_slider.set_event_cb(slider_event_cb)
 
 intense_slider = lv.slider(lv.scr_act(), red_slider)
-intense_slider.set_style_local_bg_color(lv.slider.PART.INDIC, lv.STATE.DEFAULT, LV_COLOR_GRAY)
+intense_slider.set_style_local_bg_color(lv.slider.PART.INDIC, lv.STATE.DEFAULT, lv_colors.GRAY)
 intense_slider.set_value(255, lv.ANIM.OFF)
 intense_slider.set_event_cb(slider_event_cb)
 

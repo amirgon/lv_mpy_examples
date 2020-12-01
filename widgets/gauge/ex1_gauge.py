@@ -2,13 +2,10 @@
 import time
 import lvgl as lv
 import init_gui
-
-LV_COLOR_BLUE=lv.color_hex3(0xf)
-LV_COLOR_ORANGE=lv.color_hex3(0xf80)
-LV_COLOR_PURPLE=lv.color_hex3(0x808)
+from lv_colors import lv_colors
 
 # needle colors
-needle_colors=[LV_COLOR_BLUE,LV_COLOR_ORANGE,LV_COLOR_PURPLE]
+needle_colors=[lv_colors.BLUE,lv_colors.ORANGE,lv_colors.PURPLE]
 
 # create the gauge
 gauge1=lv.gauge(lv.scr_act(),None)

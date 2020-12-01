@@ -2,7 +2,7 @@
 import time
 import lvgl as lv
 import init_gui
-from lv_colors import *
+from lv_colors import lv_colors
 
 # create a chart
 chart = lv.chart(lv.scr_act(),None)
@@ -15,8 +15,8 @@ chart.set_style_local_bg_grad_dir(lv.chart.PART.SERIES, lv.STATE.DEFAULT, lv.GRA
 chart.set_style_local_bg_main_stop(lv.chart.PART.SERIES, lv.STATE.DEFAULT, 255)                      # Max opa on the top
 chart.set_style_local_bg_grad_stop(lv.chart.PART.SERIES, lv.STATE.DEFAULT, 0)                 # Transparent on the bottom
 
-ser1=chart.add_series(LV_COLOR_RED)
-ser2=chart.add_series(LV_COLOR_GREEN)
+ser1=chart.add_series(lv_colors.RED)
+ser2=chart.add_series(lv_colors.GREEN)
 
 # Set next points on ser1
 chart.set_next(ser1,31)

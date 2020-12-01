@@ -2,7 +2,7 @@
 import time
 import lvgl as lv
 import init_gui
-from lv_colors import *
+from lv_colors import lv_colors
 from imagetools import get_png_info, open_png
 
 # Register PNG image decoder
@@ -20,7 +20,7 @@ img_hand_dsc = lv.img_dsc_t({
     'data': png_data 
 })
 # needle colors
-needle_colors=[LV_COLOR_BLUE,LV_COLOR_ORANGE,LV_COLOR_PURPLE]
+needle_colors=[lv_colors.BLUE,lv_colors.ORANGE,lv_colors.PURPLE]
 
 # create the gauge
 gauge1=lv.gauge(lv.scr_act(),None)

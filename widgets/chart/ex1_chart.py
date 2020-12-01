@@ -2,7 +2,7 @@
 import time
 import lvgl as lv
 import init_gui
-from lv_colors import *
+from lv_colors import lv_colors
 
 # create a chart
 chart = lv.chart(lv.scr_act(),None)
@@ -10,8 +10,8 @@ chart.set_size(200,150)
 chart.align(None,lv.ALIGN.CENTER,0,0)
 chart.set_type(lv.chart.TYPE.LINE)
 
-ser1=chart.add_series(LV_COLOR_RED)
-ser2=chart.add_series(LV_COLOR_GREEN)
+ser1=chart.add_series(lv_colors.RED)
+ser2=chart.add_series(lv_colors.GREEN)
 
 # Set next points on ser1
 chart.set_next(ser1,10)

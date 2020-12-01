@@ -1,14 +1,14 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
 import init_gui
-from lv_colors import *
+from lv_colors import lv_colors
 import time
 
 # Create a style for the shadow
 label_shadow_style = lv.style_t()
 label_shadow_style.init()
 label_shadow_style.set_text_opa(lv.STATE.DEFAULT,lv.OPA._50)
-label_shadow_style.set_text_color(lv.STATE.DEFAULT, LV_COLOR_RED);
+label_shadow_style.set_text_color(lv.STATE.DEFAULT, lv_colors.RED);
 
 # Create a label for the shadow first (it's in the background)
 shadow_label = lv.label(lv.scr_act())
