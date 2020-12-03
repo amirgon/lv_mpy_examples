@@ -1,7 +1,7 @@
 #!/opt/bin/lv_micropython
 import cmath
-# import lvgl as lv
-# import init_gui
+import lvgl as lv
+import init_gui
 from lv_colors import lv_colors
 import utime as time
 
@@ -114,83 +114,7 @@ def monthString (monthCode):
 CANVAS_WIDTH  = 240
 CANVAS_HEIGHT = 240
 
-def updateClock(task,aClock):
-    center=120+100j
-    now = time.time()
-    localTime = time.localtime(now)
-    seconds = localTime[5]
-    minutes = localTime[4]
-    hours = localTime[3]
-    year = localTime[0]
-    month = localTime[1]
-    day= localTime[2]
-        
-    # print('{}:{}:{}'.format(hours,minutes,seconds))
-    
-    if hours > 12:
-        hours -= 12
-    hours *=5             # the angle corresponding to the hour 
-    hours += 5/60*minutes # add the angle corresponding to the minutes
 
-    theta = cmath.pi/2 - 2*hours*cmath.pi/60
-    hrs_endpoint= cmath.rect(aClock.hrs_radius,theta)
-    polar(aClock.canvas,center,hrs_endpoint,3,lv_colors.RED)
-    
-    theta = cmath.pi/2 - 2*minutes*cmath.pi/60
-    min_endpoint= cmath.rect(aClock.min_radius,theta)
-    polar(aClock.canvas,center,min_endpoint,3,lv_colors.RED)
-    
-    # clear the old hands 
-    if aClock.oldSec != seconds:
-        theta = cmath.pi/2 - 2*aClock.oldSec*cmath.pi/60
-        sec_endpoint= cmath.rect(aClock.sec_radius+2,theta)
-        polar(aClock.canvas,center,sec_endpoint,5,lv_colors.BLACK)
-        
-    if aClock.oldMin != minutes:
-        theta = cmath.pi/2 - 2*aClock.oldMin*cmath.pi/60
-        min_endpoint= cmath.rect(aClock.min_radius+2,theta)
-        polar(aClock.canvas,center,min_endpoint,7,lv_colors.BLACK)
-        
-        theta = cmath.pi/2 - 2*aClock.oldHour*cmath.pi/60
-        hrs_endpoint= cmath.rect(aClock.hrs_radius+2,theta)
-        polar(aClock.canvas,center,hrs_endpoint,7,lv_colors.BLACK)
-
-    # set the new hands according to the current time
-    
-    theta = cmath.pi/2 - 2*hours*cmath.pi/60
-    hrs_endpoint= cmath.rect(aClock.hrs_radius,theta)
-    polar(aClock.canvas,center,hrs_endpoint,3,lv_colors.RED)
-    
-    theta = cmath.pi/2 - 2*minutes*cmath.pi/60
-    min_endpoint= cmath.rect(aClock.min_radius,theta)
-    polar(aClock.canvas,center,min_endpoint,3,lv_colors.RED)
-    
-    theta = cmath.pi/2 - 2*seconds*cmath.pi/60
-    sec_endpoint= cmath.rect(aClock.sec_radius,theta)
-    polar(aClock.canvas,center,sec_endpoint,1,lv_colors.WHITE)
-    
-    aClock.oldSec=seconds
-    aClock.oldMin=minutes
-    aClock.oldHour=hours
-    
-    date = [year,month,day]
-    if aClock.oldDate != date:
-        # clear old date overwriting it with a black rectangle
-        rect_dsc = lv.draw_rect_dsc_t()
-        rect_dsc.init()
-        rect_dsc.bg_color=lv_colors.BLACK
-        rect_dsc.bg_opa=lv.OPA.COVER
-        aClock.canvas.draw_rect(0,CANVAS_HEIGHT-30,CANVAS_WIDTH,20,rect_dsc)
-        
-        # write new date
-        weekday = dayOfWeek(year,month,day)
-        dateText=dayOfWeekString(weekday) + " " + str(day) + '.' + monthString(month) + ' ' + str(year)
-        label_dsc = lv.draw_label_dsc_t()
-        label_dsc.init()
-        label_dsc.color=lv_colors.WHITE
-        aClock.canvas.draw_text(0,CANVAS_HEIGHT-30,CANVAS_WIDTH,label_dsc,dateText,lv.label.ALIGN.CENTER)
-        aClock.oldDate = date
-            
 class analogueClock():
     oldYear=-1
     oldMonth=-1
@@ -231,12 +155,90 @@ class analogueClock():
             self.hrs_radius = self.radius-32
             self.min_radius = self.radius -12
             self.sec_radius = self.radius -12
-                
-aClock = analogueClock(lv.scr_act())
-task = lv.task_create_basic()
-task.set_cb(lambda task: updateClock(task,aClock))
-task.set_period(1000)
 
-task.set_prio(lv.TASK_PRIO.LOWEST)
-# while True:
-#     pass
+        self.task = lv.task_create_basic()
+        self.task.set_cb(lambda task: self.updateClock(self.task))
+        self.task.set_period(1000)
+        self.task.set_prio(lv.TASK_PRIO.LOWEST)
+        
+    def updateClock(self,task):
+        center=120+100j
+        now = time.time()
+        localTime = time.localtime(now)
+        seconds = localTime[5]
+        minutes = localTime[4]
+        hours = localTime[3]
+        year = localTime[0]
+        month = localTime[1]
+        day= localTime[2]
+        
+        # print('{}:{}:{}'.format(hours,minutes,seconds))
+    
+        if hours > 12:
+            hours -= 12
+        hours *=5             # the angle corresponding to the hour 
+        hours += 5/60*minutes # add the angle corresponding to the minutes
+
+        theta = cmath.pi/2 - 2*hours*cmath.pi/60
+        hrs_endpoint= cmath.rect(self.hrs_radius,theta)
+        polar(self.canvas,center,hrs_endpoint,3,lv_colors.RED)
+    
+        theta = cmath.pi/2 - 2*minutes*cmath.pi/60
+        min_endpoint= cmath.rect(self.min_radius,theta)
+        polar(self.canvas,center,min_endpoint,3,lv_colors.RED)
+    
+        # clear the old hands 
+        if self.oldSec != seconds:
+            theta = cmath.pi/2 - 2*self.oldSec*cmath.pi/60
+            sec_endpoint= cmath.rect(self.sec_radius+2,theta)
+            polar(self.canvas,center,sec_endpoint,5,lv_colors.BLACK)
+        
+        if self.oldMin != minutes:
+            theta = cmath.pi/2 - 2*self.oldMin*cmath.pi/60
+            min_endpoint= cmath.rect(self.min_radius+2,theta)
+            polar(self.canvas,center,min_endpoint,7,lv_colors.BLACK)
+            
+            theta = cmath.pi/2 - 2*self.oldHour*cmath.pi/60
+            hrs_endpoint= cmath.rect(self.hrs_radius+2,theta)
+            polar(self.canvas,center,hrs_endpoint,7,lv_colors.BLACK)
+
+        # set the new hands according to the current time
+    
+        theta = cmath.pi/2 - 2*hours*cmath.pi/60
+        hrs_endpoint= cmath.rect(self.hrs_radius,theta)
+        polar(self.canvas,center,hrs_endpoint,3,lv_colors.RED)
+    
+        theta = cmath.pi/2 - 2*minutes*cmath.pi/60
+        min_endpoint= cmath.rect(self.min_radius,theta)
+        polar(self.canvas,center,min_endpoint,3,lv_colors.RED)
+    
+        theta = cmath.pi/2 - 2*seconds*cmath.pi/60
+        sec_endpoint= cmath.rect(self.sec_radius,theta)
+        polar(self.canvas,center,sec_endpoint,1,lv_colors.WHITE)
+    
+        self.oldSec=seconds
+        self.oldMin=minutes
+        self.oldHour=hours
+    
+        date = [year,month,day]
+        if self.oldDate != date:
+            # clear old date overwriting it with a black rectangle
+            rect_dsc = lv.draw_rect_dsc_t()
+            rect_dsc.init()
+            rect_dsc.bg_color=lv_colors.BLACK
+            rect_dsc.bg_opa=lv.OPA.COVER
+            self.canvas.draw_rect(0,CANVAS_HEIGHT-30,CANVAS_WIDTH,20,rect_dsc)
+        
+            # write new date
+            weekday = dayOfWeek(year,month,day)
+            dateText=dayOfWeekString(weekday) + " " + str(day) + '.' + monthString(month) + ' ' + str(year)
+            label_dsc = lv.draw_label_dsc_t()
+            label_dsc.init()
+            label_dsc.color=lv_colors.WHITE
+            self.canvas.draw_text(0,CANVAS_HEIGHT-30,CANVAS_WIDTH,label_dsc,dateText,lv.label.ALIGN.CENTER)
+            self.oldDate = date
+                 
+aClock = analogueClock(lv.scr_act())
+
+while True:
+    pass
