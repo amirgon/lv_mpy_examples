@@ -10,25 +10,6 @@ CANVAS_HEIGHT = 240
     
 start_time = time.ticks_ms()
 
-rect_dsc = lv.draw_rect_dsc_t()
-rect_dsc.init()
-rect_dsc.radius = 10
-rect_dsc.bg_opa = lv.OPA.COVER
-rect_dsc.bg_grad_dir = lv.GRAD_DIR.HOR
-rect_dsc.bg_color = lv_colors.RED;
-rect_dsc.bg_grad_color = lv_colors.BLUE
-rect_dsc.border_width = 2
-rect_dsc.border_opa = lv.OPA._90
-rect_dsc.border_color = lv_colors.WHITE
-rect_dsc.shadow_width = 5
-rect_dsc.shadow_ofs_x = 5
-rect_dsc.shadow_ofs_y = 5
-
-line_dsc = lv.draw_line_dsc_t()
-line_dsc.init()
-line_dsc.color = lv_colors.BLACK;
-line_dsc.opa = lv.OPA.COVER
-
 colors = [lv_colors.SILVER,lv_colors.RED,lv_colors.MAROON,lv_colors.YELLOW,lv_colors.OLIVE,
           lv_colors.LIME,lv_colors.GREEN,lv_colors.CYAN,lv_colors.AQUA,lv_colors.BLUE,
           lv_colors.GRAY,lv_colors.TEAL,lv_colors.NAVY,lv_colors.MAGENTA,lv_colors.PURPLE,
