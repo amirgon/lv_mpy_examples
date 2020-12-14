@@ -1,8 +1,12 @@
 #!/opt/bin/lv_micropython -i
 import lvgl as lv
 import time
-import SDL
-lv.init()
+
+from GUI import driver
+drv = driver()
+drv.set_width(480)
+drv.set_height(320)
+drv.init_gui()
 
 LV_DEMO_WIDGETS_SLIDESHOW = 0
 LV_THEME_DEFAULT_COLOR_PRIMARY=lv.color_hex(0x01a2b1)
@@ -11,36 +15,8 @@ LV_THEME_DEFAULT_COLOR_SECONDARY=lv.color_hex(0x44d1b6)
 LV_LED_BRIGHT_MIN = 120
 LV_LED_BRIGHT_MAX = 255
 
-SDL.init(w=480,h=320)
-
 LV_DPI =130
 LV_ANIM_REPEAT_INFINITE = -1
-
-# Register SDL display driver.
-        
-disp_buf1 = lv.disp_buf_t()
-buf1_1 = bytes(480 * 10)
-disp_buf1.init(buf1_1, None, len(buf1_1)//4)
-disp_drv = lv.disp_drv_t()
-disp_drv.init()
-disp_drv.buffer = disp_buf1
-disp_drv.flush_cb = SDL.monitor_flush
-disp_drv.hor_res = 480
-disp_drv.ver_res = 320
-disp_drv.register()
-
-# Register SDL mouse driver
-
-indev_drv = lv.indev_drv_t()
-indev_drv.init() 
-indev_drv.type = lv.INDEV_TYPE.POINTER
-indev_drv.read_cb = SDL.mouse_read
-indev_drv.register()
-# print("Running the Unix version")
-
-# Create a screen and load it
-scr=lv.obj()
-lv.scr_load(scr)
 
 def LV_DPX(n):
     if n == 0:
@@ -407,7 +383,7 @@ def visuals_create(parent):
     bar_h.set_style_local_value_str(lv.cont.PART.MAIN, lv.STATE.DEFAULT, "Bar")
 
     if disp_size <= lv.DISP_SIZE.SMALL:
-        bar_h.set_width(lv.page_get_width_grid(page, 1, 1))
+        bar_h.set_width(lv.page.get_width_grid(page, 1, 1))
     elif disp_size <= lv.DISP_SIZE.MEDIUM:
         bar_h.set_width(lv.page.get_width_grid(page, 2, 1))
     else:
@@ -474,7 +450,7 @@ def selectors_create(parent):
     else :
         cal.set_size(grid_w, grid_w)
         if disp_size <= lv.DISP_SIZE.SMALL:
-            cal.set_style_local_text_font(lv.calendat.PART.BG, lv.STATE.DEFAULT, lv.theme_get_font_small())
+            cal.set_style_local_text_font(lv.calendar.PART.BG, lv.STATE.DEFAULT, lv.theme_get_font_small())
 
     hl = [{ "year":2020, "month":1, "day":5},
           {"year":2020, "month":1, "day":9}]
@@ -530,27 +506,29 @@ def selectors_create(parent):
             lv.SYMBOL.BLUETOOTH, "Bluetooth",  lv.SYMBOL.GPS, "GPS", lv.SYMBOL.USB, "USB",
             lv.SYMBOL.SD_CARD, "SD card", lv.SYMBOL.CLOSE, "Close"]
     
- 
+    
     for i in range(0,len(txts)//2,2):
+        print("add button: ",txts[2*i+1])
         btn = list.add_btn(txts[i], txts[i + 1]);
         lv.btn.set_checkable(lv.btn.__cast__(btn),True)
 
         # Make a button disabled
         if i == 4:
             btn.set_state(lv.btn.STATE.DISABLED)
-            
+    print("cal.set_highlighted_dates")        
     cal.set_highlighted_dates(hl, 2)
+    print("done")
     
 tv = lv.tabview(lv.scr_act(), None)
-display = scr.get_disp()
+display = lv.scr_act().get_disp()
 disp_size = display.get_size_category()
-tv.set_style_local_pad_left(lv.tabview.PART.TAB_BG, lv.STATE.DEFAULT, disp_drv.hor_res // 2)
+tv.set_style_local_pad_left(lv.tabview.PART.TAB_BG, lv.STATE.DEFAULT, display.driver.hor_res // 3)
 
 sw = lv.switch(lv.scr_act(), None)
 if lv.theme_get_flags() & lv.THEME_MATERIAL_FLAG.DARK:
    sw.on(LV_ANIM_OFF)
 sw.set_event_cb(color_chg_event_cb)   
-sw.set_pos(LV_DPX(10), LV_DPX(10))
+sw.set_pos(LV_DPX(10), LV_DPX(20))
 sw.set_style_local_value_str(lv.switch.PART.BG, lv.STATE.DEFAULT, "Dark")
 sw.set_style_local_value_align(lv.switch.PART.BG, lv.STATE.DEFAULT, lv.ALIGN.OUT_RIGHT_MID)
 sw.set_style_local_value_ofs_x(lv.switch.PART.BG, lv.STATE.DEFAULT, LV_DPI//35)
@@ -567,6 +545,6 @@ style_box.set_value_ofs_y(lv.STATE.DEFAULT, - LV_DPX(10))
 style_box.set_margin_top(lv.STATE.DEFAULT, LV_DPX(30))
 
 controls_create(t1)
-visuals_create(t2)                            
 selectors_create(t3)
+visuals_create(t2)
 
