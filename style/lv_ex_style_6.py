@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 # change the above to the path of your lv_micropython unix binary
 #
 import time
@@ -30,6 +30,3 @@ obj.align(None, lv.ALIGN.CENTER, 0, 0)
 # Add a value text to the local style. This way every object can have different text
 obj.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, "Text")
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(10)

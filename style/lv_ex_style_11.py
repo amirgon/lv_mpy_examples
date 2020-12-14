@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 # change the above to the path of your lv_micropython unix binary
 #
 import time
@@ -37,7 +37,3 @@ if LV_USE_GAUGE:
     obj = lv.gauge(lv.scr_act(), None)
     obj.add_style(lv.gauge.PART.MAIN, style)
     obj.align(None, lv.ALIGN.CENTER, 0, 0)
-
-while True:
-     lv.task_handler()
-     time.sleep_ms(10)

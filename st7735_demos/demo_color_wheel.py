@@ -1,15 +1,15 @@
-#!//opt/bin/lv_micropython
+#!//opt/bin/lv_micropython -i
 import lvgl as lv
 import init_gui
-from utime import sleep
 from math import sin,cos,pi
 from lv_colors import LV_COLOR_MAKE
 
-CANVAS_WIDTH  = 240
-CANVAS_HEIGHT = 240
+disp = lv.scr_act().get_disp()
+CANVAS_WIDTH = disp.driver.hor_res
+CANVAS_HEIGHT = disp.driver.ver_res
 
 HALF_WIDTH = CANVAS_WIDTH // 2
-HALF_HEIGHT = CANVAS_HEIGHT // 2 
+HALF_HEIGHT = CANVAS_HEIGHT // 2
 CENTER_X = CANVAS_WIDTH // 2 -1
 CENTER_Y = CANVAS_HEIGHT // 2 -1
 ANGLE_STEP_SIZE = 0.05  # Decrease step size for higher resolution
@@ -126,11 +126,10 @@ def test():
     line_dsc.opa = lv.OPA.COVER
     x, y = 0, 0
     angle = 0.0
-    
     #  Loop all angles from 0 to 2 * PI radians
     while angle < PI2:
         # Calculate x, y from a vector with known length and angle
-        x = int(CENTER_X * sin(angle) + HALF_WIDTH)
+        x = int(CENTER_Y * sin(angle) + HALF_WIDTH)
         y = int(CENTER_Y * cos(angle) + HALF_HEIGHT)
         color = LV_COLOR_MAKE(*hsv_to_rgb(angle / PI2, 1, 1))
         line_dsc.color = color;
@@ -138,14 +137,5 @@ def test():
         p1.y = y
         canvas.draw_line(point_array,2, line_dsc)
         angle += ANGLE_STEP_SIZE
-
-    sleep(5)
-    '''
-    clear()
-    for r in range(CENTER_X, 0, -1):
-        color = color565(*hsv_to_rgb(r / HALF_WIDTH, 1, 1))
-        display.draw_filledCircle(CENTER_X, CENTER_Y, r, color)
-    sleep(9)
-    '''
 
 test()

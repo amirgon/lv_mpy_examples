@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -1
 # change the above to the path of your lv_micropython unix binary
 #
 import time
@@ -27,7 +27,3 @@ style.set_border_side(lv.STATE.DEFAULT, lv.BORDER_SIDE.BOTTOM | lv.BORDER_SIDE.R
 obj = lv.obj(lv.scr_act(), None)
 obj.add_style(lv.obj.PART.MAIN, style);
 obj.align(None, lv.ALIGN.CENTER, 0, 0);
-
-while True:
-    lv.task_handler()
-    time.sleep_ms(10)

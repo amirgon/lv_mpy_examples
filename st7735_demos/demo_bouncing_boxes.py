@@ -10,8 +10,9 @@ from utime import sleep_us, ticks_cpu, ticks_us, ticks_diff
 
 """lvgl demo (bouncing boxes)."""
 
-CANVAS_WIDTH  = 240
-CANVAS_HEIGHT = 240
+disp = lv.scr_act().get_disp()
+CANVAS_WIDTH = disp.driver.hor_res
+CANVAS_HEIGHT = disp.driver.ver_res
 
 def clear():
     canvas.fill_bg(lv_colors.BLACK, lv.OPA.COVER)
@@ -123,7 +124,7 @@ def test(canvas):
             
         # print("speed_x: ",x_speed)
         sizes = [12, 11, 10, 9, 8, 7]
-        boxes = [Box(240, 240, sizes[i], canvas, x_speed[i], y_speed[i], colors[i]) for i in range(6)]
+        boxes = [Box(CANVAS_WIDTH, CANVAS_HEIGHT, sizes[i], canvas, x_speed[i], y_speed[i], colors[i]) for i in range(6)]
         
         while True:
             timer = ticks_us()

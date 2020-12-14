@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 # change the above to the path of your lv_micropython unix binary
 #
 import time
@@ -6,7 +6,7 @@ import time
 # initialize lvgl
 #
 import lvgl as lv
-import init_gui
+import display_driver
 from lv_colors import lv_colors 
 
 #
@@ -34,7 +34,4 @@ obj = lv.obj(lv.scr_act(), None)
 obj.add_style(lv.obj.PART.MAIN, style)
 obj.align(None, lv.ALIGN.CENTER, 0, 0)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(10)
     

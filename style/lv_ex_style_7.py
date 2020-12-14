@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 # change the above to the path of your lv_micropython unix binary
 #
 import time
@@ -35,6 +35,3 @@ obj.set_text("Text of\n"
                             "a label")
 obj.align(None, lv.ALIGN.CENTER, 0, 0)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(10)

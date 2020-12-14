@@ -1,4 +1,4 @@
-#!//opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import init_gui
 import time

@@ -68,28 +68,29 @@ time.sleep(1)
 clear()
 
 print("octagon")
-p1.x = 80
+offset = (CANVAS_WIDTH-CANVAS_HEIGHT)//2
+p1.x = 80+offset
 p1.y = 0
 
-p2.x = 0
+p2.x = 0+offset
 p2.y = 80
 
-p3.x = 0
+p3.x = 0+offset
 p3.y = 160
 
-p4.x = 80
+p4.x = 80+offset
 p4.y = 239
 
-p5.x = 160
+p5.x = 160+offset
 p5.y = 239
 
-p6.x = 240
+p6.x = 240+offset
 p6.y = 160
 
-p7.x = 240
+p7.x = 240+offset
 p7.y = 80
 
-p8.x = 160
+p8.x = 160+offset
 p8.y = 0
 point_array=[p1,p2,p3,p4,p5,p6,p7,p8]
 canvas.draw_polygon(point_array,8,rect_dsc)

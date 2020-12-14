@@ -1,12 +1,13 @@
-#!//opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import init_gui
 import time
 import math
 from lv_colors import lv_colors
 
-CANVAS_WIDTH  = 240
-CANVAS_HEIGHT = 240
+disp = lv.scr_act().get_disp()
+CANVAS_WIDTH = disp.driver.hor_res
+CANVAS_HEIGHT = disp.driver.ver_res
     
 start_time = time.ticks_ms()
 
@@ -204,29 +205,29 @@ def testfillrects(canvas,color1, color2):
 
 def testtriangles(canvas):
     print("Test triangles")
-    
+    offset = (CANVAS_WIDTH-CANVAS_HEIGHT)//2
     p1=lv.point_t()
     p2=lv.point_t()
     point_array=[p1,p2]
     line_dsc = lv.draw_line_dsc_t()
     line_dsc.init()
-    w = CANVAS_WIDTH // 2
-    x = CANVAS_WIDTH - 1
+    w = CANVAS_HEIGHT // 2
+    x = CANVAS_HEIGHT - 1
     y = 0
     z = CANVAS_HEIGHT -1
     for i in range(0, 15):
         line_dsc.color=colors[i]
-        p1.x = w
+        p1.x = w + offset
         p1.y = y
-        p2.x = y
+        p2.x = y + offset
         p2.y = x
         canvas.draw_line(point_array,2,line_dsc)
-        p1.x = y
+        p1.x = y + offset
         p1.y = x
-        p2.x = z
+        p2.x = z + offset
         canvas.draw_line(point_array,2,line_dsc)
-        p1.x = z
-        p2.x = w
+        p1.x = z + offset
+        p2.x = w + offset
         p2.y = y
         canvas.draw_line(point_array,2,line_dsc)
         x -= 8
@@ -356,13 +357,10 @@ style.set_bg_opa(lv.STATE.DEFAULT, lv.OPA.COVER)
 
 lv.scr_act().add_style(lv.obj.PART.MAIN,style)
 
-style.set_text_color(lv.label.PART.MAIN,lv_colors.GREEN)
+style.set_text_color(lv.label.PART.MAIN,lv_colors.YELLOW)
 style.set_text_opa(lv.STATE.DEFAULT,lv.OPA.COVER)
 
 label = lv.label(lv.scr_act(),None)
 label.set_recolor(True)
 label.add_style(lv.label.PART.MAIN,style)
 testtextwrap(label)
-
-while True:
-    pass
