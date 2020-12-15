@@ -2,11 +2,8 @@
 import lvgl as lv
 import time
 
-from GUI import driver
-drv = driver()
-drv.set_width(480)
-drv.set_height(320)
-drv.init_gui()
+from display_driver_utils import driver
+drv = driver(width=480,height=320)
 
 LV_DEMO_WIDGETS_SLIDESHOW = 0
 LV_THEME_DEFAULT_COLOR_PRIMARY=lv.color_hex(0x01a2b1)
@@ -508,16 +505,16 @@ def selectors_create(parent):
     
     
     for i in range(0,len(txts)//2,2):
-        print("add button: ",txts[2*i+1])
+        # print("add button: ",txts[2*i+1])
         btn = list.add_btn(txts[i], txts[i + 1]);
         lv.btn.set_checkable(lv.btn.__cast__(btn),True)
 
         # Make a button disabled
         if i == 4:
             btn.set_state(lv.btn.STATE.DISABLED)
-    print("cal.set_highlighted_dates")        
+    # print("cal.set_highlighted_dates")        
     cal.set_highlighted_dates(hl, 2)
-    print("done")
+    # print("done")
     
 tv = lv.tabview(lv.scr_act(), None)
 display = lv.scr_act().get_disp()

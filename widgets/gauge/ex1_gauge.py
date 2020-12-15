@@ -1,7 +1,7 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
-import init_gui
+import display_driver
 from lv_colors import lv_colors
 
 # needle colors
@@ -17,7 +17,3 @@ gauge1.align(None,lv.ALIGN.CENTER,0,0)
 gauge1.set_value(0, 10)
 gauge1.set_value(1, 20)
 gauge1.set_value(2, 50)
-
-while True:
-    lv.task_handler()
-    time.sleep(5)
