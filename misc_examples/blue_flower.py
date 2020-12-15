@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import init_gui
 import time,sys
@@ -6,11 +6,11 @@ import time,sys
 # Display a raw image
 
 try:
-  with open('blue_flower_32.bin','rb') as f:
+  with open('../assets/blue_flower_argb.bin','rb') as f:
     img_data = f.read()
 except:
   try:
-    with open('images/img_hand_rgb565.bin','rb') as f:
+    with open('images/blue_flower_rgb565.bin','rb') as f:
       img_data = f.read()
   except:
     print("Could not open image file")
@@ -30,7 +30,4 @@ img_dsc = lv.img_dsc_t(
 img.set_src(img_dsc)
 img.set_drag(True)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)
 
