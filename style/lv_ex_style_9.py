@@ -14,10 +14,10 @@ try:
         cogwheel_img_data = f.read()
 except:
     try:
-        with open('images/img_cogwheel_argb.bin','rb') as f:
+        with open('images/img_cogwheel_rgb565.bin','rb') as f:
             cogwheel_img_data = f.read()
     except:
-        print("Could not find img_cogwheel_argb.bin")
+        print("Could not find img_cogwheel_xxx.bin")
         sys.exit()
         
 cogwheel_img_dsc = lv.img_dsc_t(

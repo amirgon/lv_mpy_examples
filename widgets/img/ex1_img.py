@@ -1,33 +1,35 @@
-#!/opt/bin/lv_micropython
-import time
+#!/opt/bin/lv_micropython -i
+import usys as sys
 import lvgl as lv
-import init_gui
-from imagetools import get_png_info, open_png
+import display_driver
 
-# Register PNG image decoder
-decoder = lv.img.decoder_create()
-decoder.info_cb = get_png_info
-decoder.open_cb = open_png
+try:
+  with open('../../assets/img_cogwheel_argb.bin','rb') as f:
+    cogwheel_img_data = f.read()
+except:
+  try:
+    with open('images/img_cogwheel_rgb565.bin','rb') as f:
+      cogwheel_img_data = f.read()
+  except:
+    print("Could not find binary img_cogwheel file")
+    
+# create the cogwheel image data
 
-with open('img_cogwheel_argb.png','rb') as f:
-  png_data = f.read()
-
-png_img_dsc = lv.img_dsc_t({
-    'data_size': len(png_data),
-    'data': png_data 
-})
-
+cogwheel_img_dsc = lv.img_dsc_t(
+    {
+        "header": {"always_zero": 0, "w": 100, "h": 100, "cf": lv.img.CF.TRUE_COLOR_ALPHA},
+        "data": cogwheel_img_data,
+        "data_size": len(cogwheel_img_data),
+    }
+)
 # Create an image using the decoder
 
 img1 = lv.img(lv.scr_act(),None)
 lv.img.cache_set_size(2)
 img1.align(lv.scr_act(), lv.ALIGN.CENTER, 0, -50)
-img1.set_src(png_img_dsc)
+img1.set_src(cogwheel_img_dsc)
 
 img2 = lv.img(lv.scr_act(), None)
 img2.set_src(lv.SYMBOL.OK+"Accept")
 img2.align(img1, lv.ALIGN.OUT_BOTTOM_MID, 0, 20)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(10)

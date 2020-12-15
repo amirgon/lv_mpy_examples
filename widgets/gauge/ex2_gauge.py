@@ -6,14 +6,14 @@ import display_driver
 from lv_colors import lv_colors
 
 try:
-    with open('../../assets/img_hand.bin','rb') as f:
+    with open('../../assets/img_hand_argb.bin','rb') as f:
         hand_img_data = f.read()
 except:
     try:
-        with open('images/img_hand.bin','rb') as f:
+        with open('images/img_hand_rgb565.bin','rb') as f:
             hand_img_data = f.read()
     except:
-        print("Could not find img_hand.bin")
+        print("Could not find img_hand file")
         sys.exit()
     
 # create the hands image data
