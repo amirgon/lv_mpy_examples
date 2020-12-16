@@ -1,6 +1,6 @@
 #!//opt/bin/lv_micropython -i
 import lvgl as lv
-import init_gui
+import display_driver
 from math import sin,cos,pi
 from lv_colors import LV_COLOR_MAKE
 

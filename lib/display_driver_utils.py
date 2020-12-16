@@ -109,21 +109,22 @@ class driver:
 
         try:
             self.init_gui_twatch()
+            return
         except:
             pass
 
-        if not self.type:
-            try:
-                self.init_gui_ili9341()
-            except ImportError:
-                pass
+        try:
+            self.init_gui_ili9341()
+            return
+        except ImportError:
+            pass
             
         try:
             self.init_gui_SDL()
+            return
         except ImportError:
             pass
 
-        if not self.type:
-            print("Could not find a suitable display driver")
+        print("Could not find a suitable display driver")
             
 
