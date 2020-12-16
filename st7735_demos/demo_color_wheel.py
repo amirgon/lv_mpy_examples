@@ -1,8 +1,9 @@
 #!//opt/bin/lv_micropython -i
 import lvgl as lv
+from time import sleep 
 import display_driver
 from math import sin,cos,pi
-from lv_colors import LV_COLOR_MAKE
+from lv_colors import LV_COLOR_MAKE, lv_colors
 
 disp = lv.scr_act().get_disp()
 CANVAS_WIDTH = disp.driver.hor_res
@@ -15,7 +16,7 @@ CENTER_Y = CANVAS_HEIGHT // 2 -1
 ANGLE_STEP_SIZE = 0.05  # Decrease step size for higher resolution
 PI2 = pi * 2
 
-def clear():
+def clear(canvas):
     canvas.fill_bg(lv_colors.BLACK, lv.OPA.COVER)
     
 def hsv_to_rgb(h, s, v):
@@ -53,60 +54,7 @@ def hsv_to_rgb(h, s, v):
         return t, p, v
     if i == 5:
         return v, p, q
-
-def draw_filledCircle(canvas, x0, y0, r, color):
-    """Draw a filled circle.
-    
-    Args:
-       x0 (int): X coordinate of center point.
-       y0 (int): Y coordinate of center point.
-       r (int): Radius.
-       color (int): RGB565 color value.
-    """
-    p1=lv.point_t()
-    p2=lv.point_t()
-    point_array=[p1,p2]
-    
-    line_dsc = lv.draw_line_dsc_t()
-    line_dsc.init()
-    line_dsc.color = color;
-    line_dsc.opa = lv.OPA.COVER
-    
-    f = 1 - r
-    dx = 1
-    dy = -r - r
-    x = 0
-    y = r
-    p1.x = x0
-    p1.y = y0 - r
-    p2.x = p1.x
-    p2.y = p1.y + 2 * r + 1
-    canvas.draw_line(point_array,2, line_dsc)
-    while x < y:
-        if f >= 0:
-            y -= 1
-            dy += 2
-            f += dy
-        x += 1
-        dx += 2
-        f += dx
-        p1.x = x0 + x
-        p1.y = y0 - y
-        p2.x = p1.x
-        p2.y = p1.y +  2 * y + 1
-        canvas.draw_line(point_array,2,line_dsc)
-        p1.x = x0 - x
-        p2.x = p1.x
-        canvas.draw_line(point_array,2,line_dsc)
-        p1.x = x0 - y
-        p1.y = y0 - x
-        p2.x = p1.x
-        p2.y = p1.y + 2 * x + 1
-        canvas.draw_line(point_array,2,line_dsc)
-        p1.x = x0 + y
-        p2.x = p1.x
-        canvas.draw_line(point_array,2,line_dsc)
-        
+ 
 def test():
     """Test code."""
     cbuf=bytearray(CANVAS_WIDTH * CANVAS_HEIGHT * 4)
@@ -137,5 +85,15 @@ def test():
         p1.y = y
         canvas.draw_line(point_array,2, line_dsc)
         angle += ANGLE_STEP_SIZE
+        
+    sleep(5)
+    clear(canvas)
+    line_dsc.width=3
+    for r in range(CENTER_Y, 0, -1):
+        line_dsc.color = LV_COLOR_MAKE(*hsv_to_rgb(r / HALF_HEIGHT, 1, 1))
+        
+        canvas.draw_arc(CENTER_X, CENTER_Y, r, 0, 360, line_dsc)
+
+    sleep(5)
 
 test()
