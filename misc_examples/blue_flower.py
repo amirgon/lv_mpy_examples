@@ -1,6 +1,6 @@
 #!/opt/bin/lv_micropython -i
 import lvgl as lv
-import init_gui
+import display_driver
 import time,sys
 
 # Display a raw image

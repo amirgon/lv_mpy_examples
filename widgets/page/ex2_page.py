@@ -1,6 +1,6 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
-import init_gui
+import display_driver
 
 # create a page
 page = lv.page(lv.scr_act(),None)

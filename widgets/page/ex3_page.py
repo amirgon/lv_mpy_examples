@@ -1,6 +1,6 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
-import init_gui
+import display_driver
 
 # Create a scroll bar style
 style_sb = lv.style_t()

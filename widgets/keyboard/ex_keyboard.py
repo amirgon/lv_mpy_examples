@@ -1,6 +1,6 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
-import init_gui
+import display_driver
 LV_DPI=130
 LV_VER_RES=240
 

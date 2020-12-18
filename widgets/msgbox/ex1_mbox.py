@@ -1,7 +1,7 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
 import time
-import init_gui
+import display_driver
 
 def event_handler(obj, event):
     if event == lv.EVENT.VALUE_CHANGED:
