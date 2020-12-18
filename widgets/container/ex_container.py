@@ -1,7 +1,7 @@
 #!/opt/bin/lv_micropython
 
 import lvgl as lv
-import init_gui
+import display_driver
 import time
 
 def event_handler(source,evt):

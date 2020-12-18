@@ -2,7 +2,7 @@
 import time
 import sys
 import lvgl as lv
-import init_gui
+import display_driver
 from lv_colors import lv_colors
 
 try:

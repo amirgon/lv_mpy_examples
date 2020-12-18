@@ -1,7 +1,7 @@
 #!/opt/bin/lv_micropython -i
 import usys as sys
 import lvgl as lv
-import init_gui
+import display_driver
 from imagetools import get_png_info, open_png
 
 # Register PNG image decoder

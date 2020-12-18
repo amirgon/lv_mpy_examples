@@ -13,9 +13,9 @@ class driver:
         self.disp = None
         self.touch = None
         self.type = None
-        self.init_gui()
+        self.display_driver()
         
-    def init_gui_SDL(self):
+    def display_driver_SDL(self):
 
         import SDL
         SDL.init(w=self.width,h=self.height)
@@ -42,7 +42,7 @@ class driver:
         self.type = "SDL"
         print("Running the SDL lvgl version")
         
-    def init_gui_ili9341(self):
+    def display_driver_ili9341(self):
 
         import lvesp32
 
@@ -87,7 +87,7 @@ class driver:
         # from xpt2046 import xpt2046
         # self.touch = xpt2046()
 
-    def init_gui_twatch(self):
+    def display_driver_twatch(self):
             import ttgo
             from axp_constants import AXP202_VBUS_VOL_ADC1,AXP202_VBUS_CUR_ADC1,AXP202_BATT_CUR_ADC1,AXP202_BATT_VOL_ADC1
                 
@@ -103,24 +103,24 @@ class driver:
             self.type="t-watch"            
             print("Running lvgl on the LilyGo t-watch 2020")
             
-    def init_gui(self):
+    def display_driver(self):
         
         # Identify platform and initialize it
 
         try:
-            self.init_gui_twatch()
+            self.display_driver_twatch()
             return
         except:
             pass
 
         try:
-            self.init_gui_ili9341()
+            self.display_driver_ili9341()
             return
         except ImportError:
             pass
             
         try:
-            self.init_gui_SDL()
+            self.display_driver_SDL()
             return
         except ImportError:
             pass

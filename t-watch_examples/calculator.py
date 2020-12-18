@@ -1,6 +1,6 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
-import init_gui
+import display_driver
 
 class Calculator():
     op1_text="0"

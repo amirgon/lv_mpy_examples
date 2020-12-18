@@ -1,7 +1,7 @@
 #!/opt/bin/lv_micropython
 import time
 import lvgl as lv
-import init_gui
+import display_driver
 from lv_colors import lv_colors
 
 def LV_IMG_BUF_SIZE_ALPHA_1BIT(w, h):

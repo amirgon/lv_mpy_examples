@@ -2,7 +2,7 @@
 import lvgl as lv
 import time
 
-from init_gui_utils import driver
+from display_driver_utils import driver
 drv = driver(width=480,height=320)
 
 LV_DEMO_WIDGETS_SLIDESHOW = 0
