@@ -1,8 +1,8 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
-from micropython import const
+from micropython -i import const
 
 CIRCLE_SIZE = const(20)
 TP_MAX_VALUE = const(10000)
@@ -48,6 +48,3 @@ circ_area = lv.obj(lv.scr_act(), None)
 circ_area.set_size(CIRCLE_SIZE, CIRCLE_SIZE)
 circ_area.add_style(lv.STATE.DEFAULT,style_circ)
 circ_area.set_click(False)
-
-while True:
-    pass

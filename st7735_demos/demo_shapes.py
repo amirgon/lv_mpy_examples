@@ -1,4 +1,4 @@
-#!//opt/bin/lv_micropython
+#!//opt/bin/lv_micropython -i
 """SSD1351 demo (shapes)."""
 
 import lvgl as lv

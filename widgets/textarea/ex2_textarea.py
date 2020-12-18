@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -51,6 +51,3 @@ kb.set_textarea(pwd_ta)      #Focus it on one of the text areas to start
 kb.set_cursor_manage(True)   # Automatically show/hide cursors on text areas */
 
 
-while True:
-    lv.task_handler()
-    time.sleep(5)

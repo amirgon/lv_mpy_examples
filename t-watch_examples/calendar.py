@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i -i
 import lvgl as lv
 import display_driver
 import os
@@ -38,5 +38,3 @@ today.day = now[2]
 calendar.set_today_date(today)
 calendar.set_showed_date(today)
 
-while True:
-    pass

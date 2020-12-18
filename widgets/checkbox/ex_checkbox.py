@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -17,6 +17,3 @@ cb.align(None,lv.ALIGN.CENTER, 0, 0)
 # attach the callback
 cb.set_event_cb(event_handler)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

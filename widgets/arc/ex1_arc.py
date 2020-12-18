@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
@@ -9,6 +9,3 @@ arc.set_end_angle(200)
 arc.set_size(150,150)
 arc.align(None,lv.ALIGN.CENTER,0,0)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

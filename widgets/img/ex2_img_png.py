@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import usys as sys
 import lvgl as lv

@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -70,6 +70,3 @@ kb.set_map(lv.keyboard.MODE.SPECIAL,kb_map)
 kb.set_ctrl_map(lv.keyboard.MODE.SPECIAL,kb_ctlr_map)
 kb.set_textarea(ta)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import display_driver
 import lvgl as lv
@@ -65,6 +65,3 @@ btn.align(None, lv.ALIGN.CENTER, 0, 0)
 label = lv.label(btn)
 label.set_text("No scroll up")
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

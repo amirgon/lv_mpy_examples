@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -25,6 +25,3 @@ style_shadow.set_shadow_color(lv.STATE.DEFAULT,lv_colors.BLUE)
 obj3 = lv.obj(lv.scr_act(),obj2)
 obj3.add_style(obj3.PART.MAIN,style_shadow)
 obj3.align(None,lv.ALIGN.CENTER, 60, 30)
-
-while True:
-    pass

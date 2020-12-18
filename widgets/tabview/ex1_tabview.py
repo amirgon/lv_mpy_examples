@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
@@ -31,6 +31,3 @@ label.set_text("Second tab")
 label = lv.label(tab3, None)
 label.set_text("Third tab");
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

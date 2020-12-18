@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 
@@ -16,6 +16,3 @@ led2.set_bright(190)
 led3=lv.led(lv.scr_act(), led1)
 led3.align(None,lv.ALIGN.CENTER,80,0)
 led3.on()
-
-while True:
-    pass

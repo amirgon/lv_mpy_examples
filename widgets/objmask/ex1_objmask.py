@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
@@ -74,6 +74,3 @@ a.y2 = 200
 f1.init(a, lv.OPA.TRANSP, 0, lv.OPA.COVER, 150)
 om.add_mask(f1)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

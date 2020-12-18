@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
@@ -55,6 +55,3 @@ bg.reset_style_list(lv.obj.PART.MAIN)
 bg.add_style(lv.obj.PART.MAIN, style_bg)
 bg.set_size(MASK_WIDTH, MASK_HEIGHT)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

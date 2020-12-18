@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -17,6 +17,3 @@ bar1.align(None,lv.ALIGN.CENTER,0,0)
 bar1.set_anim_time(2000)
 bar1.set_value(100,lv.ANIM.ON)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

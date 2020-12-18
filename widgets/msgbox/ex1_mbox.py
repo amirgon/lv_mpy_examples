@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import time
 import display_driver
@@ -16,6 +16,3 @@ mbox1.set_width(200)
 mbox1.set_event_cb(event_handler)
 mbox1.align(None, lv.ALIGN.CENTER, 0, 0)  # Align to the corner
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

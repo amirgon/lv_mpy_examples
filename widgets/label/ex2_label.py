@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 from lv_colors import lv_colors
@@ -30,6 +30,3 @@ main_label.align(None, lv.ALIGN.CENTER, 0, 0)
 # Shift the second label down and to the right by 1 pixel
 shadow_label.align(main_label, lv.ALIGN.IN_TOP_LEFT, 1, 1)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

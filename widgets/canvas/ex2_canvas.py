@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -47,6 +47,3 @@ for y in range(10,30):
 #        for( x = 5; x < 20; x++) {
 #            lv_canvas_set_px(canvas, x, y, c0);
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -34,6 +34,3 @@ You can scroll the content
 See the scroll bar on the bottom!"""
 )
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

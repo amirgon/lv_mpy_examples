@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 
@@ -6,22 +6,22 @@ import display_driver
 style_sb = lv.style_t()
 style_sb.init()
 #lv.style_copy(style_sb, lv.style_plain)
-style_sb.body.main_color = lv.color_make(0,0,0)
-style_sb.body.grad_color = lv.color_make(0,0,0)
-style_sb.body.border.color = lv.color_make(0xff,0xff,0xff)
-style_sb.body.border.width = 1
-style_sb.body.border.opa = lv.OPA._70
-style_sb.body.radius = 800 # large enough to make a circle
-style_sb.body.opa = lv.OPA._60
-style_sb.body.padding.right = 3
-style_sb.body.padding.bottom = 3
-style_sb.body.padding.inner = 8        # Scrollbar width
+style_sb.set_bg_color(lv.STATE.DEFAULT,lv.color_make(0,0,0))
+style_sb.set_bg_grad_color(lv.STATE.DEFAULT,lv.color_make(0,0,0))
+style_sb.set_border_color(lv.STATE.DEFAULT,lv.color_make(0xff,0xff,0xff))
+style_sb.set_border_width(lv.STATE.DEFAULT,1)
+style_sb.set_border_opa(lv.STATE.DEFAULT,lv.OPA._70)
+style_sb.set_radius(lv.STATE.DEFAULT,800)  # large enough to make a circle
+style_sb.set_bg_opa(lv.STATE.DEFAULT,lv.OPA._60)
+style_sb.set_pad_right(lv.STATE.DEFAULT, 3)
+style_sb.set_pad_bottom(lv.STATE.DEFAULT, 3)
+style_sb.set_pad_inner(lv.STATE.DEFAULT, 8)        # Scrollbar width
 
 # Create a page
 page = lv.page(lv.scr_act())
 page.set_size(150, 200)
 page.align(None, lv.ALIGN.CENTER, 0, 0)
-page.set_style(lv.page.STYLE.SB, style_sb)           # Set the scrollbar style
+page.add_style(lv.page.PART.SCROLLABLE, style_sb)           # Set the scrollbar style
 
 # Create a label on the page
 label = lv.label(page)
@@ -35,6 +35,3 @@ dolor in reprehenderit in voluptate velit esse cillum dolore
 eu fugiat nulla pariatur.
 Excepteur sint occaecat cupidatat non proident, sunt in culpa
 qui officia deserunt mollit anim id est laborum.""")
-
-while True:
-    pass

@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -18,6 +18,3 @@ label2.set_long_mode(lv.label.LONG.SROLL_CIRC)
 label2.set_width(150)
 label2.set_text("It is a circularly scrolling text. ")
 label2.align(None, lv.ALIGN.CENTER, 0, 30)
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

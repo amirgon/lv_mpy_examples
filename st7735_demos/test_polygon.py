@@ -1,4 +1,4 @@
-#!//opt/bin/lv_micropython
+#!//opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
@@ -95,5 +95,3 @@ p8.y = 0
 point_array=[p1,p2,p3,p4,p5,p6,p7,p8]
 canvas.draw_polygon(point_array,8,rect_dsc)
 
-while True:
-    pass

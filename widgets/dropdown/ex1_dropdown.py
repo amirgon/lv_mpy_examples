@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
@@ -25,6 +25,3 @@ ddlist.set_options("\n".join([
 ddlist.align(None, lv.ALIGN.IN_TOP_MID, 0, 20)
 ddlist.set_event_cb(event_handler)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

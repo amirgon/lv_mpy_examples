@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 from lv_colors import lv_colors
@@ -24,6 +24,3 @@ line1.set_points(line_points, len(line_points))      # Set the points
 line1.add_style(lv.line.PART.MAIN, style_line)
 line1.align(None, lv.ALIGN.CENTER, 0, 0)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

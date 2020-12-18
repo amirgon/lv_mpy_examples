@@ -1,4 +1,4 @@
-#!//opt/bin/lv_micropython
+#!//opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -46,7 +46,7 @@ btn1.set_style_local_value_str(lv.btn.PART.MAIN, lv.STATE.DEFAULT, "Gum");
 # Halo on press
 style_halo=lv.style_t()
 style_halo.init()
-style_halo.set_transition_time(lv.STATE.PRESSED, 400)xb
+style_halo.set_transition_time(lv.STATE.PRESSED, 400)
 style_halo.set_transition_time(lv.STATE.DEFAULT, 0)
 style_halo.set_transition_delay(lv.STATE.DEFAULT, 200)
 style_halo.set_outline_width(lv.STATE.DEFAULT, 0)
@@ -87,6 +87,3 @@ btn3.align(None, lv.ALIGN.CENTER, 0, 80)
 btn3.add_style(lv.btn.PART.MAIN, style_ripple)
 btn3.set_style_local_value_str(lv.btn.PART.MAIN, lv.STATE.DEFAULT, "Ripple")
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

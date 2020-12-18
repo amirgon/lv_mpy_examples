@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 
 import time
 import lvgl as lv
@@ -33,6 +33,3 @@ updates to match it."""
 )
 info_label.align(None, lv.ALIGN.IN_TOP_LEFT, 10, 10)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5) 

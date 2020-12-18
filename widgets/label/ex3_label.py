@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 from lv_colors import *
@@ -59,6 +59,3 @@ class TextChanger:
 text_changer = TextChanger(labels)
 text_changer.start()
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

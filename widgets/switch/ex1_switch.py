@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
@@ -22,6 +22,3 @@ sw2.on(lv.ANIM.ON)
 sw2.set_event_cb(event_handler)
 sw2.align(None, lv.ALIGN.CENTER, 0, 50)
     
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 
 import lvgl as lv
 import display_driver
@@ -32,6 +32,3 @@ time.sleep(1)
 label = lv.label(cont)
 label.set_text("Here an even longer text")
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i -i
 import lvgl as lv
 import display_driver
 import utime as time
@@ -147,7 +147,3 @@ class numClock():
         numericalClock.oldDate = date
     
 numericalClock = numClock(lv.scr_act())
-
-
-while True:
-    pass

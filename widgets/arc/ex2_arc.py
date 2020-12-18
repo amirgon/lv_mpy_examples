@@ -1,11 +1,11 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
 
 def arc_loader(task,arc):
     angle = arc.get_value()
-    print("angle: ",angle)
+    # print("angle: ",angle)
     angle += 5
     if angle > 360:
         task._del()
@@ -29,6 +29,3 @@ task.set_cb(lambda task: arc_loader(task, arc))
 task.set_period(20)
 task.set_prio(lv.TASK_PRIO.LOWEST)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

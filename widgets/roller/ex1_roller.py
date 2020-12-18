@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 
 import time
 import lvgl as lv
@@ -28,6 +28,3 @@ roller.set_visible_row_count(4)
 roller.align(None,lv.ALIGN.CENTER,0,0)              
 roller.set_event_cb(event_handler)              
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

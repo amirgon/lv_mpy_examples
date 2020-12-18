@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
@@ -35,6 +35,3 @@ table.set_cell_value(1, 1, "$7")
 table.set_cell_value(2, 1, "$4")
 table.set_cell_value(3, 1, "$6")
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

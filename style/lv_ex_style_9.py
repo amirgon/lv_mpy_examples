@@ -1,5 +1,5 @@
-#!/opt/bin/lv_micropython -i
-# change the above to the path of your lv_micropython unix binary
+#!/opt/bin/lv_micropython -i -i
+# change the above to the path of your lv_micropython -i unix binary
 import sys
 #
 # initialize lvgl

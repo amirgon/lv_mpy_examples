@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -32,6 +32,3 @@ btn.align(spinbox, lv.ALIGN.OUT_LEFT_MID, -5, 0)
 btn.set_event_cb(decrement_event_cb)
 btn.set_style_local_value_str(lv.btn.PART.MAIN, lv.STATE.DEFAULT, lv.SYMBOL.MINUS)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)  

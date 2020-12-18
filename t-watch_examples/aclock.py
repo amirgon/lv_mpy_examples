@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i -i
 import cmath
 import lvgl as lv
 import display_driver
@@ -240,5 +240,3 @@ class analogueClock():
                  
 aClock = analogueClock(lv.scr_act())
 
-while True:
-    pass

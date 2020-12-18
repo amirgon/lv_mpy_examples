@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -25,6 +25,3 @@ class TextArea():
                 self.i += 1
        
 TextArea()
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

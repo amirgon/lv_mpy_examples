@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i -i
 import lvgl as lv
 import display_driver
 
@@ -194,5 +194,3 @@ class Calculator():
 # create a calculator
 calc = Calculator(lv.scr_act())
 
-while True:
-    pass

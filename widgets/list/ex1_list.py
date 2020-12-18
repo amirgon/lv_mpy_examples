@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
@@ -36,6 +36,3 @@ list_btn.set_event_cb(event_handler)
 list_btn = list1.add_btn(lv.SYMBOL.BATTERY_FULL, "Battery")
 list_btn.set_event_cb(event_handler)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

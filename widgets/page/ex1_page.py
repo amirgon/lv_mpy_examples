@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 
 import time
 import lvgl as lv
@@ -23,7 +23,3 @@ label.set_text("Lorem ipsum dolor sit amet, consectetur adipiscing elit,\n"
                "Excepteur sint occaecat cupidatat non proident, sunt in culpa\n"
                "qui officia deserunt mollit anim id est laborum.")
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)
-    

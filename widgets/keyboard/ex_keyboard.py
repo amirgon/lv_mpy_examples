@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 LV_DPI=130
@@ -22,6 +22,3 @@ if ta.get_height() > max_h:
 
 # Assign the text area to the keyboard*/
 keyb.set_textarea(ta)    
-
-while True:
-    pass

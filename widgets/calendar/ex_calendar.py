@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -44,6 +44,3 @@ highlighted_days[2].day=22
 
 calendar.set_highlighted_dates(highlighted_days,3)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

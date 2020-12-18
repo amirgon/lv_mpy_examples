@@ -1,4 +1,4 @@
-#!//opt/bin/lv_micropython
+#!//opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -49,6 +49,3 @@ img.header.h = CANVAS_HEIGHT
 canvas.fill_bg(lv_colors.SILVER, lv.OPA.COVER)
 canvas.transform(img, 30, LV_IMG_ZOOM_NONE, 0, 0, CANVAS_WIDTH // 2, CANVAS_HEIGHT // 2, True);
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

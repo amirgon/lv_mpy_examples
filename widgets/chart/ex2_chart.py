@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import time
 import lvgl as lv
 import display_driver
@@ -33,6 +33,3 @@ chart.set_next(ser1,85)
 # Set points on ser2
 chart.set_points(ser2, [92, 71, 61, 15, 21, 35, 35, 58, 31, 53])
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)

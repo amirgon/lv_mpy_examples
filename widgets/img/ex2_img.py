@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython -i
+#!/opt/bin/lv_micropython -i -i
 import usys as sys
 import lvgl as lv
 import display_driver

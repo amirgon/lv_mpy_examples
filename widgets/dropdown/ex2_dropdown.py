@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import time
@@ -24,6 +24,3 @@ ddlist.align(None, lv.ALIGN.IN_TOP_RIGHT, 0, 20)
 ddlist = lv.dropdown(lv.scr_act(), ddlist)
 ddlist.align(None, lv.ALIGN.IN_TOP_RIGHT, 0, 100)
 
-while True:
-    lv.task_handler()
-    time.sleep_ms(5)
