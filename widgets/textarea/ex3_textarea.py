@@ -1,7 +1,7 @@
 #!/opt/bin/lv_micropython
 import time
 import lvgl as lv
-import display_driver
+import init_gui
 
 LV_HOR_RES = 240
 LV_VER_RES = 240

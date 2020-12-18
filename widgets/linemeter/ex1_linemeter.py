@@ -1,6 +1,6 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
-import display_driver
+import init_gui
 
 lmeter = lv.linemeter(lv.scr_act(),None)
 lmeter.set_range(0,100)         # Set the range

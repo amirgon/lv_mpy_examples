@@ -1,6 +1,6 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
-import display_driver
+import init_gui
 
 # Create a LED and switch it OFF
 led1 = lv.led(lv.scr_act(),None)

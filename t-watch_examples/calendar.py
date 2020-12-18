@@ -1,6 +1,6 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
-import display_driver
+import init_gui
 import os
 
 def event_handler(source,evt):

@@ -1,7 +1,7 @@
 #!//opt/bin/lv_micropython -i
 import lvgl as lv
 from time import sleep 
-import display_driver
+import init_gui
 from math import sin,cos,pi
 from lv_colors import LV_COLOR_MAKE, lv_colors
 

@@ -1,7 +1,7 @@
 #!/opt/bin/lv_micropython
 import time
 import lvgl as lv
-import display_driver
+import init_gui
             
 # create a window
 win = lv.win(lv.scr_act(),None)

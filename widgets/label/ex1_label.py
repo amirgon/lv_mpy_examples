@@ -1,7 +1,7 @@
 #!/opt/bin/lv_micropython
 import time
 import lvgl as lv
-import display_driver
+import init_gui
             
 label1 = lv.label(lv.scr_act(),None)
 label1.set_long_mode(lv.label.LONG.BREAK)  # Break the long lines

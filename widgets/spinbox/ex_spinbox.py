@@ -1,7 +1,7 @@
 #!/opt/bin/lv_micropython
 import time
 import lvgl as lv
-import display_driver
+import init_gui
 
 def increment_event_cb(source,evt):
     if evt == lv.EVENT.SHORT_CLICKED or evt == lv.EVENT.LONG_PRESSED_REPEAT:

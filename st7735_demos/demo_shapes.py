@@ -2,7 +2,7 @@
 """SSD1351 demo (shapes)."""
 
 import lvgl as lv
-import display_driver
+import init_gui
 from utime import sleep
 from math import cos, sin, pi, radians, floor
 from lv_colors import lv_colors,LV_COLOR_MAKE

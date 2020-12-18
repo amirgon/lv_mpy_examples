@@ -6,7 +6,7 @@ import sys
 # initialize lvgl
 #
 import lvgl as lv
-import display_driver
+import init_gui
 from lv_colors import lv_colors
 from imagetools import get_png_info, open_png
 

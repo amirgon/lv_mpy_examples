@@ -1,6 +1,6 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
-import display_driver
+import init_gui
 import time
 
 cpicker = lv.cpicker(lv.scr_act(),None)

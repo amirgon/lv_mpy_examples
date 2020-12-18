@@ -2,7 +2,7 @@
 
 import time
 import lvgl as lv
-import display_driver
+import init_gui
 
 # create a page
 page = lv.page(lv.scr_act(),None)

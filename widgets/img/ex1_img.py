@@ -1,7 +1,7 @@
 #!/opt/bin/lv_micropython -i
 import usys as sys
 import lvgl as lv
-import display_driver
+import init_gui
 
 try:
   with open('../../assets/img_cogwheel_argb.bin','rb') as f:

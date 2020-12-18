@@ -2,7 +2,7 @@
 
 import time
 import lvgl as lv
-import display_driver
+import init_gui
 
 def event_handler(source,evt):
     if evt == lv.EVENT.VALUE_CHANGED:

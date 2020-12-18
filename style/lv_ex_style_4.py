@@ -6,7 +6,7 @@ import time
 # initialize lvgl
 #
 import lvgl as lv
-import display_driver
+import init_gui
 from lv_colors import lv_colors
 
 style = lv.style_t()

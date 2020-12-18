@@ -1,6 +1,6 @@
 #!/opt/bin/lv_micropython
 import lvgl as lv
-import display_driver
+import init_gui
 import utime as time
 from lv_colors import lv_colors
 # Calculate the week day

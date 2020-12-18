@@ -3,6 +3,6 @@ The lvgl documentation provides examples written in C of how to use the differen
 In the lvgl documentation you will find under Micropython: "No examples yet", which this repository aims at changing.
 ## Running the demo programs
 All programs run under lv_micropython. In addition you need 
-* display_driver.py
+* init_gui.py
 * lv_colors.py
 which you will find in this repository. These modules must be visible to MicroPython which you can accomplish by copying the files to $HOME/.micropython/lib
