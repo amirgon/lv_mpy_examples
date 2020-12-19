@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython -i -i
+#!/opt/bin/lv_micropython -i
 import lvgl as lv
 import display_driver
 import usys as sys
@@ -6,11 +6,11 @@ from lv_colors import lv_colors
 
 # create the green image data
 try:
-    with open('../../assets/imgbtn_green_argb.bin','rb') as f:
+    with open('../../assets/imgbtn_green_argb8888.bin','rb') as f:
         green_img_data = f.read()
 except:
     try:
-        with open('images/imgbtn_green_rgb565.bin','rb') as f:
+        with open('images/imgbtn_green_argb565.bin','rb') as f:
             green_img_data = f.read()
     except:
         print("Cannot open green buttom image file")
@@ -18,11 +18,11 @@ except:
           
 # create the blue image data
 try:
-    with open('../../assets/imgbtn_blue_argb.bin','rb') as f:
+    with open('../../assets/imgbtn_blue_argb8888.bin','rb') as f:
         blue_img_data = f.read()
 except:
     try:
-        with open('images/imgbtn_blue_rgb565.bin','rb') as f:
+        with open('images/imgbtn_blue_argb565.bin','rb') as f:
             blue_img_data = f.read()
     except:
         print("Cannot open green buttom image file")
