@@ -1,4 +1,4 @@
-#!//opt/bin/lv_micropython -i -i
+#!//opt/bin/lv_micropython -i
 import lvgl as lv
 from time import sleep 
 import display_driver

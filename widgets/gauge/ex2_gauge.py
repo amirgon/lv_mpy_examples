@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython -i -i
+#!/opt/bin/lv_micropython -i
 import time
 import sys
 import lvgl as lv
@@ -6,11 +6,11 @@ import display_driver
 from lv_colors import lv_colors
 
 try:
-    with open('../../assets/img_hand_argb.bin','rb') as f:
+    with open('../../assets/img_hand_argb8888.bin','rb') as f:
         hand_img_data = f.read()
 except:
     try:
-        with open('images/img_hand_rgb565.bin','rb') as f:
+        with open('images/img_hand_argb565.bin','rb') as f:
             hand_img_data = f.read()
     except:
         print("Could not find img_hand file")

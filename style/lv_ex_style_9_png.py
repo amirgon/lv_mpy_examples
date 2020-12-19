@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython -i -i
+#!/opt/bin/lv_micropython -i
 # change the above to the path of your lv_micropython -i unix binary
 
 import sys
