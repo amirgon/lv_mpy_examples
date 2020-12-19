@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython -i -i
+#!/opt/bin/lv_micropython -i
 # change the above to the path of your lv_micropython -i unix binary
 import sys
 #
@@ -7,27 +7,39 @@ import sys
 import lvgl as lv
 import display_driver
 from lv_colors import lv_colors
-    
+
+SDL     = 0
+ILI9341 = 1
 # create the cogwheel image data
 try:
-    with open('../assets/img_cogwheel_argb.bin','rb') as f:
+    with open('../assets/img_cogwheel_argb8888.bin','rb') as f:
         cogwheel_img_data = f.read()
+        driver = SDL
 except:
     try:
         with open('images/img_cogwheel_rgb565.bin','rb') as f:
             cogwheel_img_data = f.read()
+            driver = ILI9341
     except:
         print("Could not find img_cogwheel_xxx.bin")
         sys.exit()
         
-cogwheel_img_dsc = lv.img_dsc_t(
-    {
-        "header": {"always_zero": 0, "w": 100, "h": 100, "cf": lv.img.CF.TRUE_COLOR_ALPHA},
-        "data": cogwheel_img_data,
-        "data_size": len(cogwheel_img_data),
-    }
-)
-
+if driver == SDL:
+    cogwheel_img_dsc = lv.img_dsc_t(
+        {
+            "header": {"always_zero": 0, "w": 100, "h": 100, "cf": lv.img.CF.TRUE_COLOR_ALPHA},
+            "data": cogwheel_img_data,
+            "data_size": len(cogwheel_img_data),
+        }
+    )
+else:
+    cogwheel_img_dsc = lv.img_dsc_t(
+        {
+            "header": {"always_zero": 0, "w": 100, "h": 100, "cf": lv.img.CF.TRUE_COLOR},
+            "data": cogwheel_img_data,
+            "data_size": len(cogwheel_img_data),
+        }
+    )    
 style = lv.style_t()
 style.init()
 # Set a background color and a radius

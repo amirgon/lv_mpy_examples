@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython -i -i
+#!/opt/bin/lv_micropython -i
 import usys as sys
 import lvgl as lv
 import display_driver
@@ -6,25 +6,37 @@ from lv_colors import lv_colors
 
 SLIDER_WIDTH=15
 
+SDL     = 0
+ILI9341 = 1
 try:
-  with open('../../assets/img_cogwheel_argb.bin','rb') as f:
+  with open('../../assets/img_cogwheel_argb8888.bin','rb') as f:
     cogwheel_img_data = f.read()
+    driver = SDL
 except:
   try:
     with open('images/img_cogwheel_rgb565.bin','rb') as f:
       cogwheel_img_data = f.read()
+      driver = ILI9341
   except:
     print("Could not find binary img_cogwheel file")
     
 # create the cogwheel image data
-
-cogwheel_img_dsc = lv.img_dsc_t(
+if driver == SDL:
+  cogwheel_img_dsc = lv.img_dsc_t(
     {
-        "header": {"always_zero": 0, "w": 100, "h": 100, "cf": lv.img.CF.TRUE_COLOR_ALPHA},
-        "data": cogwheel_img_data,
-        "data_size": len(cogwheel_img_data),
+      "header": {"always_zero": 0, "w": 100, "h": 100, "cf": lv.img.CF.TRUE_COLOR_ALPHA},
+      "data": cogwheel_img_data,
+      "data_size": len(cogwheel_img_data),
     }
-)
+  )
+else:
+  cogwheel_img_dsc = lv.img_dsc_t(
+    {
+      "header": {"always_zero": 0, "w": 100, "h": 100, "cf": lv.img.CF.TRUE_COLOR},
+      "data": cogwheel_img_data,
+      "data_size": len(cogwheel_img_data),
+    }
+  )  
 
 def slider_event_cb(slider,event):
     if event == lv.EVENT.VALUE_CHANGED:
