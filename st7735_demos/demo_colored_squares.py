@@ -5,8 +5,8 @@ import time
 import math
 from lv_colors import lv_colors, LV_COLOR_MAKE
 
-CANVAS_WIDTH  = 240
-CANVAS_HEIGHT = 240
+CANVAS_WIDTH = lv.scr_act().get_disp().driver.hor_res
+CANVAS_HEIGHT = lv.scr_act().get_disp().driver.ver_res
 
 DARKGREEN = LV_COLOR_MAKE (0, 128, 0)
 DEEP_PINK = LV_COLOR_MAKE (255, 0, 128)
@@ -28,6 +28,23 @@ colors= [lv_colors.RED,lv_colors.GREEN,lv_colors.BLUE,lv_colors.YELLOW,
          INDIGO,DODGER_BLUE,lv_colors.CYAN,PINK,LIGHT_YELLOW,LIGHT_CORAL,LIGHT_GREEN,
          LIGHT_SLATE_BLUE,lv_colors.WHITE]
 
+class coloredBox(lv.obj):
+    
+    def __init__(self,parent,x0,y0,width,height,color):
+        super().__init__(parent)
+
+        self.set_width(width)
+        self.set_height(height)
+        self.set_x(x0)
+        self.set_y(y0)
+        # color the box
+        box_style = lv.style_t()
+        box_style.init()
+        box_style.set_bg_color(lv.STATE.DEFAULT, color)
+        box_style.set_border_width(lv.STATE.DEFAULT, 0)
+        box_style.set_radius(lv.STATE.DEFAULT, 0)
+        self.add_style(lv.obj.PART.MAIN, box_style)
+
 def test():    
     """Test code."""
     cbuf=bytearray(CANVAS_WIDTH * CANVAS_HEIGHT * 4)
@@ -35,17 +52,16 @@ def test():
     canvas = lv.canvas(lv.scr_act(),None)
     canvas.set_buffer(cbuf,CANVAS_WIDTH,CANVAS_HEIGHT,lv.img.CF.TRUE_COLOR)
     canvas.align(None,lv.ALIGN.CENTER,0,0)
-    
+
+    offset = (CANVAS_WIDTH-CANVAS_HEIGHT)//2
     c = 0
     rect_dsc = lv.draw_rect_dsc_t()
     rect_dsc.init()
     rect_dsc.bg_opa = lv.OPA.COVER
 
-    for x in range(0, CANVAS_WIDTH, 48):
+    for x in range(0, CANVAS_HEIGHT, 48):
         for y in range(0, CANVAS_HEIGHT, 48):
-            rect_dsc.bg_color = colors[c]
-            canvas.draw_rect(x, y, 48, 48, rect_dsc)
+            box = coloredBox(lv.scr_act(),x+offset, y, 48, 48,colors[c])
             c += 1
-    time.sleep(9)
 
 test()

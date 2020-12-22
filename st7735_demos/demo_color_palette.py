@@ -1,13 +1,14 @@
 #!//opt/bin/lv_micropython -i
-"""ST7735 demo (color palette) running on lvgl."""
+"""SSD1351 demo (shapes)."""
+
 import lvgl as lv
 import display_driver
 from utime import sleep
 from math import cos, sin, pi, radians, floor
 from lv_colors import lv_colors,LV_COLOR_MAKE
-disp = lv.scr_act().get_disp()
-CANVAS_WIDTH = disp.driver.hor_res
-CANVAS_HEIGHT = disp.driver.ver_res
+
+def clear(color=lv_colors.BLACK):
+    canvas.fill_bg(color, lv.OPA.COVER)
     
 def hsv_to_rgb(h, s, v):
     """
@@ -45,74 +46,40 @@ def hsv_to_rgb(h, s, v):
     if i == 5:
         return v, p, q
 
-def draw_filledCircle(canvas, x0, y0, r, color):
-    """Draw a filled circle.
+class coloredCircle(lv.obj):
+    
+    def __init__(self,parent,x0,y0,radius,color):
+        super().__init__(parent)
 
-        Args:
-            x0 (int): X coordinate of center point.
-            y0 (int): Y coordinate of center point.
-            r (int): Radius.
-            color (int): RGB565 color value.
-    """
-    # print("Draw filled circle: x0: %d, y0: %d, r: %d" % (x0, y0, r))
-    f = 1 - r
-    dx = 1
-    dy = -r - r
-    x = 0
-    y = r
-    line_dsc = lv.draw_line_dsc_t()
-    line_dsc.init()
-    line_dsc.color = color
-    line_dsc.opa = lv.OPA.COVER
-    p1=lv.point_t()
-    p2=lv.point_t()
-    point_array=[p1,p2]
-    p1.x = x0
-    p1.y = y0 - r
-    p2.x = p1.x 
-    p2.y = p1.y + 2 * r + 1
-    # print("x1: %d, y1: %d, x2: %d, y2: %d" % (p1.x,p1.y,p2.x,p2.y))
-    canvas.draw_line(point_array, 2, line_dsc)
-    while x < y:
-        if f >= 0:
-            y -= 1
-            dy += 2
-            f += dy
-        x += 1
-        dx += 2
-        f += dx
-        p1.x = x0 + x
-        p1.y = y0 - y
-        p2.x = p1.x
-        p2.y = p1.y + 2 * y + 1
-        canvas.draw_line(point_array,2,line_dsc)
-        p1.x = x0 - x
-        p2.x = p1.x
-        canvas.draw_line(point_array,2,line_dsc)
-        p1.x = x0 - y
-        p1.y = y0 - x
-        p2.x = p1.x 
-        p2.y = p1.y + 2 * x + 1
-        canvas.draw_line(point_array,2,line_dsc)
-        p1.x = x0 + y
-        p2.x = p1.x
-        canvas.draw_line(point_array,2,line_dsc)
-
+        self.set_width(2*radius)
+        self.set_height(2*radius)
+        self.set_x(x0-radius)
+        self.set_y(y0-radius)
+        # color the box
+        circle_style = lv.style_t()
+        circle_style.init()
+        circle_style.set_bg_color(lv.STATE.DEFAULT, color)
+        circle_style.set_border_width(lv.STATE.DEFAULT, 0)
+        circle_style.set_radius(lv.STATE.DEFAULT, radius)
+        self.add_style(lv.obj.PART.MAIN, circle_style)
 
 def test():
     """Test code."""
-    # create a canvas
-    cbuf=bytearray(CANVAS_WIDTH * CANVAS_HEIGHT * 4)
-    canvas = lv.canvas(lv.scr_act(),None)
-    canvas.set_buffer(cbuf,CANVAS_WIDTH,CANVAS_HEIGHT,lv.img.CF.TRUE_COLOR)
-    canvas.align(None,lv.ALIGN.CENTER,0,0)
+    
+    CANVAS_WIDTH = lv.scr_act().get_disp().driver.hor_res
+    CANVAS_HEIGHT = lv.scr_act().get_disp().driver.ver_res
+    # black screen color
+    scr_style = lv.style_t()
+    scr_style.set_bg_color(lv.STATE.DEFAULT, lv_colors.BLACK)
+    lv.scr_act().add_style(lv.obj.PART.MAIN,scr_style)
+    
     radius = CANVAS_HEIGHT//16
     offset = (CANVAS_WIDTH-CANVAS_HEIGHT)//2
     c = 0
     for x in range(0, CANVAS_HEIGHT, 2*radius):
         for y in range(0, CANVAS_HEIGHT, 2*radius):
             color = LV_COLOR_MAKE(*hsv_to_rgb(c / 64, 1, 1))
-            draw_filledCircle(canvas,x+radius+offset ,y+radius, radius, color)
+            circle = coloredCircle(lv.scr_act(),x+radius+offset ,y+radius, radius, color)
             c += 1
-
+        
 test()
