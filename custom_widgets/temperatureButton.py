@@ -1,4 +1,4 @@
-#!/opt/ucc/micros/esp32/lv_micropython/ports/unix/micropython-dev -i
+#!/opt/bin/lv_micropython -i
 # This creates a custom "temperature button" which print a temperature value.
 # Once you set a new temperature the button label is automatically updated
 
