@@ -101,7 +101,7 @@ class Meter():
         self.canvas.draw_rect(0,0,self.width,self.height,rect_dsc)
         if self.divisions > 0:
             dy = (self.height -4)/ self.divisions # Tick marks
-            print("dy: ",dy)
+            # print("dy: ",dy)
             for tick in range(self.divisions+1):
                 ypos = int(dy * tick)
                 p1.x = self.width//5
@@ -110,7 +110,7 @@ class Meter():
                 p2.y = p1.y
                 self.canvas.draw_line(point_array,2,self.hline_dsc)
                 
-                print("tick: %d, pos: %d"%(tick,p1.y))
+                # print("tick: %d, pos: %d"%(tick,p1.y))
                 
                 if legend:
                     label = lv.label(self.container)
@@ -120,49 +120,58 @@ class Meter():
         self.base = p1.y
         
         # draw the value rectangle
-        print("max: ",self.max_value)
+        # print("max: ",self.max_value)
         value_y = round((self.height -4)/(self.max_value - self.min_value) * self.value)
         rect_dsc.bg_color = self.bar_color
         rect_dsc.bg_opa = lv.OPA.COVER
         rect_dsc.border_width = 0
-        print("Pos of last tick: ",p1.y)
-        print("bar height: ",value_y)
+        # print("Pos of last tick: ",p1.y)
+        # print("bar height: ",value_y)
         self.canvas.draw_rect(self.width//5+5,self.base-value_y,2*self.width//5 ,value_y ,rect_dsc)
 
     def set_value(self,value):
-        print("set value: ",value)
+        # print("set value: ",value)
+        if self.value == value:
+            return
         p1=lv.point_t()
         p2=lv.point_t()
         point_array=[p1,p2]
-        value_y = round((self.height -4)/(self.max_value - self.min_value) * self.value)
 
-        # clear the old bar
         rect_dsc = lv.draw_rect_dsc_t()
         rect_dsc.init()
-        rect_dsc.bg_color = self.bg_color
         rect_dsc.bg_opa = lv.OPA.COVER
         rect_dsc.border_width = 0
-        self.canvas.draw_rect(self.width//5+5,self.base-value_y,2*self.width//5 ,value_y ,rect_dsc)
         
-        self.value = value        
-        rect_dsc.bg_color = self.bar_color
-        value_y = round((self.height -4)/(self.max_value - self.min_value) * self.value)      
+        # draw the new bar
 
+        if value > self.value:
+            self.value = value
+            value_y = round((self.height -4)/(self.max_value - self.min_value) * self.value)
+            rect_dsc.bg_color = self.bar_color
+            self.canvas.draw_rect(self.width//5+5,self.base-value_y,2*self.width//5 ,value_y ,rect_dsc)
+            
+        else:
+            # remove the difference from the old value from the bar
+            old_value_y = round((self.height -4)/(self.max_value - self.min_value) * self.value)
+            self.value = value
+            value_y = round((self.height -4)/(self.max_value - self.min_value) * self.value)      
+            rect_dsc.bg_color = self.bg_color
 
-        if self.divisions > 0:
-            dy = (self.height -4)/ self.divisions # Tick marks
-            print("dy: ",dy)
-            for tick in range(self.divisions+1):
-                ypos = int(dy * tick)
-                p1.x = self.width//5
-                p1.y = ypos+2
-                p2.x = p1.x+self.width - 2*self.width//5
-                p2.y = p1.y
-                self.canvas.draw_line(point_array,2,self.hline_dsc)
-                
-        print("Pos of last tick: ",p1.y)
-        print("bar height: ",value_y)
-        self.canvas.draw_rect(self.width//5+5,p1.y-value_y,2*self.width//5 ,value_y ,rect_dsc)
+            self.canvas.draw_rect(self.width//5+5,self.base-old_value_y,2*self.width//5 ,
+                                  old_value_y - value_y,rect_dsc)
+    
+            if self.divisions > 0:
+                dy = (self.height -4)/ self.divisions # Tick marks
+                # print("dy: ",dy)
+                for tick in range(self.divisions+1):
+                    ypos = int(dy * tick)
+                    p1.x = self.width//5
+                    p1.y = ypos+2
+                    p2.x = p1.x+self.width - 2*self.width//5
+                    p2.y = p1.y
+                    if p1.y >= self.base-old_value_y and p1.y < self.base-value_y:
+                        self.canvas.draw_line(point_array,2,self.hline_dsc)
+                        break
         
         if self.value_text_format:
             value_text = self.value_text_format.format(self.value)
