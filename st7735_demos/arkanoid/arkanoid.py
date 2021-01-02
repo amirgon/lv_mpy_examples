@@ -16,7 +16,7 @@ ILI9341 = 1
 
 SCREEN_WIDTH = lv.scr_act().get_disp().driver.hor_res
 SCREEN_HEIGHT = lv.scr_act().get_disp().driver.ver_res
-print("screen height: ",SCREEN_HEIGHT)
+# print("screen height: ",SCREEN_HEIGHT)
 LV_ANIM_REPEAT_INFINITE = -1
 
 def draw_background():
@@ -128,7 +128,6 @@ def draw_background():
     frame_top_img.set_src(frame_top_img_dsc)
     frame_left_img.set_src(frame_left_img_dsc)
     frame_right_img.set_src(frame_right_img_dsc)
-    print("Background Done")
 
 brick_colors = ['Red','Yellow', 'Blue', 'Pink', 'Green']
 bricks = [None]*len(brick_colors)
@@ -141,7 +140,7 @@ def create_brick_img_dscs(w=26,h=14):
         filename_argb8888 = 'Brick_' + brick_colors[index] + '26x14_argb8888.bin'
         filename_rgb656 = 'Brick_' + brick_colors[index] + '26x14_rgb565.bin'
         
-        print("Filenames: %s %s"%('arkanoid_images/'+filename_argb8888,'images/'+filename_rgb656))
+        # print("Filenames: %s %s"%('arkanoid_images/'+filename_argb8888,'images/'+filename_rgb656))
         try:
             with open('arkanoid_images/'+filename_argb8888,'rb') as f:
                 brick_data = f.read()
@@ -217,9 +216,7 @@ class Ball():
         self.y = y
         self.x2 = x + w - 1
         self.y2 = y + h - 1
-        # self.x2 = x - 1
-        # self.y2 = y - 1
-        print("ball x2: %d, y2: %d"%(self.x2,self.y2))
+        # print("ball x2: %d, y2: %d"%(self.x2,self.y2))
         self.prev_x = x
         self.prev_y = y
         self.width = w
@@ -233,7 +230,6 @@ class Ball():
         self.x_speed2 = 0.0
         self.y_speed2 = 0.0
         self.created = ticks_ms()
-        print("created: %d"%self.created)
         try:
             with open('arkanoid_images/Ball14x14_argb8888.bin','rb') as f:
                 ball_data = f.read()
@@ -281,17 +277,17 @@ class Ball():
         paddle_center = paddle_width//2
         self.prev_x = self.x
         self.prev_y = self.y
-        print("set_position: paddle_x: %d, paddle_y: %d paddle_width: %d"%(paddle_x,paddle_y,paddle_width))
+        # print("set_position: paddle_x: %d, paddle_y: %d paddle_width: %d"%(paddle_x,paddle_y,paddle_width))
         # Check if frozen to paddle
         if self.frozen:
 
             # Freeze ball to top center of paddle
             self.x = paddle_x +  paddle_center - self.center + 10
             # self.y = paddle_y - self.height
-            print("paddle x: %d, paddle_center: %d, ball center: %d"%(paddle_x,paddle_width//2, self.center))
-            print("ball position, frozen: ",self.x)
+            # print("paddle x: %d, paddle_center: %d, ball center: %d"%(paddle_x,paddle_width//2, self.center))
+            # print("ball position, frozen: ",self.x)
             self.ball_img.set_x(self.x)
-            print("time since creation: ", ticks_diff(ticks_ms(), self.created))
+            # print("time since creation: ", ticks_diff(ticks_ms(), self.created))
             if ticks_diff(ticks_ms(), self.created) >= 2000:
                 # Release frozen ball after 2 seconds
                 self.frozen = False
@@ -306,7 +302,7 @@ class Ball():
         self.y_speed2 -= int(self.y_speed2)
         self.y_speed2 += self.y_speed - int(self.y_speed)
         
-        print("x: %d, y: %d"%(self.x,self.y))
+        # print("x: %d, y: %d"%(self.x,self.y))
         
         # Bounces off walls
         if self.y < 40:               # space for score (30) + width of border image (10)
@@ -760,7 +756,6 @@ class Score():
 
     def game_over(self):
         """Display game over."""
-        print("game_over")
         label_style = lv.style_t()
         label_style.init()
         label_style.set_text_color(lv.STATE.DEFAULT,lv_colors.RED)
@@ -787,14 +782,14 @@ class Arkanoid():
         self.bricks = load_level(self.level)
 
         self.paddle = Paddle(lv.scr_act())
-        print('paddle x: %d, y: %d'%(self.paddle.x,self.paddle.y))
+        # print('paddle x: %d, y: %d'%(self.paddle.x,self.paddle.y))
         self.balls = []
 
         # Initialze the score
         self.score = Score()
 
         # Initialize balls
-        print("ball position: %d.%d"%(120-9,300-self.paddle.height))
+        # print("ball position: %d.%d"%(120-9,300-self.paddle.height))
         self.balls.append(Ball(120-9,300-self.paddle.height,-3,-2,frozen=True))
 
         # Initialize lives
@@ -814,7 +809,7 @@ class Arkanoid():
     def anim_cb(self):
         score_points = 0
         for ball in self.balls:
-            print("paddle x: %d, paddle y: %d, paddle width: %d"%(self.paddle.x,self.paddle.y, self.paddle.width))
+            # print("paddle x: %d, paddle y: %d, paddle width: %d"%(self.paddle.x,self.paddle.y, self.paddle.width))
             ball.set_position(self.paddle.x,self.paddle.y, self.paddle.width)
 
             if not ball.frozen:
@@ -854,8 +849,7 @@ class Arkanoid():
 
                     # Check for missed
                     if ball.y2 > SCREEN_HEIGHT - 3:
-                        print("y of ball: ", ball.y2)
-                        print("clear ball")
+                        # print("y of ball: ", ball.y2)
                         ball.clear()
                         self.balls.remove(ball)
                         print(self.balls)
@@ -864,14 +858,14 @@ class Arkanoid():
                             self.powerups.clear()
                             # Lose life if last ball on screen
                             if len(self.lives) == 0:
-                                print("lives: ",len(self.lives))
+                                # print("lives: ",len(self.lives))
                                 self.score.game_over()
                                 self.game_over=True
                             else:
                                 # Subtract Life
                                 self.lives.pop().clear()
                                 # Add ball
-                                print("Create new ball")
+                                # print("Create new ball")
                                 self.balls.append(Ball(self.paddle.x+self.paddle.width//2,300-self.paddle.height,-2,-1,frozen=True))
                             # balls.append(Ball(59, 112, 2, -3, frozen=True))
                         return
@@ -902,13 +896,12 @@ class Arkanoid():
                     for powerup in self.powerups:
                         powerup.clear()
                     self.powerups.clear()
-                    print("no of balls: ",len(self.balls))
+                    # print("no of balls: ",len(self.balls))
                     self.level += 1
                     if self.level > self.MAX_LEVEL:
                         self.level = 1
                     self.bricks = load_level(self.level)
-                    print("New level")
-                    print("No of bricks: ",len(bricks))
+                    # print("No of bricks: ",len(bricks))
                     self.balls.append(Ball(self.paddle.x+self.paddle.width//2,300-self.paddle.height,-2,-1,frozen=True))
                     return
                 # Attempt to set framerate to 30 FPS
@@ -919,4 +912,4 @@ class Arkanoid():
 arkanoid = Arkanoid()
 while True:
     if not arkanoid.game_over:
-        time-sleep(1)
+        time.sleep(1)
