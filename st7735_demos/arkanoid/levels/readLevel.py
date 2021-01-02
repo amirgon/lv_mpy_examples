@@ -21,6 +21,6 @@ for i in range(len(lines)):
     for i in range(len(brick_color)):
         if line[2] == brick_color[i]:
             break
-    print("x: %d, y: %x, color_index: %d"%(int(line[0]),int(line[1]),i))
+    print("x: %d, y: %d, color_index: %d"%(int(line[0]),int(line[1]),i))
 
 f.close()
