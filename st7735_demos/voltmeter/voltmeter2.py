@@ -1,5 +1,6 @@
 #!/opt/bin/lv_micropython -i
 import utime as time
+import sys
 import lvgl as lv
 import display_driver
 from lv_colors import lv_colors
