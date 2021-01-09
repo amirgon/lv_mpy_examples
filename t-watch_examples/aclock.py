@@ -1,4 +1,4 @@
-#!/opt/bin/lv_micropython -i -i
+#!/opt/bin/lv_micropython -i
 import cmath
 import lvgl as lv
 import display_driver
@@ -111,10 +111,6 @@ def monthString (monthCode):
     }
     return monthTable[monthCode]
 
-CANVAS_WIDTH  = 240
-CANVAS_HEIGHT = 240
-
-
 class analogueClock():
     oldYear=-1
     oldMonth=-1
@@ -124,18 +120,22 @@ class analogueClock():
     oldSec=-1
     oldDate=[oldYear,oldMonth,oldDay]
 
-    def __init__(self,parent):  
-        cbuf=bytearray(CANVAS_WIDTH * CANVAS_HEIGHT * 4)
+    def __init__(self,parent):
+        
+        self.CANVAS_HEIGHT = lv.scr_act().get_disp().driver.ver_res
+        self.CANVAS_WIDTH = self.CANVAS_HEIGHT
+        cbuf=bytearray(self.CANVAS_HEIGHT * self.CANVAS_HEIGHT * 4)
 
         self.canvas = lv.canvas(parent,None)
-        self.canvas.set_buffer(cbuf,CANVAS_WIDTH,CANVAS_HEIGHT,lv.img.CF.TRUE_COLOR)
-
+        self.canvas.set_buffer(cbuf,self.CANVAS_HEIGHT,self.CANVAS_HEIGHT,lv.img.CF.TRUE_COLOR)
+        self.canvas.align(None,lv.ALIGN.CENTER,0,0)
+        
         circle_dsc = lv.draw_line_dsc_t()
         circle_dsc.init()
         circle_dsc.color = lv_colors.GREEN
         self.radius = 90
-        xo=CANVAS_WIDTH//2
-        yo=CANVAS_HEIGHT//2-20
+        xo=self.CANVAS_WIDTH//2
+        yo=self.CANVAS_HEIGHT//2-20
         self.canvas.draw_arc(xo,yo,self.radius,0,360,circle_dsc)
         vor = xo + 1j * yo
         vtstart = 0.9 * self.radius + 0j  # start of tick
@@ -158,13 +158,16 @@ class analogueClock():
 
         self.task = lv.task_create_basic()
         self.task.set_cb(lambda task: self.updateClock(self.task))
-        self.task.set_period(1000)
+        self.task.set_period(100)
         self.task.set_prio(lv.TASK_PRIO.LOWEST)
         
     def updateClock(self,task):
         center=120+100j
-        now = time.time()
-        localTime = time.localtime(now)
+        try:
+            localTime = cetTime()
+        except:
+            now = time.time()
+            localTime = time.localtime(now)
         seconds = localTime[5]
         minutes = localTime[4]
         hours = localTime[3]
@@ -227,7 +230,7 @@ class analogueClock():
             rect_dsc.init()
             rect_dsc.bg_color=lv_colors.BLACK
             rect_dsc.bg_opa=lv.OPA.COVER
-            self.canvas.draw_rect(0,CANVAS_HEIGHT-30,CANVAS_WIDTH,20,rect_dsc)
+            self.canvas.draw_rect(0,self.CANVAS_HEIGHT-30,self.CANVAS_WIDTH,20,rect_dsc)
         
             # write new date
             weekday = dayOfWeek(year,month,day)
@@ -235,8 +238,28 @@ class analogueClock():
             label_dsc = lv.draw_label_dsc_t()
             label_dsc.init()
             label_dsc.color=lv_colors.WHITE
-            self.canvas.draw_text(0,CANVAS_HEIGHT-30,CANVAS_WIDTH,label_dsc,dateText,lv.label.ALIGN.CENTER)
+            self.canvas.draw_text(0,self.CANVAS_HEIGHT-30,self.CANVAS_WIDTH,
+                                  label_dsc,dateText,lv.label.ALIGN.CENTER)
             self.oldDate = date
                  
-aClock = analogueClock(lv.scr_act())
+scr_style = lv.style_t()
+scr_style.set_bg_color(lv.STATE.DEFAULT, lv_colors.BLACK)
+lv.scr_act().add_style(lv.obj.PART.MAIN,scr_style)
 
+text_style = lv.style_t()
+text_style.init()
+text_style.set_text_color(lv.STATE.DEFAULT,lv_colors.WHITE)
+
+label = lv.label(lv.scr_act(),None)
+label.set_text("Starting up...")
+label.align(None,lv.ALIGN.CENTER, 0, 0)
+
+try:
+    from wifi_connect import connect,cetTime
+    # get time from the network
+    connect()
+except:
+    pass
+    
+label.delete()
+aClock = analogueClock(lv.scr_act())
