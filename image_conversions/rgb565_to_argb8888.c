@@ -1,6 +1,7 @@
-/* Convert the Python41x49.raw sprite from rgb565 format to argb8888 format  */
-/* This allows the unix/SDL version of lvgl to read the file                 */
-
+/* Convert an image in rgb565:  5 bits red, 6 bits blue, 5 bits green      */
+/* to argb8888 format: (8 bits for red,green,blue,opacity)                 */
+/* Written for the course on IoT at the University of Cape Coast, Ghana    */
+/* Copyright: U. Raich                                                     */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

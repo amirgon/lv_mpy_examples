@@ -7,7 +7,7 @@
  * created for a project with the course of embedded systems 
  * at the University of Cape Coast, Ghana
  * Author: U. Raich, 21. 12. 2020
- * This program is released under GPL
+ * This program is released under the MIT license
  */
 typedef struct __attribute__((packed)) {
   unsigned short type;                     /* Magic identifier            */

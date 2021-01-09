@@ -2,13 +2,6 @@
 import time
 import lvgl as lv
 import display_driver
-
-def event_handler(source,evt):
-    if  evt == lv.EVENT.VALUE_CHANGED:
-        if source.is_checked():
-            print("State: checked")
-        else:
-            print("State: unchecked")
             
 # create a simple bar
 bar1 = lv.bar(lv.scr_act(),None)

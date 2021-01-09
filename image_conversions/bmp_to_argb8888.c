@@ -1,14 +1,13 @@
+/* convert an image in bmp format to the 32 bit argb8888 raw format        */
+/* argb8888: 8 bits red,green,blue,opacity                                 */ 
+/* Written for the course on IoT at the University of Cape Coast, Ghana    */
+/* Copyright: U. Raich                                                     */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-/*
- * a program to create a bmp file from raw argb8888 data
- * created for a project with the course of embedded systems 
- * at the University of Cape Coast, Ghana
- * Author: U. Raich, 21. 12. 2020
- * This program is released under GPL
- */
+
 typedef struct __attribute__((packed)) {
   unsigned short type;                     /* Magic identifier            */
   unsigned int size;                       /* File size in bytes          */

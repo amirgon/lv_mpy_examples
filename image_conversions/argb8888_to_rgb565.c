@@ -1,6 +1,7 @@
-/* Convert the blueflower argb8888 format to argb565 (rgb565 + opacity) */
-/* format for the ili9341 driver                                        */
-
+/* Convert an image in argb8888 format (8 bits for red,green,blue,opacity) */
+/* to argb565 format: 5 bits red, 6 bits blue, 5 bits green                */
+/* Written for the course on IoT at the University of Cape Coast, Ghana    */
+/* Copyright: U. Raich                                                     */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,7 +42,7 @@ int main(int argc, char ** argv){
   rewind(infile);
 
   inbuf = malloc(fileSize);
-  outbuf = malloc(fileSize*2);
+  outbuf = malloc(fileSize/2);
   
   fread(inbuf, fileSize, 1, infile);
   fclose(infile);
