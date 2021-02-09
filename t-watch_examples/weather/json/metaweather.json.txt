@@ -1,0 +1,147 @@
+consolidated_weather	
+0	
+id	5711732338065408
+weather_state_name	"Thunder"
+weather_state_abbr	"t"
+wind_direction_compass	"WSW"
+created	"2021-02-07T11:24:31.840953Z"
+applicable_date	"2021-02-07"
+min_temp	2.755
+max_temp	6.875
+the_temp	6.9
+wind_speed	2.958948294085209
+wind_direction	237.15468403683963
+air_pressure	997
+humidity	84
+visibility	6.27181012884753
+predictability	80
+1	
+id	4870292275986432
+weather_state_name	"Heavy Cloud"
+weather_state_abbr	"hc"
+wind_direction_compass	"SSW"
+created	"2021-02-07T11:24:33.568188Z"
+applicable_date	"2021-02-08"
+min_temp	0.215
+max_temp	6.99
+the_temp	5.880000000000001
+wind_speed	2.229591409981707
+wind_direction	193.43204539757195
+air_pressure	998
+humidity	73
+visibility	10.741643800206791
+predictability	71
+2	
+id	5221626925809664
+weather_state_name	"Sleet"
+weather_state_abbr	"sl"
+wind_direction_compass	"NNW"
+created	"2021-02-07T11:24:38.044849Z"
+applicable_date	"2021-02-09"
+min_temp	0.030000000000000027
+max_temp	4.4
+the_temp	3.135
+wind_speed	2.3118335798218403
+wind_direction	342.31698364780215
+air_pressure	1003.5
+humidity	85
+visibility	10.239575876879027
+predictability	85
+3	
+id	6377114577141760
+weather_state_name	"Hail"
+weather_state_abbr	"h"
+wind_direction_compass	"W"
+created	"2021-02-07T11:24:39.572699Z"
+applicable_date	"2021-02-10"
+min_temp	-0.020000000000000018
+max_temp	5.045
+the_temp	3.51
+wind_speed	2.597365070887351
+wind_direction	263.7766007303185
+air_pressure	1001
+humidity	87
+visibility	8.552863775550783
+predictability	82
+4	
+id	4508928441319424
+weather_state_name	"Heavy Rain"
+weather_state_abbr	"hr"
+wind_direction_compass	"NNE"
+created	"2021-02-07T11:24:43.361225Z"
+applicable_date	"2021-02-11"
+min_temp	-8.765
+max_temp	0.42999999999999994
+the_temp	-0.9700000000000001
+wind_speed	3.5880540833956363
+wind_direction	13.13814289362562
+air_pressure	1021
+humidity	85
+visibility	9.15963274477054
+predictability	77
+5	
+id	6302952923856896
+weather_state_name	"Heavy Cloud"
+weather_state_abbr	"hc"
+wind_direction_compass	"NE"
+created	"2021-02-07T11:24:45.838820Z"
+applicable_date	"2021-02-12"
+min_temp	-11.11
+max_temp	-3.135
+the_temp	-3.55
+wind_speed	3.9838047800843075
+wind_direction	49.00000000000001
+air_pressure	1027
+humidity	84
+visibility	9.469696969696969
+predictability	71
+time	"2021-02-07T15:18:00.581254+01:00"
+sun_rise	"2021-02-07T07:43:24.122328+01:00"
+sun_set	"2021-02-07T17:37:10.029120+01:00"
+timezone_name	"BMT"
+parent	
+title	"Switzerland"
+location_type	"Country"
+woeid	23424957
+latt_long	"46.813202,8.223950"
+sources	
+0	
+title	"BBC"
+slug	"bbc"
+url	"http://www.bbc.co.uk/weather/"
+crawl_rate	360
+1	
+title	"Forecast.io"
+slug	"forecast-io"
+url	"http://forecast.io/"
+crawl_rate	480
+2	
+title	"HAMweather"
+slug	"hamweather"
+url	"http://www.hamweather.com/"
+crawl_rate	360
+3	
+title	"Met Office"
+slug	"met-office"
+url	"http://www.metoffice.gov.uk/"
+crawl_rate	180
+4	
+title	"OpenWeatherMap"
+slug	"openweathermap"
+url	"http://openweathermap.org/"
+crawl_rate	360
+5	
+title	"Weather Underground"
+slug	"wunderground"
+url	"https://www.wunderground.com/?apiref=fc30dc3cd224e19b"
+crawl_rate	720
+6	
+title	"World Weather Online"
+slug	"world-weather-online"
+url	"http://www.worldweatheronline.com/"
+crawl_rate	360
+title	"Zurich"
+location_type	"City"
+woeid	784794
+latt_long	"47.377060,8.539550"
+timezone	"Europe/Zurich"
