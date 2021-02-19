@@ -1,0 +1,1 @@
+lv_demo_printer_icon_eco.c
