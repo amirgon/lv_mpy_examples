@@ -3,7 +3,7 @@ from display_driver_utils import driver,ORIENT_LANDSCAPE
 from lv_colors import lv_colors
 import ulogging as logging
 
-NORMAL_FONT = lv.font_montserrat_12
+NORMAL_FONT = lv.font_montserrat_16
 SUBTITLE_FONT = lv.font_montserrat_24
 TITLE_FONT = lv.font_montserrat_48
 
