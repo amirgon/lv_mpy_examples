@@ -3,7 +3,7 @@ import lvgl as lv
 from display_driver_utils import driver,ORIENT_LANDSCAPE
 from lv_colors import lv_colors
 from theme import Theme, LV_DEMO_PRINTER_BLUE,LV_DEMO_PRINTER_TITLE_PAD,LV_DEMO_PRINTER_THEME_TITLE
-from theme import LV_DEMO_PRINTER_THEME_ICON
+from theme import LV_DEMO_PRINTER_THEME_ICON,LV_DEMO_PRINTER_THEME_LABEL_WHITE
 import ulogging as logging
 
 
@@ -21,7 +21,6 @@ class DemoPrinter(object):
         
         self.LV_DEMO_PRINTER_BG_NORMAL = (-2 * (self.LV_VER_RES // 3))
 
-        self.delay = 200
         self.log = logging.getLogger("DemoPrinter")
         self.log.setLevel(logging.DEBUG)
         
@@ -51,13 +50,11 @@ class DemoPrinter(object):
         self.img_scan_dsc = None
         self.img_setup_data = None
         self.img_setup_dsc = None
-        
-        '''
-        flag = lv.THEME_MATERIAL_FLAG.LIGHT
-        demo_printer_theme = lv.theme_material_init(LV_THEME_DEFAULT_COLOR_PRIMARY,LV_THEME_DEFAULT_COLOR_SECONDARY,flag,
-                                       lv.theme_get_font_small(), lv.theme_get_font_normal(), lv.theme_get_font_subtitle(),
-                                       lv.theme_get_font_title())   
-        '''
+
+        self.scan_img = None
+        self.bg_top = None
+        self.bg_bottom = None
+ 
         bg_top = lv.obj(lv.scr_act(),None)
         bg_top.set_style_local_bg_opa(lv.obj.PART.MAIN, lv.STATE.DEFAULT,lv.OPA.COVER)
         bg_top.set_style_local_bg_color(lv.obj.PART.MAIN, lv.STATE.DEFAULT,LV_DEMO_PRINTER_BLUE)
@@ -82,28 +79,28 @@ class DemoPrinter(object):
         icon = lv.img(self.cont, None)
         icon.set_src(self.icon_wifi_dsc)
         icon.align(None, lv.ALIGN.IN_TOP_LEFT, 20, 45)
-        self.anim_in(icon, self.delay);
+        self.anim_in(icon, delay);
 
         icon = lv.img(self.cont, None)
         icon.set_src(self.icon_tel_dsc)
         icon.align(None, lv.ALIGN.IN_TOP_LEFT, 110, 45)
-        # lv_demo_printer_anim_in(icon, delay);
+        self.anim_in(icon, delay);
 
         icon = lv.img(self.cont, None)
         icon.set_src(self.icon_eco_dsc)
         icon.align(None, lv.ALIGN.IN_TOP_LEFT, 200, 45)
-        # lv_demo_printer_anim_in(icon, delay);
+        self.anim_in(icon, delay);
 
         icon = lv.img(self.cont, None)
         icon.set_src(self.icon_pc_dsc)
         icon.align(None, lv.ALIGN.IN_TOP_LEFT, 290, 45)
-        # lv_demo_printer_anim_in(icon, delay);
+        self.anim_in(icon, delay);
 
         title = self.add_title("22 April 2020 15:36");
         title.align(None, lv.ALIGN.IN_TOP_RIGHT, -60, LV_DEMO_PRINTER_TITLE_PAD)
         
-        # delay += LV_DEMO_PRINTER_ANIM_DELAY
-        # lv_demo_printer_anim_in(title, delay)
+        delay += self.LV_DEMO_PRINTER_ANIM_DELAY
+        self.anim_in(title, delay)
         
         box_w = 720;
         box = lv.obj(lv.scr_act(), None)
@@ -126,33 +123,35 @@ class DemoPrinter(object):
         
         icon = self.add_icon(box, self.img_btn_bg_1_dsc, self.img_copy_dsc, "COPY")
         icon.align(None, lv.ALIGN.IN_LEFT_MID, 1 * (box_w - 20) // 8 - 80, 0)
-        # lv_obj_set_event_cb(icon, copy_open_icon_event_cb);
-        # lv_obj_fade_in(icon, LV_DEMO_PRINTER_ANIM_TIME * 2, delay + LV_DEMO_PRINTER_ANIM_TIME + 50);
+        icon.set_event_cb(self.copy_open_icon_event_cb)
+        icon.fade_in(self.LV_DEMO_PRINTER_ANIM_TIME * 2, delay + self.LV_DEMO_PRINTER_ANIM_TIME + 50)
         
         icon = self.add_icon(box, self.img_btn_bg_2_dsc, self.img_scan_dsc, "SCAN")
         icon.align(None, lv.ALIGN.IN_LEFT_MID, 3 * (box_w - 20) // 8 - 80, 0)
-        # lv_obj_fade_in(icon, LV_DEMO_PRINTER_ANIM_TIME * 2, delay + LV_DEMO_PRINTER_ANIM_TIME + 50);
-        # lv_obj_set_event_cb(icon, scan_open_icon_event_cb);
+        icon.fade_in(self.LV_DEMO_PRINTER_ANIM_TIME * 2, delay + self.LV_DEMO_PRINTER_ANIM_TIME + 50);
+        icon.set_event_cb(self.scan_open_icon_event_cb)
         
         icon = self.add_icon(box, self.img_btn_bg_3_dsc, self.img_print_dsc, "PRINT")
         icon.align(None, lv.ALIGN.IN_LEFT_MID, 5 * (box_w - 20) // 8 - 80, 0)
-        # icon.fade_in(LV_DEMO_PRINTER_ANIM_TIME * 2, delay + LV_DEMO_PRINTER_ANIM_TIME + 50);
+        icon.fade_in(self.LV_DEMO_PRINTER_ANIM_TIME * 2, delay + self.LV_DEMO_PRINTER_ANIM_TIME + 50);
         # lv_obj_set_event_cb(icon, print_open_event_cb);
 
         icon = self.add_icon(box, self.img_btn_bg_4_dsc, self.img_setup_dsc, "SETUP");
         icon.align(None, lv.ALIGN.IN_LEFT_MID, 7 * (box_w - 20) // 8 - 80, 0)
-        # lv_obj_fade_in(icon, LV_DEMO_PRINTER_ANIM_TIME * 2, delay + LV_DEMO_PRINTER_ANIM_TIME + 50);
+        icon.fade_in(self.LV_DEMO_PRINTER_ANIM_TIME * 2, delay + self.LV_DEMO_PRINTER_ANIM_TIME + 50);
         # lv_obj_set_event_cb(icon, setup_icon_event_cb);
 
         box = lv.obj(lv.scr_act(), None)
         box.set_size(500, 80)
         box.align(None, lv.ALIGN.IN_BOTTOM_LEFT, self.LV_HOR_RES // 20,
                      - self.LV_HOR_RES // 40)
-        box.set_style_local_value_str(lv.cont.PART.MAIN, lv.STATE.DEFAULT,
-                                         "What do you want to do today?")
-        
-        # delay += LV_DEMO_PRINTER_ANIM_DELAY;
-        # lv_demo_printer_anim_in(box, delay);        box = lv.obj(lv.scr_act(), None)
+        label = lv.label(box,None)
+        label.set_text("What do you want to do today?")
+        self.theme.apply(label,lv.THEME.LABEL)
+        label.align(box,lv.ALIGN.CENTER,0,0)
+    
+        delay += self.LV_DEMO_PRINTER_ANIM_DELAY;
+        self.anim_in(box,delay)
         
         box = lv.obj(lv.scr_act(), None)
         box_w = 200;
@@ -221,8 +220,8 @@ class DemoPrinter(object):
     def add_icon(self,parent,src_bg_dsc,src_icon_dsc,txt):
         bg = lv.img(parent,None)
         bg.set_click(True)
-        self.theme.apply(bg,LV_DEMO_PRINTER_THEME_ICON)
         bg.set_src(src_bg_dsc)
+        self.theme.apply(bg,LV_DEMO_PRINTER_THEME_ICON)
         bg.set_antialias(False)
 
         icon = lv.img(bg,None)
@@ -233,9 +232,79 @@ class DemoPrinter(object):
         label = lv.label(bg,None)
         label.set_text(txt)
         label.align(None, lv.ALIGN.IN_BOTTOM_LEFT, 30, -30)
-
+        self.theme.apply(label,lv.THEME.LABEL)
         return bg
+                
+    def copy_open_icon_event_cb(self,obj,evt):
+        if evt == lv.EVENT.CLICKED:
+            self.anim_out_all(lv.scr_act(), 0)
+            self.log.debug("copy_open_icon_event_cb")
+            scan_btn_txt = "NEXT"
+            delay = 200
+            # lv_demo_printer_anim_bg(150, LV_DEMO_PRINTER_BLUE, LV_DEMO_PRINTER_BG_FULL);
+
+            arc = self.add_loader(self.scan_anim_ready)
+            arc.align(None, lv.ALIGN.CENTER, 0, -40)
+
+            txt = lv.label(lv.scr_act(), None)
+            txt.set_text("Scanning, please wait...")
+            self.theme.apply(txt, LV_DEMO_PRINTER_THEME_LABEL_WHITE)
+            txt.align(arc, lv.ALIGN.OUT_BOTTOM_MID, 0, 60)
+
+            #lv_demo_printer_anim_in(arc, delay);
+            delay += self.LV_DEMO_PRINTER_ANIM_DELAY
+            #lv_demo_printer_anim_in(txt, delay);
+    
+            # icon_generic_event_cb(obj, e);
+            
+    def scan_open_icon_event_cb(self,obj,evt):
+        if evt == lv.EVENT.CLICKED:
+            self.log.debug("scan_open_icon_event_cb")
+            self.scan_btn_txt = "SAVE"
+            # self.anim_out_all(lv_scr_act(), 0)
+            delay = 200
+            # lv_demo_printer_anim_bg(150, LV_DEMO_PRINTER_BLUE, LV_DEMO_PRINTER_BG_FULL);
+            arc = self.add_loader(self.scan_anim_ready)
+            arc.align(None, lv.ALIGN.CENTER, 0, -40)
+
+            txt = lv.label(lv.scr_act(), None)
+            txt.set_text("Scanning, please wait...");
+            self.theme.apply(txt, LV_DEMO_PRINTER_THEME_LABEL_WHITE)
+            txt.align(arc, lv.ALIGN.OUT_BOTTOM_MID, 0, 60)
+
+            # lv_demo_printer_anim_in(arc, delay);
+            delay += self.LV_DEMO_PRINTER_ANIM_DELAY
+            # lv_demo_printer_anim_in(txt, delay);
+            
+    def add_loader(self, a):
+        arc = lv.arc(lv.scr_act(),None)
+        arc.set_bg_angles(0, 0)
+        arc.set_start_angle(270)
+        arc.set_size(180, 180)
         
+        self.log.debug("Starting loader anim")
+        a = lv.anim_t()
+        a.init()
+        a.set_custom_exec_cb(lambda a, val: self.loader_anim_cb(a,arc,val))
+        a.set_values(0, 110)
+        a.set_time(2000)
+        a.set_ready_cb(lambda a:  self.end_cb(a,arc))
+        lv.anim_t.start(a)                
+
+        return arc
+
+    def end_cb(self,a,arc):
+        self.log.debug("in anim ended")
+        
+    def loader_anim_cb(self,a,arc,v):
+        # self.log.debug("loader_anim_cb called with value: %d"%v)
+        if v > 100:
+            v = 100
+        arc.set_end_angle(v * 360 // 100 + 270)
+        percent_txt = "%d %%"%v
+        arc.set_style_local_value_str(lv.arc.PART.BG, lv.STATE.DEFAULT, percent_txt)
+
+                                     
     def anim_in(self,obj,delay):
         a = lv.anim_t()
         a.init()
@@ -245,7 +314,42 @@ class DemoPrinter(object):
         # a.set_exec_cb(obj.set_y)
         # a.set_values(obj.get_y() -  self.LV_DEMO_PRINTER_ANIM_Y, obj.get_y())
         # a.start()
-        obj.fade_in(self.LV_DEMO_PRINTER_ANIM_TIME - 50, self.delay)
+        obj.fade_in(self.LV_DEMO_PRINTER_ANIM_TIME - 50, delay)
 
+    def anim_out_all(self,obj,delay):
+        self.log.debug("anim_out_all")
+        child = obj.get_child_back(None)
+        while child:
+            if child != self.scan_img and child != self.bg_top and child != self.bg_bottom and child != lv.scr_act():
+                a = lv.anim_t()
+                a.init()
+                a.set_var(child)
+                a.set_time(self.LV_DEMO_PRINTER_ANIM_TIME)
+                # a.set_exec_cb(lambda y: lv.obj.set_y(y))
+                if child.get_y() < 80:
+                    a.set_values(child.get_y(),child.get_y() - self.LV_DEMO_PRINTER_ANIM_Y)
+                else:
+                    a.set_values(child.get_y(),child.get_y() + self.LV_DEMO_PRINTER_ANIM_Y)
+                    delay += LV_DEMO_PRINTER_ANIM_DELAY
+                a.set_ready_cb(lv.obj.del_anim_ready_cb)
+                lv.anim_t.start(a)
+                               
+        
+    def scan_anim_ready(self,a):
+        self.log.debug("scan_anim_ready")
+        self.anim_out_all(lv_scr_act(), None)
+        self.scan1_open(self.scan_btn_txt)
+        
+    def scan1_open(btn_txt):
+        self.log.debug("scan1_open %d"%txt)
+        anim_out_all(lv.scr_act(), None)
+        
+
+    def anim_bg(self,delay,color,y_new):
+        self.log.debug("anim_bg: new y: %d"&y_new)
+        y_act = self.bg_top.get_y()
+        self.log.debug("current y: %d"&y_act)
+        
+        
 drv = driver(width=800,height=480,orientation=ORIENT_LANDSCAPE)
 printer = DemoPrinter()

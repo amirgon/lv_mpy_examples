@@ -3,10 +3,6 @@ from display_driver_utils import driver,ORIENT_LANDSCAPE
 from lv_colors import lv_colors
 import ulogging as logging
 
-NORMAL_FONT = lv.font_montserrat_16
-SUBTITLE_FONT = lv.font_montserrat_24
-TITLE_FONT = lv.font_montserrat_48
-
 LV_THEME_DEFAULT_COLOR_PRIMARY=lv.color_hex(0x01a2b1)
 LV_THEME_DEFAULT_COLOR_SECONDARY=lv.color_hex(0x44d1b6)
 LV_DEMO_PRINTER_WHITE      = lv_colors.WHITE
@@ -47,7 +43,7 @@ class Theme():
         self.style_bg.init()
         self.style_bg.set_bg_opa(lv.STATE.DEFAULT, lv.OPA.COVER)
         self.style_bg.set_bg_color(lv.STATE.DEFAULT,LV_DEMO_PRINTER_LIGHT)
-        self.style_bg.set_text_font(lv.STATE.DEFAULT, NORMAL_FONT)
+        self.style_bg.set_text_font(lv.STATE.DEFAULT, self.get_font_normal())
 
         self.style_box = lv.style_t()
         self.style_box.init()
@@ -55,7 +51,7 @@ class Theme():
         self.style_box.set_bg_opa(lv.STATE.DEFAULT, lv.OPA.COVER)
         self.style_box.set_radius(lv.STATE.DEFAULT, 10)
         self.style_box.set_value_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_BLUE)
-        self.style_box.set_value_font(lv.STATE.DEFAULT, NORMAL_FONT)
+        self.style_box.set_value_font(lv.STATE.DEFAULT, self.get_font_normal())
 
         self.style_box_border = lv.style_t()
         self.style_box_border.init()
@@ -66,12 +62,16 @@ class Theme():
         self.style_title = lv.style_t()
         self.style_title.init()
         self.style_title.set_text_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
-        self.style_title.set_text_font(lv.STATE.DEFAULT, SUBTITLE_FONT);
+        self.style_title.set_text_font(lv.STATE.DEFAULT, self.get_font_subtitle())
 
+        self.style_label = lv.style_t()
+        self.style_label.init()
+        self.style_label.set_text_font(lv.STATE.DEFAULT, self.get_font_normal())
+        
         self.style_label_white = lv.style_t()
         self.style_label_white.init()
         self.style_label_white.set_text_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
-
+        
         self.style_btn = lv.style_t()
         self.style_btn.init()
         self.style_btn.set_radius(lv.STATE.DEFAULT, 10)
@@ -104,13 +104,14 @@ class Theme():
         self.style_icon.set_transition_delay(lv.STATE.PRESSED, 0)
         self.style_icon.set_transition_delay(lv.STATE.DEFAULT, 70)
         self.style_icon.set_transition_prop_1(lv.STATE.DEFAULT, lv.STYLE.TRANSFORM_ZOOM)
-
+        self.style_icon.set_value_font(lv.STATE.DEFAULT, self.get_font_subtitle())
+                
         self.style_back = lv.style_t()
         self.style_back.init()
         self.style_back.set_value_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
         self.style_back.set_value_color(lv.STATE.PRESSED, LV_DEMO_PRINTER_LIGHT_GRAY)
         self.style_back.set_value_str(lv.STATE.DEFAULT, lv.SYMBOL.LEFT)
-        self.style_back.set_value_font(lv.STATE.DEFAULT, SUBTITLE_FONT)
+        self.style_back.set_value_font(lv.STATE.DEFAULT, self.get_font_subtitle())
         
         self.style_bar_indic = lv.style_t()
         self.style_bar_indic.init()
@@ -201,7 +202,7 @@ class Theme():
         self.style_arc_bg = lv.style_t()
         self.style_arc_bg.init()
         self.style_arc_bg.set_value_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
-        self.style_arc_bg.set_value_font(lv.STATE.DEFAULT, TITLE_FONT)
+        self.style_arc_bg.set_value_font(lv.STATE.DEFAULT, self.get_font_title())
     
     def apply(self,obj,name):
         if name == lv.THEME.NONE:
@@ -216,6 +217,153 @@ class Theme():
         if name == LV_DEMO_PRINTER_THEME_TITLE:
             obj.add_style(obj.PART.MAIN,self.style_title)
             return
-            
-            
         
+        if name ==  LV_DEMO_PRINTER_THEME_BOX_BORDER:
+            obj.add_style(lv.obj.PART.MAIN,self.style_box)
+            obj.add_style(lv.obj.PART.MAIN,self.style_box_border)
+            return
+
+
+        if name == lv.THEME.CONT:
+            obj.add_style(obj,self.style_box)
+            return
+
+        if name == LV_DEMO_PRINTER_THEME_BTN_CIRCLE:
+            obj.add_style(lv.obj.PART.MAIN,style_btn);
+            obj.add_style(lv.obj.PART.MAIN,self.style_circle);
+            return
+
+        if name == LV_DEMO_PRINTER_THEME_BTN_BORDER:
+            obj.add_style(lv.obj.PART.MAIN,style_btn)
+            obj.add_style(lv.obj.PART.MAIN,self.style_btn_border)
+            return
+
+        if name == LV_DEMO_PRINTER_THEME_BTN_BACK:
+            obj.add_style(lv.obj.PART.MAIN,self.style_back)
+            return
+
+        if name == lv.THEME.BTN:
+            obj.add_style(lv.obj.PART.MAIN,self.style_btn)
+            return
+
+        if name == LV_DEMO_PRINTER_THEME_ICON:
+            obj.add_style(lv.obj.PART.MAIN,self.style_icon)
+            return
+        
+        '''
+        if name == LV_THEME_BAR:
+            lv_obj_clean_style_list(obj, LV_BAR_PART_BG);
+            list = lv_obj_get_style_list(obj, LV_BAR_PART_BG);
+
+            lv_obj_clean_style_list(obj, LV_BAR_PART_INDIC);
+            list = lv_obj_get_style_list(obj, LV_BAR_PART_INDIC);
+            _lv_style_list_add_style(list, &style_bar_indic);
+            break;
+
+        case LV_THEME_IMAGE:
+            lv_obj_clean_style_list(obj, LV_IMG_PART_MAIN);
+            list = lv_obj_get_style_list(obj, LV_IMG_PART_MAIN);
+            break;
+        '''
+        if name == lv.THEME.LABEL:
+            obj.add_style(lv.label.PART.MAIN,self.style_label)       
+            return
+        
+        if name == LV_DEMO_PRINTER_THEME_TITLE:
+            obj.add_style(lv.obj.PART.MAIN,swelf.style_title)
+            return
+
+        if name ==  LV_DEMO_PRINTER_THEME_LABEL_WHITE:
+            obj.add_style(lv.obj.PART.MAIN,self.style_label_white)
+            return
+        '''
+        case LV_THEME_SLIDER:
+            lv_obj_clean_style_list(obj, LV_SLIDER_PART_BG);
+            list = lv_obj_get_style_list(obj, LV_SLIDER_PART_BG);
+            _lv_style_list_add_style(list, &style_sw_bg);
+
+            lv_obj_clean_style_list(obj, LV_SLIDER_PART_INDIC);
+            list = lv_obj_get_style_list(obj, LV_SLIDER_PART_INDIC);
+
+            lv_obj_clean_style_list(obj, LV_SLIDER_PART_KNOB);
+            list = lv_obj_get_style_list(obj, LV_SLIDER_PART_KNOB);
+            _lv_style_list_add_style(list, &style_slider_knob);
+            break;
+
+        case LV_THEME_LIST:
+            lv_obj_clean_style_list(obj, LV_LIST_PART_BG);
+            list = lv_obj_get_style_list(obj, LV_LIST_PART_BG);
+            _lv_style_list_add_style(list, &style_box);
+
+            lv_obj_clean_style_list(obj, LV_LIST_PART_SCROLLABLE);
+            list = lv_obj_get_style_list(obj, LV_LIST_PART_SCROLLABLE);
+
+            lv_obj_clean_style_list(obj, LV_LIST_PART_SCROLLBAR);
+            list = lv_obj_get_style_list(obj, LV_LIST_PART_SCROLLBAR);
+            _lv_style_list_add_style(list, &style_scrollbar);
+            break;
+
+        case LV_THEME_LIST_BTN:
+            lv_obj_clean_style_list(obj, LV_BTN_PART_MAIN);
+            list = lv_obj_get_style_list(obj, LV_BTN_PART_MAIN);
+            _lv_style_list_add_style(list, &style_list_btn);
+            break;
+
+
+        case LV_THEME_ARC:
+            lv_obj_clean_style_list(obj, LV_ARC_PART_BG);
+            list = lv_obj_get_style_list(obj, LV_ARC_PART_BG);
+            _lv_style_list_add_style(list, &style_arc_bg);
+
+            lv_obj_clean_style_list(obj, LV_ARC_PART_INDIC);
+            list = lv_obj_get_style_list(obj, LV_ARC_PART_INDIC);
+            _lv_style_list_add_style(list, &style_arc_indic);
+            break;
+
+
+        case LV_THEME_SWITCH:
+            lv_obj_clean_style_list(obj, LV_SWITCH_PART_BG);
+            list = lv_obj_get_style_list(obj, LV_SWITCH_PART_BG);
+            _lv_style_list_add_style(list, &style_sw_bg);
+
+            lv_obj_clean_style_list(obj, LV_SWITCH_PART_INDIC);
+            list = lv_obj_get_style_list(obj, LV_SWITCH_PART_INDIC);
+            _lv_style_list_add_style(list, &style_sw_indic);
+
+            lv_obj_clean_style_list(obj, LV_SWITCH_PART_KNOB);
+            list = lv_obj_get_style_list(obj, LV_SWITCH_PART_KNOB);
+            _lv_style_list_add_style(list, &style_sw_knob);
+            break;
+
+        case LV_THEME_DROPDOWN:
+            lv_obj_clean_style_list(obj, LV_DROPDOWN_PART_MAIN);
+            list = lv_obj_get_style_list(obj, LV_DROPDOWN_PART_MAIN);
+            _lv_style_list_add_style(list, &style_btn);
+            _lv_style_list_add_style(list, &style_pad);
+
+            lv_obj_clean_style_list(obj, LV_DROPDOWN_PART_LIST);
+            list = lv_obj_get_style_list(obj, LV_DROPDOWN_PART_LIST);
+            _lv_style_list_add_style(list, &style_box);
+            _lv_style_list_add_style(list, &style_ddlist_list);
+            _lv_style_list_add_style(list, &style_pad);
+
+            lv_obj_clean_style_list(obj, LV_DROPDOWN_PART_SELECTED);
+            list = lv_obj_get_style_list(obj, LV_DROPDOWN_PART_SELECTED);
+            _lv_style_list_add_style(list, &style_ddlist_selected);
+
+            lv_obj_clean_style_list(obj, LV_DROPDOWN_PART_SCROLLBAR);
+            list = lv_obj_get_style_list(obj, LV_DROPDOWN_PART_SCROLLBAR);
+            _lv_style_list_add_style(list, &style_scrollbar);
+            break;
+        '''
+    def get_font_small(self):
+        return lv.font_montserrat_14
+        
+    def get_font_normal(self):
+        return lv.font_montserrat_22
+
+    def get_font_subtitle(self):
+        return lv.font_montserrat_28
+
+    def get_font_title(self):
+        return lv.font_montserrat_48
