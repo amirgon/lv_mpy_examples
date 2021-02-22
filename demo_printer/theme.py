@@ -225,16 +225,16 @@ class Theme():
 
 
         if name == lv.THEME.CONT:
-            obj.add_style(obj,self.style_box)
+            obj.add_style(lv.obj.PART.MAIN,self.style_box)
             return
 
         if name == LV_DEMO_PRINTER_THEME_BTN_CIRCLE:
-            obj.add_style(lv.obj.PART.MAIN,style_btn);
+            obj.add_style(lv.obj.PART.MAIN,self.style_btn);
             obj.add_style(lv.obj.PART.MAIN,self.style_circle);
             return
 
         if name == LV_DEMO_PRINTER_THEME_BTN_BORDER:
-            obj.add_style(lv.obj.PART.MAIN,style_btn)
+            obj.add_style(lv.obj.PART.MAIN,self.style_btn)
             obj.add_style(lv.obj.PART.MAIN,self.style_btn_border)
             return
 
@@ -274,6 +274,7 @@ class Theme():
             return
 
         if name ==  LV_DEMO_PRINTER_THEME_LABEL_WHITE:
+            obj.add_style(lv.label.PART.MAIN,self.style_label)  
             obj.add_style(lv.obj.PART.MAIN,self.style_label_white)
             return
         '''
