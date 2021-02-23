@@ -110,6 +110,8 @@ class Theme():
         self.style_back.init()
         self.style_back.set_value_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
         self.style_back.set_value_color(lv.STATE.PRESSED, LV_DEMO_PRINTER_LIGHT_GRAY)
+        self.style_back.set_border_width(lv.STATE.DEFAULT,0)
+        self.style_back.set_bg_color(lv.STATE.DEFAULT,LV_DEMO_PRINTER_BLUE)
         self.style_back.set_value_str(lv.STATE.DEFAULT, lv.SYMBOL.LEFT)
         self.style_back.set_value_font(lv.STATE.DEFAULT, self.get_font_subtitle())
         
@@ -202,7 +204,9 @@ class Theme():
         self.style_arc_bg = lv.style_t()
         self.style_arc_bg.init()
         self.style_arc_bg.set_value_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
-        self.style_arc_bg.set_value_font(lv.STATE.DEFAULT, self.get_font_title())
+        self.style_arc_bg.set_bg_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_BLUE)        
+        self.style_arc_bg.set_value_font(lv.STATE.DEFAULT, self.get_font_normal())
+        self.style_arc_bg.set_border_width(lv.STATE.DEFAULT,0)
     
     def apply(self,obj,name):
         if name == lv.THEME.NONE:
@@ -275,7 +279,12 @@ class Theme():
 
         if name ==  LV_DEMO_PRINTER_THEME_LABEL_WHITE:
             obj.add_style(lv.label.PART.MAIN,self.style_label)  
-            obj.add_style(lv.obj.PART.MAIN,self.style_label_white)
+            obj.add_style(lv.label.PART.MAIN,self.style_label_white)
+            return
+
+        if name == lv.THEME.ARC:
+            obj.add_style(lv.arc.PART.BG,self.style_arc_bg);
+            obj.add_style(lv.arc.PART.INDIC,self.style_arc_indic)
             return
         '''
         case LV_THEME_SLIDER:
@@ -309,18 +318,6 @@ class Theme():
             list = lv_obj_get_style_list(obj, LV_BTN_PART_MAIN);
             _lv_style_list_add_style(list, &style_list_btn);
             break;
-
-
-        case LV_THEME_ARC:
-            lv_obj_clean_style_list(obj, LV_ARC_PART_BG);
-            list = lv_obj_get_style_list(obj, LV_ARC_PART_BG);
-            _lv_style_list_add_style(list, &style_arc_bg);
-
-            lv_obj_clean_style_list(obj, LV_ARC_PART_INDIC);
-            list = lv_obj_get_style_list(obj, LV_ARC_PART_INDIC);
-            _lv_style_list_add_style(list, &style_arc_indic);
-            break;
-
 
         case LV_THEME_SWITCH:
             lv_obj_clean_style_list(obj, LV_SWITCH_PART_BG);

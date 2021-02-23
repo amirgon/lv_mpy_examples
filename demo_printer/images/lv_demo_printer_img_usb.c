@@ -1,5 +1,38 @@
-#include "../../../lv_examples.h"
-#if LV_USE_DEMO_PRINTER
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+#define LV_ATTRIBUTE_MEM_ALIGN
+#define LV_ATTRIBUTE_IMG_ALARM_16PX
+
+#define LV_COLOR_DEPTH 32
+//#define LV_COLOR_DEPTH 16
+#define LV_IMG_PX_SIZE_ALPHA_BYTE 4  /* for 32 bit color */
+//#define LV_IMG_PX_SIZE_ALPHA_BYTE 3     /* for 16 bit color */
+#define LV_IMG_CF_TRUE_COLOR_ALPHA 5 /* for 32 bit color */
+// #define LV_IMG_CF_TRUE_COLOR_ALPHA 3    /* for 16 bit color */
+// #define LV_COLOR_16_SWAP 1
+
+/** Image header it is compatible with
+ * the result from image converter utility*/
+
+typedef struct {
+
+    uint32_t cf : 5;          /* Color format: See `lv_img_color_format_t`*/
+    uint32_t always_zero : 3; /*It the upper bits of the first byte. Always zero to look like a
+                                 non-printable character*/
+
+    uint32_t reserved : 2; /*Reserved to be used later*/
+
+    uint32_t w : 11; /*Width of the image map*/
+    uint32_t h : 11; /*Height of     the image map*/
+} lv_img_header_t;
+
+typedef struct {
+    lv_img_header_t header;
+    uint32_t data_size;
+    const uint8_t * data;
+} lv_img_dsc_t;
 
 #ifndef LV_ATTRIBUTE_MEM_ALIGN
 #define LV_ATTRIBUTE_MEM_ALIGN
@@ -276,5 +309,20 @@ const lv_img_dsc_t lv_demo_printer_img_usb = {
   .data = lv_demo_printer_img_usb_map,
 };
 
-#endif /*LV_USE_DEMO_PRINTER*/
+/*
+ * writing the pixel map
+ */
+
+int main(int argc, char **argv) {
+  FILE *fp;
+  char *binFile;
+  
+  binFile="img_usb_62x61_argb8888.bin";  /* 32 bit color */
+
+  
+  fp = fopen(binFile, "wb");
+  fwrite(lv_demo_printer_img_usb_map,lv_demo_printer_img_usb.data_size,1,fp);
+  fclose(fp);
+  
+}
 
