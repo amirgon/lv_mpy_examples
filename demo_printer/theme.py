@@ -82,7 +82,15 @@ class Theme():
         self.style_btn.set_value_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
         self.style_btn.set_pad_top(lv.STATE.DEFAULT, self.LV_VER_RES // 40)
         self.style_btn.set_pad_bottom(lv.STATE.DEFAULT, self.LV_VER_RES // 40)
-
+        
+        self.style_btn.set_transform_width(lv.STATE.PRESSED, self.LV_HOR_RES // 100)
+        self.style_btn.set_transform_height(lv.STATE.PRESSED, self.LV_HOR_RES // 150)
+        self.style_btn.set_transition_time(lv.STATE.DEFAULT, 100)
+        self.style_btn.set_transition_delay(lv.STATE.PRESSED, 0)
+        self.style_btn.set_transition_delay(lv.STATE.DEFAULT, 70)
+        self.style_btn.set_transition_prop_1(lv.STATE.DEFAULT, lv.STYLE.TRANSFORM_WIDTH);
+        self.style_btn.set_transition_prop_2(lv.STATE.DEFAULT, lv.STYLE.TRANSFORM_HEIGHT);
+    
         self.style_btn_border = lv.style_t()
         self.style_btn_border.init()
         self.style_btn.set_radius(lv.STATE.DEFAULT, LV_RADIUS_CIRCLE)
@@ -162,6 +170,17 @@ class Theme():
         self.style_ddlist_selected.set_bg_color(lv.STATE.PRESSED, LV_DEMO_PRINTER_LIGHT_GRAY)
         self.style_ddlist_selected.set_text_color(lv.STATE.PRESSED, LV_DEMO_PRINTER_GRAY.color_darken(lv.OPA._20))
         
+        self.style_sw_bg = lv.style_t()
+        self.style_sw_bg.init()
+        self.style_sw_bg.set_bg_opa(lv.STATE.DEFAULT, lv.OPA.COVER)
+        self.style_sw_bg.set_bg_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_LIGHT_GRAY)
+        self.style_sw_bg.set_radius(lv.STATE.DEFAULT, lv.RADIUS.CIRCLE)
+        self.style_sw_bg.set_value_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_BLUE)
+
+        self.style_sw_indic = lv.style_t()
+        self.style_sw_indic.init()
+        self.style_sw_indic.set_bg_opa(lv.STATE.DEFAULT, lv.OPA.COVER)
+        self.style_sw_indic.set_bg_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_GREEN);
 
         self.style_sw_knob = lv.style_t()
         self.style_sw_knob.init()
@@ -254,20 +273,14 @@ class Theme():
             obj.add_style(lv.obj.PART.MAIN,self.style_icon)
             return
         
+        if name == lv.THEME.BAR:
+            obj.add_style(lv.bar.PART.INDIC, style_bar_indic)
+            return
         '''
-        if name == LV_THEME_BAR:
-            lv_obj_clean_style_list(obj, LV_BAR_PART_BG);
-            list = lv_obj_get_style_list(obj, LV_BAR_PART_BG);
-
-            lv_obj_clean_style_list(obj, LV_BAR_PART_INDIC);
-            list = lv_obj_get_style_list(obj, LV_BAR_PART_INDIC);
-            _lv_style_list_add_style(list, &style_bar_indic);
-            break;
-
-        case LV_THEME_IMAGE:
+        if name == LV_THEME_IMAGE:
             lv_obj_clean_style_list(obj, LV_IMG_PART_MAIN);
             list = lv_obj_get_style_list(obj, LV_IMG_PART_MAIN);
-            break;
+            return
         '''
         if name == lv.THEME.LABEL:
             obj.add_style(lv.label.PART.MAIN,self.style_label)       
@@ -286,20 +299,13 @@ class Theme():
             obj.add_style(lv.arc.PART.BG,self.style_arc_bg);
             obj.add_style(lv.arc.PART.INDIC,self.style_arc_indic)
             return
+  
+        if name == lv.THEME.SLIDER:
+            obj.add_style(lv.slider.PART.BG,self.style_sw_bg)
+            obj.add_style(lv.slider.PART.KNOB,self.style_slider_knob)
+            return
+        
         '''
-        case LV_THEME_SLIDER:
-            lv_obj_clean_style_list(obj, LV_SLIDER_PART_BG);
-            list = lv_obj_get_style_list(obj, LV_SLIDER_PART_BG);
-            _lv_style_list_add_style(list, &style_sw_bg);
-
-            lv_obj_clean_style_list(obj, LV_SLIDER_PART_INDIC);
-            list = lv_obj_get_style_list(obj, LV_SLIDER_PART_INDIC);
-
-            lv_obj_clean_style_list(obj, LV_SLIDER_PART_KNOB);
-            list = lv_obj_get_style_list(obj, LV_SLIDER_PART_KNOB);
-            _lv_style_list_add_style(list, &style_slider_knob);
-            break;
-
         case LV_THEME_LIST:
             lv_obj_clean_style_list(obj, LV_LIST_PART_BG);
             list = lv_obj_get_style_list(obj, LV_LIST_PART_BG);
