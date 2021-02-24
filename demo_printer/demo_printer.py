@@ -148,8 +148,8 @@ class DemoPrinter(object):
         
         box.align(None, lv.ALIGN.IN_TOP_MID, 0, 100)
 
-        # delay += LV_DEMO_PRINTER_ANIM_DELAY;
-        # lv_demo_printer_anim_in(box, delay);
+        delay += self.LV_DEMO_PRINTER_ANIM_DELAY
+        self.anim_in(box, delay)
         
         icon = self.add_icon(box, self.img_btn_bg_1_dsc, self.img_copy_dsc, "COPY")
         icon.align(None, lv.ALIGN.IN_LEFT_MID, 1 * (box_w - 20) // 8 - 80, 0)
@@ -755,6 +755,7 @@ class DemoPrinter(object):
             for filename in dummy_file_list:
                 btn = lv.btn.__cast__(list.add_btn(lv.SYMBOL.FILE, filename))
                 btn.set_checkable(True)
+                self.theme.apply(btn,lv.THEME.LIST_BTN)
 
             dropdown_box = lv.obj(lv.scr_act(), None)
             dropdown_box.set_size(box_w, self.LV_VER_RES // 5);
@@ -766,10 +767,14 @@ class DemoPrinter(object):
             dropdown.set_options_static("Best\nNormal\nDraft")
             dropdown.set_width((box_w - 3 * self.LV_HOR_RES // 60) // 2)
             dropdown.set_ext_click_area(5, 5, 5, 5)
-
+            self.theme.apply(dropdown,lv.THEME.DROPDOWN)
+                
             dropdown = lv.dropdown(dropdown_box, dropdown)
             dropdown.align(None, lv.ALIGN.IN_RIGHT_MID, - self.LV_HOR_RES // 60, 0)
-            dropdown.set_options_static("100 DPI\n200 DPI\n300 DPI\n400 DPI\n500 DPI\n1500 DPI")
+            # dropdown.set_options_static("100 DPI\n200 DPI\n300 DPI\n400 DPI\n500 DPI\n1500 DPI")
+            dropdown.set_options_static("\n".join([
+                "100 DPI","200 DPI","300 DPI","400 DPI","500 DPI","1500 DPI"]))
+            self.theme.apply(dropdown,lv.THEME.DROPDOWN)
             
             box_w = 320 - 40;
             settings_box = lv.obj(lv.scr_act(), None)
@@ -789,7 +794,8 @@ class DemoPrinter(object):
 
             print_cnt_label = lv.label(numbox, None)
             print_cnt_label.set_text("1")
-            print_cnt_label.set_style_local_text_font(lv.label.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_title())
+            print_cnt_label.set_style_local_text_font(lv.label.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
+            
 
             btn = lv.btn(settings_box, None)
             btn.set_size(self.LV_HOR_RES // 13, self.LV_HOR_RES // 13)
@@ -797,6 +803,7 @@ class DemoPrinter(object):
             btn.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, lv.SYMBOL.DOWN)
             # btn.set_event_cb(print_cnt_bnt_event_cb)
             btn.set_ext_click_area(10, 10, 10, 10)
+            self.theme.apply(btn,lv.THEME.BTN)
 
             sw = lv.switch(settings_box, None)
             sw.set_size(self.LV_HOR_RES // 10, self.LV_VER_RES // 12)
@@ -805,15 +812,18 @@ class DemoPrinter(object):
             sw.set_style_local_value_align(lv.obj.PART.MAIN, lv.STATE.DEFAULT, lv.ALIGN.OUT_TOP_MID)
             sw.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, "Color")
             sw.set_style_local_value_font(lv.obj.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
+            self.theme.apply(sw,lv.THEME.SWITCH)
 
             btn = lv.btn(settings_box, btn)
             btn.align(numbox, lv.ALIGN.OUT_RIGHT_MID, self.LV_VER_RES // 60, 0)
             btn.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, lv.SYMBOL.UP)
+            self.theme.apply(btn,lv.THEME.BTN)
 
             sw = lv.switch(settings_box, sw)
             sw.align(btn, lv.ALIGN.OUT_BOTTOM_RIGHT, - self.LV_HOR_RES // 50, self.LV_VER_RES // 7)
             sw.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, "Vertical")
-
+            self.theme.apply(sw,lv.THEME.SWITCH)
+            
             print_btn = lv.btn(lv.scr_act(), None)
             self.theme.apply(print_btn, LV_DEMO_PRINTER_THEME_BTN_CIRCLE)
             print_btn.set_size(box_w, 60)

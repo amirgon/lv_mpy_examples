@@ -28,6 +28,9 @@ class Theme():
         self.LV_HOR_RES = lv.scr_act().get_disp().driver.hor_res
         self.LV_VER_RES = lv.scr_act().get_disp().driver.ver_res
         
+        self.log = logging.getLogger("Theme")
+        self.log.setLevel(logging.DEBUG)
+
         self.style_pad = lv.style_t()
         self.style_pad.init()
         self.style_pad.set_pad_top(lv.STATE.DEFAULT, self.LV_VER_RES // 30)
@@ -49,7 +52,7 @@ class Theme():
         self.style_box.init()
         
         self.style_box.set_bg_opa(lv.STATE.DEFAULT, lv.OPA.COVER)
-        self.style_box.set_radius(lv.STATE.DEFAULT, 10)
+        self.style_box.set_radius(lv.STATE.DEFAULT, 2)
         self.style_box.set_value_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_BLUE)
         self.style_box.set_value_font(lv.STATE.DEFAULT, self.get_font_normal())
 
@@ -80,17 +83,18 @@ class Theme():
         self.style_btn.set_bg_color(lv.STATE.PRESSED, LV_DEMO_PRINTER_BLUE.color_darken(lv.OPA._20))
         self.style_btn.set_text_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
         self.style_btn.set_value_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
+        self.style_btn.set_text_font(lv.STATE.DEFAULT, self.get_font_subtitle())
         self.style_btn.set_pad_top(lv.STATE.DEFAULT, self.LV_VER_RES // 40)
         self.style_btn.set_pad_bottom(lv.STATE.DEFAULT, self.LV_VER_RES // 40)
-        
+
         self.style_btn.set_transform_width(lv.STATE.PRESSED, self.LV_HOR_RES // 100)
         self.style_btn.set_transform_height(lv.STATE.PRESSED, self.LV_HOR_RES // 150)
         self.style_btn.set_transition_time(lv.STATE.DEFAULT, 100)
         self.style_btn.set_transition_delay(lv.STATE.PRESSED, 0)
         self.style_btn.set_transition_delay(lv.STATE.DEFAULT, 70)
-        self.style_btn.set_transition_prop_1(lv.STATE.DEFAULT, lv.STYLE.TRANSFORM_WIDTH);
-        self.style_btn.set_transition_prop_2(lv.STATE.DEFAULT, lv.STYLE.TRANSFORM_HEIGHT);
-    
+        self.style_btn.set_transition_prop_1(lv.STATE.DEFAULT, lv.STYLE.TRANSFORM_WIDTH)
+        self.style_btn.set_transition_prop_2(lv.STATE.DEFAULT, lv.STYLE.TRANSFORM_HEIGHT)
+
         self.style_btn_border = lv.style_t()
         self.style_btn_border.init()
         self.style_btn.set_radius(lv.STATE.DEFAULT, LV_RADIUS_CIRCLE)
@@ -157,16 +161,23 @@ class Theme():
         self.style_list_btn.set_pad_bottom(lv.STATE.DEFAULT, self.LV_HOR_RES // 100)
         self.style_list_btn.set_pad_inner(lv.STATE.DEFAULT, self.LV_HOR_RES // 50)
         
+        self.style_ddlist_bg = lv.style_t()
+        self.style_ddlist_bg.init()
+        self.style_ddlist_bg.set_radius(lv.STATE.DEFAULT,10)
+        self.style_ddlist_bg.set_bg_color(lv.STATE.DEFAULT,LV_DEMO_PRINTER_BLUE)
+        self.style_ddlist_bg.set_text_color(lv.STATE.DEFAULT,lv_colors.WHITE)
+        self.style_ddlist_bg.set_text_color(lv.STATE.PRESSED,LV_DEMO_PRINTER_WHITE)
+        self.style_ddlist_bg.set_text_font(lv.STATE.DEFAULT,lv.font_montserrat_22)
+
         self.style_ddlist_list = lv.style_t()
         self.style_ddlist_list.init()
-        self.style_ddlist_list.set_text_line_space(lv.STATE.DEFAULT, self.LV_VER_RES // 25)
+        self.style_ddlist_list.set_text_font(lv.STATE.DEFAULT,lv.font_montserrat_22)
         self.style_ddlist_list.set_shadow_width(lv.STATE.DEFAULT, self.LV_VER_RES // 20)
         self.style_ddlist_list.set_shadow_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_GRAY)
-
+        
         self.style_ddlist_selected = lv.style_t()
-        self.style_ddlist_selected.init()
-        self.style_ddlist_selected.set_bg_opa(lv.STATE.DEFAULT, lv.OPA.COVER)
-        self.style_ddlist_selected.set_bg_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_BLUE)
+        self.style_ddlist_selected.copy(self.style_ddlist_list)
+        self.style_ddlist_selected.set_bg_color(lv.STATE.DEFAULT,LV_DEMO_PRINTER_BLUE)
         self.style_ddlist_selected.set_bg_color(lv.STATE.PRESSED, LV_DEMO_PRINTER_LIGHT_GRAY)
         self.style_ddlist_selected.set_text_color(lv.STATE.PRESSED, LV_DEMO_PRINTER_GRAY.color_darken(lv.OPA._20))
         
@@ -246,7 +257,6 @@ class Theme():
             obj.add_style(lv.obj.PART.MAIN,self.style_box_border)
             return
 
-
         if name == lv.THEME.CONT:
             obj.add_style(lv.obj.PART.MAIN,self.style_box)
             return
@@ -266,6 +276,7 @@ class Theme():
             return
 
         if name == lv.THEME.BTN:
+            self.log.debug("btn style")
             obj.add_style(lv.obj.PART.MAIN,self.style_btn)
             return
 
@@ -276,12 +287,7 @@ class Theme():
         if name == lv.THEME.BAR:
             obj.add_style(lv.bar.PART.INDIC, style_bar_indic)
             return
-        '''
-        if name == LV_THEME_IMAGE:
-            lv_obj_clean_style_list(obj, LV_IMG_PART_MAIN);
-            list = lv_obj_get_style_list(obj, LV_IMG_PART_MAIN);
-            return
-        '''
+
         if name == lv.THEME.LABEL:
             obj.add_style(lv.label.PART.MAIN,self.style_label)       
             return
@@ -305,61 +311,33 @@ class Theme():
             obj.add_style(lv.slider.PART.KNOB,self.style_slider_knob)
             return
         
-        '''
-        case LV_THEME_LIST:
-            lv_obj_clean_style_list(obj, LV_LIST_PART_BG);
-            list = lv_obj_get_style_list(obj, LV_LIST_PART_BG);
-            _lv_style_list_add_style(list, &style_box);
+        if name ==  lv.THEME.LIST:
+            obj.add_style( lv.list.PART.BG, self.style_box)
+            obj.add_style(lv.list.PART.SCROLLBAR, self.style_scrollbar)
+            return
 
-            lv_obj_clean_style_list(obj, LV_LIST_PART_SCROLLABLE);
-            list = lv_obj_get_style_list(obj, LV_LIST_PART_SCROLLABLE);
+        if name == lv.THEME.LIST_BTN:
+            obj.add_style(lv.btn.PART.MAIN,self.style_list_btn)
+            obj.add_style(lv.btn.PART.MAIN,self.style_label)
+            return
 
-            lv_obj_clean_style_list(obj, LV_LIST_PART_SCROLLBAR);
-            list = lv_obj_get_style_list(obj, LV_LIST_PART_SCROLLBAR);
-            _lv_style_list_add_style(list, &style_scrollbar);
-            break;
+        if name == lv.THEME.SWITCH:
+            obj.add_style(lv.switch.PART.BG, self.style_sw_bg)
+            obj.add_style(lv.switch.PART.INDIC, self.style_sw_indic)
+            obj.add_style(lv.switch.PART.KNOB, self.style_sw_knob)
+            return
 
-        case LV_THEME_LIST_BTN:
-            lv_obj_clean_style_list(obj, LV_BTN_PART_MAIN);
-            list = lv_obj_get_style_list(obj, LV_BTN_PART_MAIN);
-            _lv_style_list_add_style(list, &style_list_btn);
-            break;
+        if name == lv.THEME.DROPDOWN:
+            obj.add_style(lv.dropdown.PART.MAIN, self.style_btn)
+            obj.add_style(lv.dropdown.PART.MAIN, self.style_ddlist_bg)
+            obj.add_style(lv.dropdown.PART.LIST, self.style_ddlist_list)
+            obj.add_style(lv.dropdown.PART.LIST, self.style_pad)
 
-        case LV_THEME_SWITCH:
-            lv_obj_clean_style_list(obj, LV_SWITCH_PART_BG);
-            list = lv_obj_get_style_list(obj, LV_SWITCH_PART_BG);
-            _lv_style_list_add_style(list, &style_sw_bg);
+            obj.add_style(lv.dropdown.PART.SELECTED, self.style_ddlist_selected)
 
-            lv_obj_clean_style_list(obj, LV_SWITCH_PART_INDIC);
-            list = lv_obj_get_style_list(obj, LV_SWITCH_PART_INDIC);
-            _lv_style_list_add_style(list, &style_sw_indic);
+            obj.add_style(lv.dropdown.PART.SCROLLBAR, self.style_scrollbar)
+            return
 
-            lv_obj_clean_style_list(obj, LV_SWITCH_PART_KNOB);
-            list = lv_obj_get_style_list(obj, LV_SWITCH_PART_KNOB);
-            _lv_style_list_add_style(list, &style_sw_knob);
-            break;
-
-        case LV_THEME_DROPDOWN:
-            lv_obj_clean_style_list(obj, LV_DROPDOWN_PART_MAIN);
-            list = lv_obj_get_style_list(obj, LV_DROPDOWN_PART_MAIN);
-            _lv_style_list_add_style(list, &style_btn);
-            _lv_style_list_add_style(list, &style_pad);
-
-            lv_obj_clean_style_list(obj, LV_DROPDOWN_PART_LIST);
-            list = lv_obj_get_style_list(obj, LV_DROPDOWN_PART_LIST);
-            _lv_style_list_add_style(list, &style_box);
-            _lv_style_list_add_style(list, &style_ddlist_list);
-            _lv_style_list_add_style(list, &style_pad);
-
-            lv_obj_clean_style_list(obj, LV_DROPDOWN_PART_SELECTED);
-            list = lv_obj_get_style_list(obj, LV_DROPDOWN_PART_SELECTED);
-            _lv_style_list_add_style(list, &style_ddlist_selected);
-
-            lv_obj_clean_style_list(obj, LV_DROPDOWN_PART_SCROLLBAR);
-            list = lv_obj_get_style_list(obj, LV_DROPDOWN_PART_SCROLLBAR);
-            _lv_style_list_add_style(list, &style_scrollbar);
-            break;
-        '''
     def get_font_small(self):
         return lv.font_montserrat_14
         
