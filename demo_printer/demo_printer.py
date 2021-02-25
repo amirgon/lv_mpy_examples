@@ -95,6 +95,8 @@ class DemoPrinter(object):
         (self.img_wave_data,self.img_wave_dsc) = self.get_icon("img_wave_27x47",27,47)
         (self.img_phone_data,self.img_phone_dsc) = self.get_icon("img_phone_77x99",77,99)
         
+        (self.img_ready,self.img_ready_dsc) = self.get_icon("img_ready_158x158",158,158)
+        
         (self.img_printer2_data,self.img_printer2_dsc)       = self.get_icon("img_printer2_107x104",107,104)
         (self.img_no_internet_data,self.img_no_internet_dsc) = self.get_icon("img_no_internet_42x42",42,42)
         (self.img_cloud_data,self.img_cloud_dsc)             = self.get_icon("img_cloud_93x59",93,59)
@@ -284,7 +286,7 @@ class DemoPrinter(object):
             delay += self.LV_DEMO_PRINTER_ANIM_DELAY
             self.anim_in(txt, delay);
     
-            # icon_generic_event_cb(obj, e);
+            self.icon_generic_event_cb(obj, evt)
             
     def scan_open_icon_event_cb(self,obj,evt):
         if evt == lv.EVENT.CLICKED:
@@ -301,9 +303,9 @@ class DemoPrinter(object):
             self.theme.apply(txt, LV_DEMO_PRINTER_THEME_LABEL_WHITE)
             txt.align(arc, lv.ALIGN.OUT_BOTTOM_MID, 0, 60)
 
-            # lv_demo_printer_anim_in(arc, delay);
+            self.anim_in(arc, delay)
             delay += self.LV_DEMO_PRINTER_ANIM_DELAY
-            # lv_demo_printer_anim_in(txt, delay);
+            self.anim_in(txt, delay)
 
     def print_open_event_cb(self,obj,evt):
         if evt == lv.EVENT.CLICKED:
@@ -348,8 +350,6 @@ class DemoPrinter(object):
         self.theme.apply(label,lv.THEME.LABEL)
         label.set_text("From where do you want to print?")
         label.align(box,lv.ALIGN.CENTER,0,0)
-        # box.set_style_local_value_str(lv.cont.PART.MAIN, lv.STATE.DEFAULT,
-        #     "From where do you want to print?");
 
         delay += self.LV_DEMO_PRINTER_ANIM_DELAY;
         self.anim_in(box, delay)
@@ -534,20 +534,153 @@ class DemoPrinter(object):
         next_btn.set_size(box_w, 60)
         next_btn.align(self.scan_img, lv.ALIGN.OUT_RIGHT_BOTTOM, 40, 0)
         if btn_txt == "NEXT":
-            # next_btn.set_event_cb(scan_next_event_cb)
+            next_btn.set_event_cb(self.scan_next_event_cb)
             next_btn.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, "NEXT")
             next_btn.set_style_local_value_font(lv.obj.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
         elif btn_txt == "SAVE":
-            # next_btn.set_event_cb(scan_save_event_cb)
+            next_btn.set_event_cb(self.scan_save_event_cb)
             next_btn.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, "SAVE")
             next_btn.set_style_local_value_font(lv.obj.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
             next_btn.set_style_local_bg_color(lv.obj.PART.MAIN, lv.STATE.DEFAULT, LV_DEMO_PRINTER_GREEN)
             next_btn.set_style_local_bg_color(lv.obj.PART.MAIN, lv.STATE.PRESSED, LV_DEMO_PRINTER_GREEN.color_darken(lv.OPA._20))
 
-        
+    def scan_save_event_cb(self,obj,evt):
+        if evt == lv.EVENT.CLICKED:
+            self.scan_img = None
+
+            self.anim_out_all(lv.scr_act(), 0)
+            self.anim_bg(0, LV_DEMO_PRINTER_GREEN, self.LV_DEMO_PRINTER_BG_FULL)
+
+            delay = 200
+
+            img = lv.img(lv.scr_act(), None)
+            img.set_src(self.img_ready_dsc);
+            img.align(None, lv.ALIGN.CENTER, 0, -40)
+
+            delay += self.LV_DEMO_PRINTER_ANIM_DELAY
+            self.anim_in(img, delay)
+
+            self.info_bottom_create("File saved", "CONTINUE", self.back_to_home_event_cb, delay)
+            
+    def scan_next_event_cb(self,obj,evt):
+        if evt == lv.EVENT.CLICKED:
+            self.anim_out_all(lv.scr_act(), 0)
+
+            delay = 400
+
+            back = self.add_back(self.back_to_home_event_cb)
+            self.anim_in(back, delay)
+
+            title = self.add_title("ADJUST IMAGE")
+            self.anim_in(title, delay)
+
+            box_w = 400
+            self.scan_img.set_pivot(0, 0)
+            self.scan_img.set_antialias(False)
+
+            '''
+            a = lv.anim_t()
+            a.init()
+            a.set_var(self.scan_img)
+            #a.set_exec_cb(lv_img_set_zoom);
+            a.set_values(lv.img.ZOOM.NONE, 190)
+            a.set_time(200)
+            a.set_delay(200)
+            lv.anim_t.start(a)
+            '''
+            self.scan_img = None    # To allow anim out
+
+            dropdown_box = lv.obj(lv.scr_act(), None)
+            dropdown_box.set_size(box_w, self.LV_VER_RES // 5)
+            dropdown_box.align(None, lv.ALIGN.IN_BOTTOM_LEFT, 40, -20)
+
+            dropdown = lv.dropdown(dropdown_box, None)
+            dropdown.align(None, lv.ALIGN.IN_LEFT_MID, self.LV_HOR_RES // 60, 0)
+            dropdown.set_max_height(self.LV_VER_RES // 3)
+            dropdown.set_options_static("Best\nNormal\nDraft")
+            dropdown.set_width((box_w - 3 * self.LV_HOR_RES // 60) // 2)
+            self.theme.apply(dropdown,lv.THEME.DROPDOWN)
+            
+            dropdown = lv.dropdown(dropdown_box, dropdown)
+            dropdown.align(None, lv.ALIGN.IN_RIGHT_MID, - self.LV_HOR_RES // 60, 0)
+            dropdown.set_options_static("72 DPI\n96 DPI\n150 DPI\n300 DPI\n600 DPI\n900 DPI\n1200 DPI")
+            self.theme.apply(dropdown,lv.THEME.DROPDOWN)
+            
+            box_w = 320 - 40
+            settings_box = lv.obj(lv.scr_act(), None)
+            settings_box.set_size(box_w, self.LV_VER_RES // 2)
+            settings_box.align(None, lv.ALIGN.IN_TOP_RIGHT, -40, 100)
+
+            numbox = lv.cont(settings_box, None)
+            self.theme.apply(numbox, LV_DEMO_PRINTER_THEME_BOX_BORDER)
+            numbox.set_size(self.LV_HOR_RES // 7, self.LV_HOR_RES // 13)
+            numbox.align(settings_box, lv.ALIGN.IN_TOP_MID, 0, self.LV_VER_RES // 10)
+            numbox.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, "Copies")
+            numbox.set_style_local_value_align(lv.obj.PART.MAIN, lv.STATE.DEFAULT, lv.ALIGN.OUT_TOP_MID)
+            numbox.set_style_local_value_ofs_y(lv.obj.PART.MAIN, lv.STATE.DEFAULT, - self.LV_VER_RES // 50)
+            numbox.set_style_local_value_font(lv.obj.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
+            numbox.set_layout(lv.LAYOUT.CENTER)
+
+            self.print_cnt = 1
+            self.print_cnt_label = lv.label(numbox, None)
+            self.print_cnt_label.set_text("1")
+            self.print_cnt_label.set_style_local_text_font(lv.label.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
+
+            btn = lv.btn(settings_box, None)
+            btn.set_size(self.LV_HOR_RES // 13, self.LV_HOR_RES // 13)
+            btn.align(numbox, lv.ALIGN.OUT_LEFT_MID, - self.LV_VER_RES // 60, 0)
+            btn.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, lv.SYMBOL.DOWN)
+            btn.set_style_local_value_font(lv.obj.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
+            btn.set_event_cb(self.print_cnt_btn_event_cb)
+            btn.set_ext_click_area(10, 10, 10, 10);
+            self.theme.apply(btn,lv.THEME.BTN)
+            
+            sw = lv.switch(settings_box, None)
+            sw.set_size(self.LV_HOR_RES // 10, self.LV_VER_RES // 12)
+            sw.align(btn, lv.ALIGN.OUT_BOTTOM_LEFT, self.LV_HOR_RES // 50, self.LV_VER_RES // 7)
+            sw.set_style_local_value_ofs_y(lv.obj.PART.MAIN, lv.STATE.DEFAULT, - self.LV_VER_RES // 50)
+            sw.set_style_local_value_align(lv.obj.PART.MAIN, lv.STATE.DEFAULT, lv.ALIGN.OUT_TOP_MID)
+            sw.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, "Color")
+            sw.set_style_local_value_font(lv.obj.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
+            self.theme.apply(sw,lv.THEME.SWITCH)
+            
+            btn = lv.btn(settings_box, btn)
+            btn.align(numbox, lv.ALIGN.OUT_RIGHT_MID, self.LV_VER_RES // 60, 0)
+            btn.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, lv.SYMBOL.UP)
+            btn.set_event_cb(self.print_cnt_btn_event_cb)
+            self.theme.apply(btn,lv.THEME.BTN)
+            
+            sw = lv.switch(settings_box, sw)
+            sw.align(btn, lv.ALIGN.OUT_BOTTOM_RIGHT, - self.LV_HOR_RES // 50, self.LV_VER_RES // 7)
+            sw.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, "Vertical")
+
+            print_btn = lv.btn(lv.scr_act(), None)
+            self.theme.apply(print_btn, LV_DEMO_PRINTER_THEME_BTN_CIRCLE)
+            print_btn.set_size(box_w, 60)
+            print_btn.set_event_cb(self.print_start_event_cb)
+            
+            btn_ofs_y = (dropdown_box.get_height() - print_btn.get_height()) // 2
+            print_btn.align(settings_box, lv.ALIGN.OUT_BOTTOM_MID, 0, self.LV_HOR_RES // 30 + btn_ofs_y)
+            print_btn.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, "PRINT")
+            print_btn.set_style_local_value_font(lv.obj.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
+            print_btn.set_style_local_bg_color(lv.obj.PART.MAIN, lv.STATE.DEFAULT, LV_DEMO_PRINTER_GREEN)
+            print_btn.set_style_local_bg_color(lv.obj.PART.MAIN, lv.STATE.PRESSED, LV_DEMO_PRINTER_GREEN.color_darken(lv.OPA._20))
+
+            delay += self.LV_DEMO_PRINTER_ANIM_DELAY;
+            self.anim_in(settings_box, delay)
+
+            delay += self.LV_DEMO_PRINTER_ANIM_DELAY
+            self.anim_in(dropdown_box, delay)
+
+            delay += self.LV_DEMO_PRINTER_ANIM_DELAY
+            self.anim_in(print_btn, delay)
+
+            self.anim_bg(0, LV_DEMO_PRINTER_BLUE, self.LV_DEMO_PRINTER_BG_NORMAL)
+            
     def anim_bg(self,delay,color,y_new):
         self.log.debug("anim_bg: new y: %d"%y_new)
         y_act = self.bg_top.get_y()
+        act_color = self.bg_top.get_style_bg_color(lv.obj.PART.MAIN)
         self.log.debug("current y: %d"%y_act)
         if y_new != self.LV_DEMO_PRINTER_BG_NORMAL and y_new == y_act and  act_color.full == color.full:
             return
@@ -617,6 +750,7 @@ class DemoPrinter(object):
         btn.align(txt, lv.ALIGN.OUT_BOTTOM_MID, 0, 60)
         
         btn.set_style_local_value_str(lv.btn.PART.MAIN, lv.STATE.DEFAULT, btn_txt)
+        btn.set_style_local_value_font(lv.btn.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_normal())
         btn.set_event_cb(btn_event_cb)
         
         self.anim_in(txt, delay)
@@ -629,6 +763,7 @@ class DemoPrinter(object):
 
     def back_to_home_event_cb(self,obj,evt):
         if evt == lv.EVENT.CLICKED:
+            self.scan_img=None
             self.anim_out_all(lv.scr_act(), 0)
             self.home_open(200)
         pass
@@ -781,7 +916,7 @@ class DemoPrinter(object):
             settings_box.set_size(box_w, self.LV_VER_RES // 2);
             settings_box.align(list, lv.ALIGN.OUT_RIGHT_TOP, self.LV_HOR_RES // 20, 0)
 
-            print_cnt = 1
+            self.print_cnt = 1
             numbox = lv.cont(settings_box, None)
             self.theme.apply(numbox, LV_DEMO_PRINTER_THEME_BOX_BORDER)
             numbox.set_size(self.LV_HOR_RES // 7, self.LV_HOR_RES // 13)
@@ -792,19 +927,20 @@ class DemoPrinter(object):
             numbox.set_style_local_value_font(lv.obj.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
             numbox.set_layout(lv.LAYOUT.CENTER)
 
-            print_cnt_label = lv.label(numbox, None)
-            print_cnt_label.set_text("1")
-            print_cnt_label.set_style_local_text_font(lv.label.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
+            self.print_cnt_label = lv.label(numbox, None)
+            self.print_cnt_label.set_text("1")
+            self.print_cnt_label.set_style_local_text_font(lv.label.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
             
 
             btn = lv.btn(settings_box, None)
             btn.set_size(self.LV_HOR_RES // 13, self.LV_HOR_RES // 13)
             btn.align(numbox, lv.ALIGN.OUT_LEFT_MID, - self.LV_VER_RES // 60, 0)
             btn.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, lv.SYMBOL.DOWN)
-            # btn.set_event_cb(print_cnt_bnt_event_cb)
+            btn.set_style_local_value_font(lv.obj.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
+            btn.set_event_cb(self.print_cnt_btn_event_cb)
             btn.set_ext_click_area(10, 10, 10, 10)
             self.theme.apply(btn,lv.THEME.BTN)
-
+            
             sw = lv.switch(settings_box, None)
             sw.set_size(self.LV_HOR_RES // 10, self.LV_VER_RES // 12)
             sw.align(btn, lv.ALIGN.OUT_BOTTOM_LEFT, self.LV_HOR_RES // 50, self.LV_VER_RES // 7)
@@ -817,8 +953,10 @@ class DemoPrinter(object):
             btn = lv.btn(settings_box, btn)
             btn.align(numbox, lv.ALIGN.OUT_RIGHT_MID, self.LV_VER_RES // 60, 0)
             btn.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, lv.SYMBOL.UP)
+            btn.set_style_local_value_font(lv.obj.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())            
             self.theme.apply(btn,lv.THEME.BTN)
-
+            btn.set_event_cb(self.print_cnt_btn_event_cb)
+                          
             sw = lv.switch(settings_box, sw)
             sw.align(btn, lv.ALIGN.OUT_BOTTOM_RIGHT, - self.LV_HOR_RES // 50, self.LV_VER_RES // 7)
             sw.set_style_local_value_str(lv.obj.PART.MAIN, lv.STATE.DEFAULT, "Vertical")
@@ -834,7 +972,7 @@ class DemoPrinter(object):
             print_btn.set_style_local_value_font(lv.obj.PART.MAIN, lv.STATE.DEFAULT, self.theme.get_font_subtitle())
             print_btn.set_style_local_bg_color(lv.obj.PART.MAIN, lv.STATE.DEFAULT, LV_DEMO_PRINTER_GREEN)
             print_btn.set_style_local_bg_color(lv.obj.PART.MAIN, lv.STATE.PRESSED, LV_DEMO_PRINTER_GREEN.color_darken(lv.OPA._20))
-            # print_bnt.set_event_cb(self.print_start_event_cb)
+            print_btn.set_event_cb(self.print_start_event_cb)
 
             delay += self.LV_DEMO_PRINTER_ANIM_DELAY
             self.anim_in(list, delay);
@@ -850,7 +988,51 @@ class DemoPrinter(object):
             
             self.anim_bg(0, LV_DEMO_PRINTER_BLUE, self.LV_DEMO_PRINTER_BG_NORMAL)
 
-                
+    def print_cnt_btn_event_cb(self,obj,evt):
+        if evt == lv.EVENT.CLICKED or evt == lv.EVENT.LONG_PRESSED_REPEAT: 
+        # if evt == lv.EVENT.CLICKED:
+            txt = obj.get_style_value_str(lv.btn.PART.MAIN)
+            if txt == lv.SYMBOL.DOWN:
+                if self.print_cnt > 1:
+                    self.print_cnt -= 1
+            else:
+                if self.print_cnt < 1000:
+                    self.print_cnt +=1
+                    
+            self.print_cnt_label.set_text(str(self.print_cnt))
+
+    def print_start_event_cb(self,obj,evt):
+        if evt == lv.EVENT.CLICKED:
+            self.anim_out_all(lv.scr_act(), 0)
+            delay = 200
+            self.anim_bg(150, LV_DEMO_PRINTER_BLUE, self.LV_DEMO_PRINTER_BG_FULL)
+            
+            arc = self.add_loader(lambda a: self.print_start_ready())
+            arc.align(None, lv.ALIGN.CENTER, 0, -40)
+            
+            txt = lv.label(lv.scr_act(), None)
+            txt.set_text("Printing, please wait...")
+            self.theme.apply(txt,LV_DEMO_PRINTER_THEME_LABEL_WHITE)
+            txt.align(arc, lv.ALIGN.OUT_BOTTOM_MID, 0, 60)
+
+            self.anim_in(arc, delay)
+            delay += self.LV_DEMO_PRINTER_ANIM_DELAY
+            self.anim_in(txt, delay)
+
+    def print_start_ready(self):
+        self.anim_bg(0, LV_DEMO_PRINTER_GREEN, self.LV_DEMO_PRINTER_BG_FULL)
+        self.anim_out_all(lv.scr_act(), 0);
+        
+        img = lv.img(lv.scr_act(), None)
+        img.set_src(self.img_ready_dsc)
+        img.align(None, lv.ALIGN.CENTER, 0, -40)
+        
+        delay = 200
+        self.anim_in(img, delay)
+        delay += self.LV_DEMO_PRINTER_ANIM_DELAY
+
+        self.info_bottom_create("Printing finished", "CONTINUE", self.back_to_home_event_cb, delay)
+        
     def back_to_print_event_cb(self,obj,evt):
         if evt == lv.EVENT.CLICKED:
             self.anim_out_all(lv.scr_act(), 0)

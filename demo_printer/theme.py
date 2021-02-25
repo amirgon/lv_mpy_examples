@@ -74,7 +74,7 @@ class Theme():
         self.style_label_white = lv.style_t()
         self.style_label_white.init()
         self.style_label_white.set_text_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
-        
+
         self.style_btn = lv.style_t()
         self.style_btn.init()
         self.style_btn.set_radius(lv.STATE.DEFAULT, 10)
@@ -94,10 +94,10 @@ class Theme():
         self.style_btn.set_transition_delay(lv.STATE.DEFAULT, 70)
         self.style_btn.set_transition_prop_1(lv.STATE.DEFAULT, lv.STYLE.TRANSFORM_WIDTH)
         self.style_btn.set_transition_prop_2(lv.STATE.DEFAULT, lv.STYLE.TRANSFORM_HEIGHT)
-
+   
         self.style_btn_border = lv.style_t()
         self.style_btn_border.init()
-        self.style_btn.set_radius(lv.STATE.DEFAULT, LV_RADIUS_CIRCLE)
+        self.style_btn_border.set_radius(lv.STATE.DEFAULT, LV_RADIUS_CIRCLE)
         self.style_btn_border.set_border_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
         self.style_btn_border.set_border_width(lv.STATE.DEFAULT, 2)
         self.style_btn_border.set_bg_opa(lv.STATE.DEFAULT, lv.OPA.TRANSP)
@@ -276,8 +276,7 @@ class Theme():
             return
 
         if name == lv.THEME.BTN:
-            self.log.debug("btn style")
-            obj.add_style(lv.obj.PART.MAIN,self.style_btn)
+            obj.add_style(lv.btn.PART.MAIN,self.style_btn)
             return
 
         if name == LV_DEMO_PRINTER_THEME_ICON:
