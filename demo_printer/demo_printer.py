@@ -563,6 +563,7 @@ class DemoPrinter(object):
             self.info_bottom_create("File saved", "CONTINUE", self.back_to_home_event_cb, delay)
             
     def scan_next_event_cb(self,obj,evt):
+        LV_IMG_ZOOM_NONE = 250
         if evt == lv.EVENT.CLICKED:
             self.anim_out_all(lv.scr_act(), 0)
 
@@ -578,17 +579,16 @@ class DemoPrinter(object):
             self.scan_img.set_pivot(0, 0)
             self.scan_img.set_antialias(False)
 
-            '''
             a = lv.anim_t()
             a.init()
             a.set_var(self.scan_img)
-            #a.set_exec_cb(lv_img_set_zoom);
-            a.set_values(lv.img.ZOOM.NONE, 190)
+            a.set_custom_exec_cb(lambda a,val: self.set_zoom(self.scan_img,val))
+            a.set_values(LV_IMG_ZOOM_NONE, 190)
             a.set_time(200)
             a.set_delay(200)
             lv.anim_t.start(a)
-            '''
-            self.scan_img = None    # To allow anim out
+
+            # self.scan_img = None    # To allow anim out
 
             dropdown_box = lv.obj(lv.scr_act(), None)
             dropdown_box.set_size(box_w, self.LV_VER_RES // 5)
@@ -729,7 +729,11 @@ class DemoPrinter(object):
     def set_x(self,obj,new_x):
         self.log.debug("Setting x to %d"%new_x)
         obj.set_x(new_x)
-        
+                                 
+    def set_zoom(self,obj,new_size):
+        self.log.debug("Setting zoom to %d"%new_size)
+        obj.set_zoom(new_size)
+                                 
     def anim_bg_color_cb(self,v):
         self.log.debug("anim_bg_color_cb: Mixing colors with value: %d"%v)
         c = self.bg_color_act.color_mix(self.bg_color_prev,v)
