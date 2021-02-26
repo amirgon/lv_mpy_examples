@@ -29,7 +29,7 @@ class Theme():
         self.LV_VER_RES = lv.scr_act().get_disp().driver.ver_res
         
         self.log = logging.getLogger("Theme")
-        self.log.setLevel(logging.DEBUG)
+        self.log.setLevel(logging.ERROR)
 
         self.style_pad = lv.style_t()
         self.style_pad.init()

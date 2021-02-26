@@ -31,7 +31,7 @@ class DemoPrinter(object):
         self.LV_DEMO_PRINTER_BG_NORMAL = (-2 * (self.LV_VER_RES // 3))
 
         self.log = logging.getLogger("DemoPrinter")
-        self.log.setLevel(logging.DEBUG)
+        self.log.setLevel(logging.ERROR)
         
         self.icon_wifi_data = None
         self.icon_wifi_dsc = None
@@ -689,7 +689,7 @@ class DemoPrinter(object):
            (y_new == self.LV_DEMO_PRINTER_BG_NORMAL and y_act == self.LV_DEMO_PRINTER_BG_FULL):            
             path = lv.anim_path_t()
             path.init()
-            path.set_cb(self.triangle)
+            path.set_cb(self.triangle_path_cb)
             
             a = lv.anim_t()
             a.set_var(self.bg_top)
@@ -720,7 +720,7 @@ class DemoPrinter(object):
         # a.set_path(lv.anim_t.path_def)
         lv.anim_t.start(color_anim)
 
-    def triangle(self,path,a):
+    def triangle_path_cb(self,path,a):
         if a.time == a.act_time:
             return a.end
         if a.act_time < a.time//2:
