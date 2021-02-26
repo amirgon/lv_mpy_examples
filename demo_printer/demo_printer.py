@@ -689,14 +689,13 @@ class DemoPrinter(object):
            (y_new == self.LV_DEMO_PRINTER_BG_NORMAL and y_act == self.LV_DEMO_PRINTER_BG_FULL):            
             path = lv.anim_path_t()
             path.init()
-            # path.set_cb(lv.anim_path_t.triangle)
+            path.set_cb(self.triangle)
             
             a = lv.anim_t()
             a.set_var(self.bg_top)
             a.set_time(self.LV_DEMO_PRINTER_ANIM_TIME_BG + 200)
             a.set_delay(delay)
             a.set_custom_exec_cb(lambda a, val: self.set_y(self.bg_top,val))
-            #a.set_exec_cb(lv.obj.set_y)
             a.set_values(y_act, y_new)
             a.set_path(path)
             lv.anim_t.start(a)
@@ -706,7 +705,6 @@ class DemoPrinter(object):
             a.set_time(self.LV_DEMO_PRINTER_ANIM_TIME_BG)
             a.set_delay(delay)
             a.set_custom_exec_cb(lambda a, val: self.set_y(self.bg_top,val))
-            # a.set_exec_cb(lv.obj.set_y)
             a.set_values(self.bg_top.get_y(), y_new)
             lv.anim_t.start(a)
 
@@ -722,6 +720,25 @@ class DemoPrinter(object):
         # a.set_path(lv.anim_t.path_def)
         lv.anim_t.start(color_anim)
 
+    def triangle(self,path,a):
+        if a.time == a.act_time:
+            return a.end
+        if a.act_time < a.time//2:
+            step = a.act_time * 1024 // (a.time//2)
+            new_value = step * self.LV_DEMO_PRINTER_BG_SMALL - a.start
+            new_value >>= 10
+            new_value += a.start
+            self.log.debug("triangle: new value: %d"%new_value)
+            return new_value
+        else:
+            t = a.act_time - a.time // 2
+            step = a.act_time * 1024 // (a.time//2)
+            new_value = step * (a.end - self.LV_DEMO_PRINTER_BG_SMALL) 
+            new_value >>= 10
+            new_value += self.LV_DEMO_PRINTER_BG_SMALL
+            self.log.debug("triangle: new value: %d"%new_value)
+            return new_value        
+        
     def set_y(self,obj,new_y):
         self.log.debug("Setting y to %d"%new_y)
         obj.set_y(new_y)
@@ -888,8 +905,8 @@ class DemoPrinter(object):
             
             dummy_file_list = ["Contract 12.pdf", "Scanned_05_21.pdf", "Photo_132210.jpg", "Photo_232141.jpg",
                  "Photo_091640.jpg", "Photo_124019.jpg", "Photo_232032.jpg", "Photo_232033.jpg", "Photo_232034.jpg",
-                 "Monday schedule.pdf", "Email from John.txt", "New file.txt", "Untitled.txt", "Untitled (1).txt", "Gallery_40.jpg",
-                 "Gallery_41.jpg", "Gallery_42.jpg", "Gallery_43.jpg", "Gallery_44.jpg"]
+                 "Monday schedule.pdf", "Email from John.txt", "New file.txt", "Untitled.txt", "Untitled (1).txt",
+                 "Gallery_40.jpg","Gallery_41.jpg", "Gallery_42.jpg", "Gallery_43.jpg", "Gallery_44.jpg"]
             
             for filename in dummy_file_list:
                 btn = lv.btn.__cast__(list.add_btn(lv.SYMBOL.FILE, filename))
