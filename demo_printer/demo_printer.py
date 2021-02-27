@@ -8,7 +8,10 @@ from theme import LV_DEMO_PRINTER_THEME_BTN_BORDER,LV_DEMO_PRINTER_THEME_BTN_BAC
 from theme import LV_DEMO_PRINTER_THEME_BTN_CIRCLE,LV_DEMO_PRINTER_THEME_BOX_BORDER
 import utime as time
 
-import ulogging as logging
+try:
+    import logging
+except:
+    import ulogging as logging
 
 
 class DemoPrinter(object):
