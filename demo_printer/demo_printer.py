@@ -1027,6 +1027,7 @@ class DemoPrinter(object):
 
     def print_start_event_cb(self,obj,evt):
         if evt == lv.EVENT.CLICKED:
+            self.scan_img = None
             self.anim_out_all(lv.scr_act(), 0)
             delay = 200
             self.anim_bg(150, LV_DEMO_PRINTER_BLUE, self.LV_DEMO_PRINTER_BG_FULL)
