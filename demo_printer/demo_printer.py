@@ -7,16 +7,25 @@ from theme import LV_DEMO_PRINTER_THEME_ICON,LV_DEMO_PRINTER_THEME_LABEL_WHITE,L
 from theme import LV_DEMO_PRINTER_THEME_BTN_BORDER,LV_DEMO_PRINTER_THEME_BTN_BACK
 from theme import LV_DEMO_PRINTER_THEME_BTN_CIRCLE,LV_DEMO_PRINTER_THEME_BOX_BORDER
 import utime as time
+import sys
 
-try:
-    import logging
-except:
-    import ulogging as logging
+import ulogging as logging
 
 
 class DemoPrinter(object):
     
     def __init__(self):
+
+        # find the script directory
+        path_dirs = __file__.split('/')
+        script_dir = ''
+        for i in range(len(path_dirs)-1):
+            script_dir += path_dirs[i]
+            script_dir += '/'
+        # add the widget and lib directories to the system path
+        sys.path.extend([script_dir + '/../lib', script_dir + '/../widgets'])
+        self.images_lib = script_dir + 'images/'
+
         self.LV_HOR_RES = lv.scr_act().get_disp().driver.hor_res
         self.LV_VER_RES = lv.scr_act().get_disp().driver.ver_res
         # Bg positions
@@ -72,7 +81,7 @@ class DemoPrinter(object):
         self.bg_top = lv.obj(lv.scr_act(),None)
         self.bg_top.set_size(self.LV_HOR_RES,self.LV_VER_RES)
         
-        # read all the images fromm the raw image files
+        # read all the images from the raw image files
 
         (self.icon_wifi_data,self.icon_wifi_dsc) = self.get_icon("icon_wifi_48x34",48,34)
         (self.icon_tel_data,self.icon_tel_dsc)   = self.get_icon("icon_tel_35x35",35,35)
@@ -227,7 +236,7 @@ class DemoPrinter(object):
     def get_icon(self,filename,xres,yres):
 
         try:
-            sdl_filename = 'images/' + filename + "_argb8888.bin"
+            sdl_filename = self.images_lib + filename + "_argb8888.bin"
             self.log.debug('sdl filename: ' + sdl_filename)
             with open(sdl_filename,'rb') as f:
                 icon_data = f.read()
@@ -593,20 +602,24 @@ class DemoPrinter(object):
 
             # self.scan_img = None    # To allow anim out
 
-            dropdown_box = lv.obj(lv.scr_act(), None)
+            dropdown_box = lv.cont(lv.scr_act(), None)
+            dropdown_box.set_auto_realign(True)
+            dropdown_box.align_mid(None,lv.ALIGN.CENTER,0,0)
+            dropdown_box.set_fit(lv.FIT.TIGHT)
+            dropdown_box.set_layout(lv.LAYOUT.ROW_MID)
             dropdown_box.set_size(box_w, self.LV_VER_RES // 5)
             dropdown_box.align(None, lv.ALIGN.IN_BOTTOM_LEFT, 40, -20)
 
             dropdown = lv.dropdown(dropdown_box, None)
-            dropdown.align(None, lv.ALIGN.IN_LEFT_MID, self.LV_HOR_RES // 60, 0)
             dropdown.set_max_height(self.LV_VER_RES // 3)
             dropdown.set_options_static("Best\nNormal\nDraft")
             dropdown.set_width((box_w - 3 * self.LV_HOR_RES // 60) // 2)
             self.theme.apply(dropdown,lv.THEME.DROPDOWN)
             
             dropdown = lv.dropdown(dropdown_box, dropdown)
-            dropdown.align(None, lv.ALIGN.IN_RIGHT_MID, - self.LV_HOR_RES // 60, 0)
+            dropdown.set_max_height(self.LV_VER_RES // 3)
             dropdown.set_options_static("72 DPI\n96 DPI\n150 DPI\n300 DPI\n600 DPI\n900 DPI\n1200 DPI")
+            dropdown.set_width((box_w - 3 * self.LV_HOR_RES // 60) // 2)            
             self.theme.apply(dropdown,lv.THEME.DROPDOWN)
             
             box_w = 320 - 40
