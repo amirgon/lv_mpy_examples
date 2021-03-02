@@ -1,4 +1,7 @@
 #!/opt/bin/lv_micropython -i
+import sys
+sys.path.append('') # work around a micropython bug when loading frozen modules on thee unix port
+
 import lvgl as lv
 from display_driver_utils import driver,ORIENT_LANDSCAPE
 from lv_colors import lv_colors
@@ -7,7 +10,6 @@ from theme import LV_DEMO_PRINTER_THEME_ICON,LV_DEMO_PRINTER_THEME_LABEL_WHITE,L
 from theme import LV_DEMO_PRINTER_THEME_BTN_BORDER,LV_DEMO_PRINTER_THEME_BTN_BACK
 from theme import LV_DEMO_PRINTER_THEME_BTN_CIRCLE,LV_DEMO_PRINTER_THEME_BOX_BORDER
 import utime as time
-import sys
 
 import ulogging as logging
 
