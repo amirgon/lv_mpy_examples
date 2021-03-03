@@ -931,16 +931,18 @@ class DemoPrinter(object):
                 btn.set_checkable(True)
                 self.theme.apply(btn,lv.THEME.LIST_BTN)
 
-            dropdown_box = lv.obj(lv.scr_act(), None)
-            dropdown_box.set_size(box_w, self.LV_VER_RES // 5);
-            dropdown_box.align(list, lv.ALIGN.OUT_BOTTOM_MID, 0, self.LV_HOR_RES // 30)
+            dropdown_box = lv.cont(lv.scr_act(), None)
+            dropdown_box.set_auto_realign(True)
+            dropdown_box.align_mid(None,lv.ALIGN.CENTER,0,0)
+            dropdown_box.set_fit(lv.FIT.TIGHT)
+            dropdown_box.set_layout(lv.LAYOUT.ROW_MID)
+            dropdown_box.set_size(box_w, self.LV_VER_RES // 5)
+            dropdown_box.align(None, lv.ALIGN.IN_BOTTOM_LEFT, 40, -20)
 
             dropdown = lv.dropdown(dropdown_box, None)
-            dropdown.align(None, lv.ALIGN.IN_LEFT_MID, self.LV_HOR_RES // 60, 0)
             dropdown.set_max_height(self.LV_VER_RES // 3)
             dropdown.set_options_static("Best\nNormal\nDraft")
             dropdown.set_width((box_w - 3 * self.LV_HOR_RES // 60) // 2)
-            dropdown.set_ext_click_area(5, 5, 5, 5)
             self.theme.apply(dropdown,lv.THEME.DROPDOWN)
                 
             dropdown = lv.dropdown(dropdown_box, dropdown)
