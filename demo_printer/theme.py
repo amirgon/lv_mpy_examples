@@ -2,6 +2,7 @@ import lvgl as lv
 from display_driver_utils import driver,ORIENT_LANDSCAPE
 from lv_colors import lv_colors
 import ulogging as logging
+from filesys_driver import Fs_driver
 
 LV_THEME_DEFAULT_COLOR_PRIMARY=lv.color_hex(0x01a2b1)
 LV_THEME_DEFAULT_COLOR_SECONDARY=lv.color_hex(0x44d1b6)
@@ -27,7 +28,17 @@ class Theme():
     def __init__(self):
         self.LV_HOR_RES = lv.scr_act().get_disp().driver.hor_res
         self.LV_VER_RES = lv.scr_act().get_disp().driver.ver_res
+        #
+        # dynamically load fonts
+        #
+        # FS driver init.
+        fs_drv = lv.fs_drv_t()
+        fs_driver = Fs_driver()
+        fs_driver.fs_register(fs_drv, 'S')
         
+        self.font_montserrat_22 = lv.font_load("S:font/montserrat-22.bin")
+        self.font_montserrat_28 = lv.font_load("S:font/montserrat-28.bin")
+
         self.log = logging.getLogger("Theme")
         self.log.setLevel(logging.ERROR)
 
@@ -167,11 +178,11 @@ class Theme():
         self.style_ddlist_bg.set_bg_color(lv.STATE.DEFAULT,LV_DEMO_PRINTER_BLUE)
         self.style_ddlist_bg.set_text_color(lv.STATE.DEFAULT,lv_colors.WHITE)
         self.style_ddlist_bg.set_text_color(lv.STATE.PRESSED,LV_DEMO_PRINTER_WHITE)
-        self.style_ddlist_bg.set_text_font(lv.STATE.DEFAULT,lv.font_montserrat_22)
+        self.style_ddlist_bg.set_text_font(lv.STATE.DEFAULT,self.font_montserrat_22)
 
         self.style_ddlist_list = lv.style_t()
         self.style_ddlist_list.init()
-        self.style_ddlist_list.set_text_font(lv.STATE.DEFAULT,lv.font_montserrat_22)
+        self.style_ddlist_list.set_text_font(lv.STATE.DEFAULT,self.font_montserrat_22)
         self.style_ddlist_list.set_shadow_width(lv.STATE.DEFAULT, self.LV_VER_RES // 20)
         self.style_ddlist_list.set_shadow_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_GRAY)
         
@@ -337,14 +348,10 @@ class Theme():
             obj.add_style(lv.dropdown.PART.SCROLLBAR, self.style_scrollbar)
             return
 
-    def get_font_small(self):
-        return lv.font_montserrat_14
         
     def get_font_normal(self):
-        return lv.font_montserrat_22
+        return self.font_montserrat_22
 
     def get_font_subtitle(self):
-        return lv.font_montserrat_28
+        return self.font_montserrat_28
 
-    def get_font_title(self):
-        return lv.font_montserrat_48
