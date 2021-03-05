@@ -11,8 +11,8 @@ from theme import LV_DEMO_PRINTER_THEME_BTN_BORDER,LV_DEMO_PRINTER_THEME_BTN_BAC
 from theme import LV_DEMO_PRINTER_THEME_BTN_CIRCLE,LV_DEMO_PRINTER_THEME_BOX_BORDER
 import utime as time
 
-#IMAGE_FORMAT = "ARGB8888_BIN"
-IMAGE_FORMAT = "PNG"
+IMAGE_FORMAT = "ARGB8888_BIN"
+#IMAGE_FORMAT = "PNG"
 
 if IMAGE_FORMAT == "PNG":
     from imagetools import get_png_info, open_png
