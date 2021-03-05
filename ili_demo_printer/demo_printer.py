@@ -53,31 +53,19 @@ class DemoPrinter(object):
         self.log = logging.getLogger("DemoPrinter")
         self.log.setLevel(logging.DEBUG)
         
-        self.icon_wifi_data = None
         self.icon_wifi_dsc = None
-        self.icon_tel_data = None
         self.icon_tel_dsc = None
-        self.icon_eco_data = None
         self.icon_eco_dsc = None
-        self.icon_pc_data = None
         self.icon_pc_dsc = None
         
-        self.img_btn_bg_1_data = None
         self.img_btn_bg_1_dsc = None
-        self.img_btn_bg_2_data = None
         self.img_btn_bg_2_dsc = None
-        self.img_btn_bg_3_data = None
         self.img_btn_bg_3_dsc = None
-        self.img_btn_bg_4_data = None
         self.img_btn_bg_4_dsc = None
 
-        self.img_copy_data = None
         self.img_copy_dsc = None
-        self.img_print_data = None
         self.img_print_dsc = None
-        self.img_scan_data = None
         self.img_scan_dsc = None
-        self.img_setup_data = None
         self.img_setup_dsc = None
 
         self.scan_img = None
@@ -91,37 +79,37 @@ class DemoPrinter(object):
         
         # read all the images from the raw image files
 
-        (self.icon_wifi_data,self.icon_wifi_dsc) = self.get_icon("icon_wifi")
-        (self.icon_tel_data,self.icon_tel_dsc)   = self.get_icon("icon_tel")
-        (self.icon_eco_data,self.icon_eco_dsc)   = self.get_icon("icon_eco")
-        (self.icon_pc_data,self.icon_pc_dsc)     = self.get_icon("icon_pc")
+        self.icon_wifi_dsc = self.get_icon("icon_wifi_20x14")
+        self.icon_tel_dsc  = self.get_icon("icon_tel_14x14")
+        self.icon_eco_dsc  = self.get_icon("icon_eco_15x13")
+        self.icon_pc_dsc   = self.get_icon("icon_pc_16x13")
         
-        (self.icon_bright_data,self.icon_bright_dsc) = self.get_icon("icon_bright")
-        (self.icon_hue_data,self.icon_hue_dsc) = self.get_icon("icon_hue")
+        self.icon_bright_dsc = self.get_icon("icon_bright_12x12")
+        self.icon_hue_dsc    = self.get_icon("icon_hue_12x12")
 
-        (self.img_btn_bg_1_data,self.img_btn_bg_1_dsc) = self.get_icon("img_btn_bg_1")
-        (self.img_btn_bg_2_data,self.img_btn_bg_2_dsc) = self.get_icon("img_btn_bg_2")
-        (self.img_btn_bg_3_data,self.img_btn_bg_3_dsc) = self.get_icon("img_btn_bg_3")
-        (self.img_btn_bg_4_data,self.img_btn_bg_4_dsc) = self.get_icon("img_btn_bg_4")
+        self.img_btn_bg_1_dsc = self.get_icon("img_btn_bg_1_70x86")
+        self.img_btn_bg_2_dsc = self.get_icon("img_btn_bg_2_70x86")
+        self.img_btn_bg_3_dsc = self.get_icon("img_btn_bg_3_70x86")
+        self.img_btn_bg_4_dsc = self.get_icon("img_btn_bg_4_70x86")
         
-        (self.img_copy_data,self.img_copy_dsc) = self.get_icon("img_copy")
-        (self.img_print_data,self.img_print_dsc) = self.get_icon("img_print")
-        (self.img_scan_data,self.img_scan_dsc) = self.get_icon("img_scan")
-        (self.img_setup_data,self.img_setup_dsc) = self.get_icon("img_setup")
+        self.img_copy_dsc  = self.get_icon("img_copy_20x24")
+        self.img_print_dsc = self.get_icon("img_print_26x26")
+        self.img_scan_dsc  = self.get_icon("img_scan_20x24")
+        self.img_setup_dsc = self.get_icon("img_setup_25x25")
         
-        (self.img_usb_data,self.img_usb_dsc) = self.get_icon("img_usb")
-        (self.img_internet_data,self.img_internet_dsc) = self.get_icon("img_internet")
-        (self.img_mobile_data,self.img_mobile_dsc) = self.get_icon("img_mobile")
-        (self.img_wave_data,self.img_wave_dsc) = self.get_icon("img_wave")
-        (self.img_phone_data,self.img_phone_dsc) = self.get_icon("img_phone")
+        self.img_usb_dsc      = self.get_icon("img_usb_25x25")
+        self.img_internet_dsc = self.get_icon("img_internet_26x26")
+        self.img_mobile_dsc   = self.get_icon("img_mobile_20x24")
+        self.img_wave_dsc     = self.get_icon("img_wave_11x19")
+        self.img_phone_dsc    = self.get_icon("img_phone_31x40")
         
-        (self.img_ready,self.img_ready_dsc) = self.get_icon("img_ready")
+        self.img_ready_dsc    = self.get_icon("img_ready_63x63")
         
-        (self.img_printer2_data,self.img_printer2_dsc)       = self.get_icon("img_printer2")
-        (self.img_no_internet_data,self.img_no_internet_dsc) = self.get_icon("img_no_internet")
-        (self.img_cloud_data,self.img_cloud_dsc)             = self.get_icon("img_cloud")
+        self.img_printer2_dsc    = self.get_icon("img_printer2_43x42")
+        self.img_no_internet_dsc = self.get_icon("img_no_internet_17x17")
+        self.img_cloud_dsc       = self.get_icon("img_cloud_37x23")
         
-        (self.scan_example_data,self.scan_example_dsc) = self.get_icon("scan_example")
+        self.scan_example_dsc    = self.get_icon("scan_example_250x163")
         self.theme = Theme()
 
         self.home_open(0)
@@ -260,7 +248,7 @@ class DemoPrinter(object):
                 "data": icon_data,
             }
         )
-        return (icon_data,icon_dsc) 
+        return icon_dsc 
 
     def add_title(self,txt):
         title = lv.label(lv.scr_act(), None)
