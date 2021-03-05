@@ -1,12 +1,12 @@
 #!/usr/bin/bash
-# This shell scripts sets up the t-watch application
+# This shell scripts sets up the demo_printer application
 # python modules and images are uploaded to the t-watch
 # Demo program for the course on the Internet of Things (IoT) at the
 # University of Cape Coast (Ghana)
 # Copyright (c) U. Raich April 2020
 # This program is released under the MIT license
 
-echo "Setting up the file system for the t-watch program"
+echo "Setting up the file system for the demo_printer application"
 dirs="$(ampy ls)"
 echo "dirs in /:" $dirs
 # check if /lib already exists, create it if not
@@ -23,6 +23,40 @@ echo "Uploading  Python code to /lib"
 echo "------------------------------"
 echo "uploading theme.py"
 ampy put theme.py /lib/theme.py
+echo "uploading filesys_driver.py"
+ampy put filesys_driver.py /lib/filesys_driver.py
+
+dirs="$(ampy ls)"
+#
+# check if the /images folder exists, create it if not
+#
+if [[ $dirs == *"/font"* ]]
+then
+    echo "/font directory already exists"
+    fonts="$(ampy ls /font)"    
+else
+    echo "Creating /font directory"
+    ampy mkdir /font
+    ampy mkdir /font/png
+fi
+
+echo $fonts
+#
+# check it fonts have already been uploaded, upload them if not
+#
+if echo $fonts | grep -w "montserrat-10.bin" > /dev/null ; then
+    echo "montserrat-10.bin has already been uploaded"
+else
+    echo "Uploading montserrat-10.bin"
+    ampy put font/montserrat-10.bin /font/montserrat-10.bin
+fi
+
+if echo $fonts | grep -w "montserrat-14.bin" > /dev/null ; then
+    echo "montserrat-14.bin has already been uploaded"
+else
+    echo "Uploading montserrat-14.bin"
+    ampy put font/montserrat-14.bin /font/montserrat-14.bin
+fi
 
 dirs="$(ampy ls)"
 #
@@ -35,10 +69,19 @@ then
 else
     echo "Creating /images directory"
     ampy mkdir /images
-    images=""
 fi
-images="$(ampy ls /images)"
-# echo $images
+image_dir = "$(ampy ls /images)"
+if [[ $dirs == *"/png"* ]]
+then
+    echo "/images/png directory already exists"
+    images="$(ampy ls /images/png)"    
+else
+    echo "Creating /images/png directory"
+    ampy mkdir /images/png
+fi
+
+images="$(ampy ls /images/png)"
+echo $images
 #
 # check it images have already been uploaded, upload them if not
 #
@@ -46,7 +89,42 @@ if echo $images | grep -w "icon_bright.png" > /dev/null ; then
     echo "icon_bright.png has already been uploaded"
 else
     echo "Uploading icon_bright.png"
-    ampy put src/images/icon_bright.png /images/icon_bright.png
+    ampy put images/png/icon_bright.png /images/png/icon_bright.png
+fi
+
+if echo $images | grep -w "icon_eco.png" > /dev/null ; then
+    echo "icon_eco.png has already been uploaded"
+else
+    echo "Uploading icon_eco.png"
+    ampy put images/png/icon_eco.png /images/png/icon_eco.png
+fi
+
+if echo $images | grep -w "icon_hue.png" > /dev/null ; then
+    echo "icon_hue.png has already been uploaded"
+else
+    echo "Uploading icon_hue.png"
+    ampy put images/png/icon_hue.png /images/png/icon_hue.png
+fi
+
+if echo $images | grep -w "icon_pc.png" > /dev/null ; then
+    echo "icon_pc.png has already been uploaded"
+else
+    echo "Uploading icon_pc.png"
+    ampy put images/png/icon_pc.png /images/png/icon_pc.png
+fi
+
+if echo $images | grep -w "icon_tel.png" > /dev/null ; then
+    echo "icon_tel.png has already been uploaded"
+else
+    echo "Uploading icon_tel.png"
+    ampy put images/png/icon_tel.png /images/png/icon_tel.png
+fi
+
+if echo $images | grep -w "icon_wifi.png" > /dev/null ; then
+    echo "icon_wifi.png has already been uploaded"
+else
+    echo "Uploading icon_wifi.png"
+    ampy put images/png/icon_wifi.png /images/png/icon_wifi.png
 fi
 
 #
@@ -55,315 +133,136 @@ fi
 
 echo "uploading btn images"
 
-if echo $images | grep -w "bg1_240px_rgb565.bin" > /dev/null ; then
-    echo "bg1_240px_rgb565.bin has already been uploaded"
+if echo $images | grep -w "img_btn_bg_1.png" > /dev/null ; then
+    echo "img_btn_bg_1.png has already been uploaded"
 else
-    echo "Uploading bg1_240px_rgb565.bin"
-    ampy put src/images/bg1_240px_rgb565.bin /images/bg1_240px_rgb565.bin
-fi
-if echo $images | grep -w "bg2_240px_rgb565.bin" > /dev/null ; then
-    echo "bg2_240px_rgb565.bin has already been uploaded"
-else
-    echo "Uploading bg2_240px_rgb565.bin"
-    ampy put src/images/bg2_240px_rgb565.bin /images/bg2_240px_rgb565.bin
-fi
-if echo $images | grep -w "bg3_240px_rgb565.bin" > /dev/null ; then
-    echo "bg3_240px_rgb565.bin has already been uploaded"
-else
-    echo "Uploading bg3_240px_rgb565.bin"
-    ampy put src/images/bg3_240px_rgb565.bin /images/bg3_240px_rgb565.bin
+    echo "Uploading img_btn_bg_1.png"
+    ampy put images/png/img_btn_bg_1.png /images/png/img_btn_bg_1.png
 fi
 
-echo "---------------------------"
-echo "uploading application icons"
-echo "---------------------------"
-
-if echo $images | grep -w "message_64px_argb565.bin" > /dev/null ; then
-    echo "message_64pxargb565.bin has already been uploaded"
+if echo $images | grep -w "img_btn_bg_2.png" > /dev/null ; then
+    echo "img_btn_bg_2.png has already been uploaded"
 else
-    echo "Uploading message_argb565.bin"
-    ampy put src/images/message_64px_argb565.bin /images/message_64px_argb565.bin
+    echo "Uploading img_btn_bg_2.png"
+    ampy put images/png/img_btn_bg_2.png /images/png/img_btn_bg_2.png
 fi
 
-if echo $images | grep -w "weather_64px_argb565.bin" > /dev/null ; then
-    echo "weather_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_btn_bg_3.png" > /dev/null ; then
+    echo "img_btn_bg_3.png has already been uploaded"
 else
-    echo "Uploading weather_argb565.bin"
-    ampy put src/images/weather_64px_argb565.bin /images/weather_64px_argb565.bin
+    echo "Uploading img_btn_bg_3.png"
+    ampy put images/png/img_btn_bg_3.png /images/png/img_btn_bg_3.png
 fi
 
-if echo $images | grep -w "mondaine_clock_64px_argb565.bin" > /dev/null ; then
-    echo "mondaine_clock_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_btn_bg_4.png" > /dev/null ; then
+    echo "img_btn_bg_4.png has already been uploaded"
 else
-    echo "Uploading mondaine_clock_64px_argb565.bin"
-    ampy put src/images/mondaine_clock_64px_argb565.bin /images/mondaine_clock_64px_argb565.bin
+    echo "Uploading img_btn_bg_4.png"
+    ampy put images/png/img_btn_bg_4.png /images/png/img_btn_bg_4.png
 fi
 
-if echo $images | grep -w "stopwatch_64px_argb565.bin" > /dev/null ; then
-    echo "stopwatch_64px_argb565.bin has already been uploaded"
+echo "uploading images for copy, scan, print and setup"
+
+if echo $images | grep -w "img_copy.png" > /dev/null ; then
+    echo "img_copy.png has already been uploaded"
 else
-    echo "Uploading stopwatch_64px_argb565.bin"
-    ampy put src/images/stopwatch_64px_argb565.bin /images/stopwatch_64px_argb565.bin
+    echo "Uploading img_copy.png"
+    ampy put images/png/img_copy.png /images/png/img_copy.png
 fi
 
-if echo $images | grep -w "alarm_clock_64px_argb565.bin" > /dev/null ; then
-    echo "alarm_clock_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_scan.png" > /dev/null ; then
+    echo "img_scan.png has already been uploaded"
 else
-    echo "Uploading alarm_clock_64px_argb565.bin"
-    ampy put src/images/alarm_clock_64px_argb565.bin /images/alarm_clock_64px_argb565.bin
+    echo "Uploading img_scan.png"
+    ampy put images/png/img_scan.png /images/png/img_scan.png
 fi
 
-if echo $images | grep -w "calendar_64px_argb565.bin" > /dev/null ; then
-    echo "calendar_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_print.png" > /dev/null ; then
+    echo "img_print.png has already been uploaded"
 else
-    echo "Uploading calendar_64px_argb565.bin"
-    ampy put src/images/calendar_64px_argb565.bin /images/calendar_64px_argb565.bin
+    echo "Uploading img_print.png"
+    ampy put images/png/img_print.png /images/png/img_print.png
 fi
 
-if echo $images | grep -w "powermeter_64px_argb565.bin" > /dev/null ; then
-    echo "powermeter_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_setup.png" > /dev/null ; then
+    echo "img_setup.png has already been uploaded"
 else
-    echo "Uploading powermeter_64px_argb565.bin"
-    ampy put src/images/powermeter_64px_argb565.bin /images/powermeter_64px_argb565.bin
+    echo "Uploading img_setup.png"
+    ampy put images/png/img_setup.png /images/png/img_setup.png
 fi
 
-if echo $images | grep -w "calculator_64px_argb565.bin" > /dev/null ; then
-    echo "calculator_64px_argb565.bin has already been uploaded"
+echo "Uploading images for cloud, internet, no_internet, phone, mobile, usb, wave"
+
+if echo $images | grep -w "img_cloud.png" > /dev/null ; then
+    echo "img_cloud.png has already been uploaded"
 else
-    echo "Uploading calculator_64px_argb565.bin"
-    ampy put src/images/calculator_64px_argb565.bin /images/calculator_64px_argb565.bin
+    echo "Uploading img_cloud.png"
+    ampy put images/png/img_cloud.png /images/png/img_cloud.png
 fi
 
-if echo $images | grep -w "status_64px_argb565.bin" > /dev/null ; then
-    echo "status_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_internet.png" > /dev/null ; then
+    echo "img_internet.png has already been uploaded"
 else
-    echo "Uploading status_64px_argb565.bin"
-    ampy put src/images/status_64px_argb565.bin /images/status_64px_argb565.bin
+    echo "Uploading img_internet.png"
+    ampy put images/png/img_internet.png /images/png/img_internet.png
 fi
 
-if echo $images | grep -w "myapp_64px_argb565.bin" > /dev/null ; then
-    echo "myapp_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_no_internet.png" > /dev/null ; then
+    echo "img_no_internet.png has already been uploaded"
 else
-    echo "Uploading myapp_64px_argb565.bin"
-    ampy put src/images/myapp_64px_argb565.bin /images/myapp_64px_argb565.bin
-fi
-echo "---------------------------"
-echo "uploading weather icons"
-echo "---------------------------"
-
-if echo $images | grep -w "c_64px_argb565.bin" > /dev/null ; then
-    echo "c_64px_argb565.bin has already been uploaded"
-else
-    echo "Uploading c_64px_argb565.bin"
-    ampy put images/c_64px_argb565.bin /images/c_64px_argb565.bin
+    echo "Uploading img_no_internet.png"
+    ampy put images/png/img_no_internet.png /images/png/img_no_internet.png
 fi
 
-if echo $images | grep -w "h_64px_argb565.bin" > /dev/null ; then
-    echo "h_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_phone.png" > /dev/null ; then
+    echo "img_phone.png has already been uploaded"
 else
-    echo "Uploading h_64px_argb565.bin"
-    ampy put images/h_64px_argb565.bin /images/h_64px_argb565.bin
+    echo "Uploading img_phone.png"
+    ampy put images/png/img_phone.png /images/png/img_phone.png
 fi
 
-if echo $images | grep -w "hc_64px_argb565.bin" > /dev/null ; then
-    echo "hc_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_mobile.png" > /dev/null ; then
+    echo "img_mobile.png has already been uploaded"
 else
-    echo "Uploading hc_64px_argb565.bin"
-    ampy put images/hc_64px_argb565.bin /images/hc_64px_argb565.bin
+    echo "Uploading img_mobile.png"
+    ampy put images/png/img_mobile.png /images/png/img_mobile.png
 fi
 
-if echo $images | grep -w "hr_64px_argb565.bin" > /dev/null ; then
-    echo "hr_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_usb.png" > /dev/null ; then
+    echo "img_usb.png has already been uploaded"
 else
-    echo "Uploading hr_64px_argb565.bin"
-    ampy put images/hr_64px_argb565.bin /images/hr_64px_argb565.bin
+    echo "Uploading img_usb.png"
+    ampy put images/png/img_usb.png /images/png/img_usb.png
 fi
 
-if echo $images | grep -w "lc_64px_argb565.bin" > /dev/null ; then
-    echo "lc_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_wave.png" > /dev/null ; then
+    echo "img_wave.png has already been uploaded"
 else
-    echo "Uploading lc_64px_argb565.bin"
-    ampy put images/lc_64px_argb565.bin /images/lc_64px_argb565.bin
+    echo "Uploading img_wave.png"
+    ampy put images/png/img_wave.png /images/png/img_wave.png
 fi
 
-if echo $images | grep -w "lr_64px_argb565.bin" > /dev/null ; then
-    echo "lr_64px_argb565.bin has already been uploaded"
+echo "Uploading images printer2 ready "
+
+if echo $images | grep -w "img_ready.png" > /dev/null ; then
+    echo "img_ready.png has already been uploaded"
 else
-    echo "Uploading lr_64px_argb565.bin"
-    ampy put images/lr_64px_argb565.bin /images/lr_64px_argb565.bin
+    echo "Uploading img_ready.png"
+    ampy put images/png/img_ready.png /images/png/img_ready.png
 fi
 
-if echo $images | grep -w "s_64px_argb565.bin" > /dev/null ; then
-    echo "s_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "img_printer2.png" > /dev/null ; then
+    echo "img_printer2.png has already been uploaded"
 else
-    echo "Uploading s_64px_argb565.bin"
-    ampy put images/s_64px_argb565.bin /images/s_64px_argb565.bin
+    echo "Uploading img_printer2.png"
+    ampy put images/png/img_printer2.png /images/png/img_printer2.png
 fi
 
-if echo $images | grep -w "sl_64px_argb565.bin" > /dev/null ; then
-    echo "sl_64px_argb565.bin has already been uploaded"
-else
-    echo "Uploading sl_64px_argb565.bin"
-    ampy put images/sl_64px_argb565.bin /images/sl_64px_argb565.bin
-fi
+echo "Uploading scan_example"
 
-if echo $images | grep -w "sn_64px_argb565.bin" > /dev/null ; then
-    echo "sn_64px_argb565.bin has already been uploaded"
+if echo $images | grep -w "scan_example.png" > /dev/null ; then
+    echo "scan_example.png has already been uploaded"
 else
-    echo "Uploading sn_64px_argb565.bin"
-    ampy put images/sn_64px_argb565.bin /images/sn_64px_argb565.bin
-fi
-
-if echo $images | grep -w "t_64px_argb565.bin" > /dev/null ; then
-    echo "t_64px_argb565.bin has already been uploaded"
-else
-    echo "Uploading t_64px_argb565.bin"
-    ampy put images/t_64px_argb565.bin /images/t_64px_argb565.bin
-fi
-
-if echo $images | grep -w "bg_240px_rgb565.bin" > /dev/null ; then
-    echo "bg_240px_rgb565.bin has already been uploaded"
-else
-    echo "Uploading bg_240px_rgb565.bin"
-    ampy put images/bg_240px_rgb565.bin /images/bg_240px_rgb565.bin
-fi
-
-echo "---------------------"
-echo "uploading setup icons"
-echo "---------------------"
-
-if echo $images | grep -w "battery_icon_64px_argb565.bin" > /dev/null ; then
-    echo "battery_icon_65px_argb565.bin has already been uploaded"
-else
-    echo "Uploading battery_icon_64px_argb565.bin"
-    ampy put src/images/battery_icon_64px_argb565.bin /images/battery_icon_64px_argb565.bin
-fi
-
-if echo $images | grep -w "brightness_64px_argb565.bin" > /dev/null ; then
-    echo "brightness_64px_argb565.bin has already been uploaded"
-else
-    echo "Uploading brightness_64px_argb565.bin"
-    ampy put src/images/brightness_64px_argb565.bin images/brightness_64px_argb565.bin
-fi
-
-if echo $images | grep -w "move_64px_argb565.bin" > /dev/null ; then
-    echo "move_64px_argb565.bin has already been uploaded"
-else
-    echo "Uploading move_64px_argb565.bin"
-    ampy put src/images/move_64px_argb565.bin images/move_64px_argb565.bin
-fi
-
-if echo $images | grep -w "wifi_64px_argb565.bin" > /dev/null ; then
-    echo "wifi_64px_argb565.bin has already been uploaded"
-else
-    echo "Uploading wifi_64px_argb565.bin"
-    ampy put src/images/wifi_64px_argb565.bin images/wifi_64px_argb565.bin
-fi
-
-if echo $images | grep -w "bluetooth_64px_argb565.bin" > /dev/null ; then
-    echo "bluetooth_64_px_argb565.bin has already been uploaded"
-else
-    echo "Uploading bluetooth_argb565.bin"
-    ampy put src/images/bluetooth_64px_argb565.bin images/bluetooth_64px_argb565.bin
-fi
-
-if echo $images | grep -w "time_64px_argb565.bin" > /dev/null ; then
-    echo "time_64px_argb565.bin has already been uploaded"
-else
-    echo "Uploading time_64px_argb565.bin"
-    ampy put src/images/time_64px_argb565.bin images/time_64px_argb565.bin
-fi
-
-if echo $images | grep -w "update_64px_argb565.bin" > /dev/null ; then
-    echo "update_64px_argb565.bin has already been uploaded"
-else
-    echo "Uploading update_64px_argb565.bin"
-    ampy put src/images/update_64px_argb565.bin images/update_64px_argb565.bin
-fi
-
-if echo $images | grep -w "utilities_64px_argb565.bin" > /dev/null ; then
-    echo "utilities_64px_argb565.bin has already been uploaded"
-else
-    echo "Uploading utilities_64px_argb565.bin"
-    ampy put src/images/utilities_64px_argb565.bin images/utilities_64px_argb565.bin
-fi
-if echo $images | grep -w "sound_64px_argb565.bin" > /dev/null ; then
-    echo "sound_64px_argb565.bin has already been uploaded"
-else
-    echo "Uploading sound_64px_argb565.bin"
-    ampy put src/images/sound_64px_argb565.bin images/sound_64px_argb565.bin
-fi
-
-if echo $images | grep -w "exit_32px_argb565.bin" > /dev/null ; then
-    echo "exit_32px_argb565.bin has already been uploaded"
-else
-    echo "Uploading exit_32px_argb565.bin"
-    ampy put src/images/exit_32px_argb565.bin images/exit_32px_argb565.bin
-fi
-
-if echo $images | grep -w "setup_32px_argb565.bin" > /dev/null ; then
-    echo "setup_32px_argb565.bin has already been uploaded"
-else
-    echo "Uploading setup_32px_argb565.bin"
-    ampy put src/images/setup_32px_argb565.bin images/setup_32px_argb565.bin
-fi
-
-if echo $images | grep -w "foot_16px_argb565.bin" > /dev/null ; then
-    echo "foot_16px_argb565.bin has already been uploaded"
-else
-    echo "Uploading foot_16px_argb565.bin"
-    ampy put src/images/foot_16px_argb565.bin images/foot_16px_argb565.bin
-fi
-
-echo "---------------------"
-echo "uploading info icons"
-echo "---------------------"
-
-if echo $images | grep -w "info_1_16px_argb565.bin" > /dev/null ; then
-    echo "info_1_16px_argb565.bin has already been uploaded"
-else
-    echo "Uploading info_1_16px_argb565.bin"
-    ampy put src/images/info_1_16px_argb565.bin images/info_1_16px_argb565.bin
-fi
-
-if echo $images | grep -w "info_2_16px_argb565.bin" > /dev/null ; then
-    echo "info_2_16px_argb565.bin has already been uploaded"
-else
-    echo "Uploading info_2_16px_argb565.bin"
-    ampy put src/images/info_2_16px_argb565.bin images/info_2_16px_argb565.bin
-fi
-
-if echo $images | grep -w "info_3_16px_argb565.bin" > /dev/null ; then
-    echo "info_3_16px_argb565.bin has already been uploaded"
-else
-    echo "Uploading info_3_16px_argb565.bin"
-    ampy put src/images/info_3_16px_argb565.bin images/info_3_16px_argb565.bin
-fi
-
-if echo $images | grep -w "info_n_16px_argb565.bin" > /dev/null ; then
-    echo "info_n_16px_argb565.bin has already been uploaded"
-else
-    echo "Uploading info_n_16px_argb565.bin"
-    ampy put src/images/info_n_16px_argb565.bin images/info_n_16px_argb565.bin
-fi
-
-if echo $images | grep -w "info_fail_16px_argb565.bin" > /dev/null ; then
-    echo "info_fail_16px_argb565.bin has already been uploaded"
-else
-    echo "Uploading info_fail_16px_argb565.bin"
-    ampy put src/images/info_fail_16px_argb565.bin images/info_fail_16px_argb565.bin
-fi
-
-if echo $images | grep -w "info_ok_16px_argb565.bin" > /dev/null ; then
-    echo "info_ok_16px_argb565.bin has already been uploaded"
-else
-    echo "Uploading info_ok_16px_argb565.bin"
-    ampy put src/images/info_ok_16px_argb565.bin images/info_ok_16px_argb565.bin
-fi
-
-if echo $images | grep -w "info_update_16px_argb565.bin" > /dev/null ; then
-    echo "info_1_16px_argb565.bin has already been uploaded"
-else
-    echo "Uploading info_update_16px_argb565.bin"
-    ampy put src/images/info_update_16px_argb565.bin images/info_update_16px_argb565.bin
+    echo "Uploading img_scan_example.png"
+    ampy put images/png/scan_example.png /images/png/scan_example.png
 fi

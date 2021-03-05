@@ -24,13 +24,17 @@ class DemoPrinter(object):
     def __init__(self):
 
         # find the script directory
-        path_dirs = __file__.split('/')
-        script_dir = ''
-        for i in range(len(path_dirs)-1):
-            script_dir += path_dirs[i]
-            script_dir += '/'
-        # add the widget and lib directories to the system path
-        sys.path.extend([script_dir + '/../lib', script_dir + '/../widgets'])
+        if sys.platform == "unix":
+            path_dirs = __file__.split('/')
+            script_dir = ''
+            for i in range(len(path_dirs)-1):
+                script_dir += path_dirs[i]
+                script_dir += '/'
+            # add the widget and lib directories to the system path
+            sys.path.extend([script_dir + '/../lib', script_dir + '/../widgets'])
+        else:
+            script_dir = './'
+            
         if IMAGE_FORMAT == "ARGB8888_BIN":
             self.images_lib = script_dir + 'images/argb8888_bin/'
         else:

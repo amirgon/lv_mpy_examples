@@ -5,6 +5,7 @@ import lvgl as lv
 from display_driver_utils import driver,ORIENT_LANDSCAPE
 from lv_colors import lv_colors
 from imagetools import get_png_info, open_png
+
 from theme import Theme, LV_DEMO_PRINTER_BLUE,LV_DEMO_PRINTER_TITLE_PAD,LV_DEMO_PRINTER_THEME_TITLE
 from theme import LV_DEMO_PRINTER_THEME_ICON,LV_DEMO_PRINTER_THEME_LABEL_WHITE,LV_DEMO_PRINTER_RED,LV_DEMO_PRINTER_GREEN
 from theme import LV_DEMO_PRINTER_THEME_BTN_BORDER,LV_DEMO_PRINTER_THEME_BTN_BACK
@@ -19,14 +20,19 @@ class DemoPrinter(object):
     def __init__(self):
 
         # find the script directory
-        path_dirs = __file__.split('/')
-        script_dir = ''
-        for i in range(len(path_dirs)-1):
-            script_dir += path_dirs[i]
-            script_dir += '/'
-        # add the widget and lib directories to the system path
-        sys.path.extend([script_dir + '/../lib', script_dir + '/../widgets'])
-        self.images_lib = script_dir + 'images/'
+        print("demo_printer running on " + sys.platform)
+        if sys.platform == 'linux':
+            path_dirs = __file__.split('/')
+            script_dir = ''
+            for i in range(len(path_dirs)-1):
+                script_dir += path_dirs[i]
+                script_dir += '/'
+                # add the widget and lib directories to the system path
+                sys.path.extend([script_dir + '/../lib', script_dir + '/../widgets'])
+        else:
+            script_dir = './'
+
+        self.images_lib = script_dir + 'images/png/'
 
         self.LV_HOR_RES = lv.scr_act().get_disp().driver.hor_res
         self.LV_VER_RES = lv.scr_act().get_disp().driver.ver_res
