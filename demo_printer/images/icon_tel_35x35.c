@@ -1,1 +1,0 @@
-lv_demo_printer_icon_tel.c

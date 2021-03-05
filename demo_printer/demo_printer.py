@@ -11,8 +11,13 @@ from theme import LV_DEMO_PRINTER_THEME_BTN_BORDER,LV_DEMO_PRINTER_THEME_BTN_BAC
 from theme import LV_DEMO_PRINTER_THEME_BTN_CIRCLE,LV_DEMO_PRINTER_THEME_BOX_BORDER
 import utime as time
 
-import ulogging as logging
+#IMAGE_FORMAT = "ARGB8888_BIN"
+IMAGE_FORMAT = "PNG"
 
+if IMAGE_FORMAT == "PNG":
+    from imagetools import get_png_info, open_png
+    
+import ulogging as logging
 
 class DemoPrinter(object):
     
@@ -26,7 +31,10 @@ class DemoPrinter(object):
             script_dir += '/'
         # add the widget and lib directories to the system path
         sys.path.extend([script_dir + '/../lib', script_dir + '/../widgets'])
-        self.images_lib = script_dir + 'images/'
+        if IMAGE_FORMAT == "ARGB8888_BIN":
+            self.images_lib = script_dir + 'images/argb8888_bin/'
+        else:
+            self.images_lib = script_dir + 'images/png/'        
 
         self.LV_HOR_RES = lv.scr_act().get_disp().driver.hor_res
         self.LV_VER_RES = lv.scr_act().get_disp().driver.ver_res
@@ -47,31 +55,19 @@ class DemoPrinter(object):
         self.log = logging.getLogger("DemoPrinter")
         self.log.setLevel(logging.ERROR)
         
-        self.icon_wifi_data = None
         self.icon_wifi_dsc = None
-        self.icon_tel_data = None
         self.icon_tel_dsc = None
-        self.icon_eco_data = None
         self.icon_eco_dsc = None
-        self.icon_pc_data = None
         self.icon_pc_dsc = None
         
-        self.img_btn_bg_1_data = None
         self.img_btn_bg_1_dsc = None
-        self.img_btn_bg_2_data = None
         self.img_btn_bg_2_dsc = None
-        self.img_btn_bg_3_data = None
         self.img_btn_bg_3_dsc = None
-        self.img_btn_bg_4_data = None
         self.img_btn_bg_4_dsc = None
 
-        self.img_copy_data = None
         self.img_copy_dsc = None
-        self.img_print_data = None
         self.img_print_dsc = None
-        self.img_scan_data = None
         self.img_scan_dsc = None
-        self.img_setup_data = None
         self.img_setup_dsc = None
 
         self.scan_img = None
@@ -85,37 +81,37 @@ class DemoPrinter(object):
         
         # read all the images from the raw image files
 
-        (self.icon_wifi_data,self.icon_wifi_dsc) = self.get_icon("icon_wifi_48x34",48,34)
-        (self.icon_tel_data,self.icon_tel_dsc)   = self.get_icon("icon_tel_35x35",35,35)
-        (self.icon_eco_data,self.icon_eco_dsc)   = self.get_icon("icon_eco_38x34",38,34)
-        (self.icon_pc_data,self.icon_pc_dsc)     = self.get_icon("icon_pc_41x33",41,33)
+        self.icon_wifi_dsc = self.get_icon("icon_wifi_48x34",48,34)
+        self.icon_tel_dsc  = self.get_icon("icon_tel_35x35",35,35)
+        self.icon_eco_dsc  = self.get_icon("icon_eco_38x34",38,34)
+        self.icon_pc_dsc   = self.get_icon("icon_pc_41x33",41,33)
         
-        (self.icon_bright_data,self.icon_bright_dsc) = self.get_icon("icon_bright_29x29",29,29)
-        (self.icon_hue_data,self.icon_hue_dsc) = self.get_icon("icon_hue_23x23",23,23)
+        self.icon_bright_dsc = self.get_icon("icon_bright_29x29",29,29)
+        self.icon_hue_dsc    = self.get_icon("icon_hue_23x23",23,23)
 
-        (self.img_btn_bg_1_data,self.img_btn_bg_1_dsc) = self.get_icon("img_btn_bg_1_174x215",174,215)
-        (self.img_btn_bg_2_data,self.img_btn_bg_2_dsc) = self.get_icon("img_btn_bg_2_174x215",174,215)
-        (self.img_btn_bg_3_data,self.img_btn_bg_3_dsc) = self.get_icon("img_btn_bg_3_174x215",174,215)
-        (self.img_btn_bg_4_data,self.img_btn_bg_4_dsc) = self.get_icon("img_btn_bg_4_174x215",174,215)
+        self.img_btn_bg_1_dsc = self.get_icon("img_btn_bg_1_174x215",174,215)
+        self.img_btn_bg_2_dsc = self.get_icon("img_btn_bg_2_174x215",174,215)
+        self.img_btn_bg_3_dsc = self.get_icon("img_btn_bg_3_174x215",174,215)
+        self.img_btn_bg_4_dsc = self.get_icon("img_btn_bg_4_174x215",174,215)
         
-        (self.img_copy_data,self.img_copy_dsc) = self.get_icon("img_copy_51x60",51,60)
-        (self.img_print_data,self.img_print_dsc) = self.get_icon("img_print_65x64",65,64)
-        (self.img_scan_data,self.img_scan_dsc) = self.get_icon("img_scan_51x61",51,61)
-        (self.img_setup_data,self.img_setup_dsc) = self.get_icon("img_setup_63x64",63,64)
+        self.img_copy_dsc  = self.get_icon("img_copy_51x60",51,60)
+        self.img_print_dsc = self.get_icon("img_print_65x64",65,64)
+        self.img_scan_dsc  = self.get_icon("img_scan_51x61",51,61)
+        self.img_setup_dsc = self.get_icon("img_setup_63x64",63,64)
         
-        (self.img_usb_data,self.img_usb_dsc) = self.get_icon("img_usb_62x61",62,61)
-        (self.img_internet_data,self.img_internet_dsc) = self.get_icon("img_internet_65x64",65,64)
-        (self.img_mobile_data,self.img_mobile_dsc) = self.get_icon("img_mobile_50x60",50,60)
-        (self.img_wave_data,self.img_wave_dsc) = self.get_icon("img_wave_27x47",27,47)
-        (self.img_phone_data,self.img_phone_dsc) = self.get_icon("img_phone_77x99",77,99)
+        self.img_usb_dsc      = self.get_icon("img_usb_62x61",62,61)
+        self.img_internet_dsc = self.get_icon("img_internet_65x64",65,64)
+        self.img_mobile_dsc   = self.get_icon("img_mobile_50x60",50,60)
+        self.img_wave_dsc     = self.get_icon("img_wave_27x47",27,47)
+        self.img_phone_dsc    = self.get_icon("img_phone_77x99",77,99)
         
-        (self.img_ready,self.img_ready_dsc) = self.get_icon("img_ready_158x158",158,158)
+        self.img_ready_dsc = self.get_icon("img_ready_158x158",158,158)
         
-        (self.img_printer2_data,self.img_printer2_dsc)       = self.get_icon("img_printer2_107x104",107,104)
-        (self.img_no_internet_data,self.img_no_internet_dsc) = self.get_icon("img_no_internet_42x42",42,42)
-        (self.img_cloud_data,self.img_cloud_dsc)             = self.get_icon("img_cloud_93x59",93,59)
+        self.img_printer2_dsc    = self.get_icon("img_printer2_107x104",107,104)
+        self.img_no_internet_dsc = self.get_icon("img_no_internet_42x42",42,42)
+        self.img_cloud_dsc       = self.get_icon("img_cloud_93x59",93,59)
         
-        (self.scan_example_data,self.scan_example_dsc) = self.get_icon("scan_example_522x340",522,340)
+        self.scan_example_dsc    = self.get_icon("scan_example_522x340",522,340)
         self.theme = Theme()
 
         self.home_open(0)
@@ -236,26 +232,48 @@ class DemoPrinter(object):
     # get an icon
     #
     def get_icon(self,filename,xres,yres):
-
-        try:
-            sdl_filename = self.images_lib + filename + "_argb8888.bin"
-            self.log.debug('sdl filename: ' + sdl_filename)
-            with open(sdl_filename,'rb') as f:
-                icon_data = f.read()
-                self.log.debug(sdl_filename + " successfully read")
-        except:
-            self.log.error("Could not find image file: " + filename) 
-            return None
+        if IMAGE_FORMAT == "ARGB8888_BIN":
+            try:
+                sdl_filename = self.images_lib + filename + "_argb8888.bin"
+                self.log.debug('sdl filename: ' + sdl_filename)
+                with open(sdl_filename,'rb') as f:
+                    icon_data = f.read()
+                    self.log.debug(sdl_filename + " successfully read")
+            except:
+                self.log.error("Could not find image file: " + filename) 
+                return None
+            
+            icon_dsc = lv.img_dsc_t(
+                {
+                    "header": {"always_zero": 0, "w": xres, "h": yres, "cf": lv.img.CF.TRUE_COLOR_ALPHA},
+                    "data": icon_data,
+                    "data_size": len(icon_data),
+                }
+            )
+            return icon_dsc
+        else:
+            # here if we use png image files
+            self.decoder = lv.img.decoder_create()
+            self.decoder.info_cb = get_png_info
+            self.decoder.open_cb = open_png
+            try:
+                sdl_filename = self.images_lib + filename + ".png"
+                self.log.debug('sdl filename: ' + sdl_filename)
+                with open(sdl_filename,'rb') as f:
+                    icon_data = f.read()
+                    self.log.debug(sdl_filename + " successfully read")
+            except:
+                self.log.error("Could not find image file: " + filename) 
+                return None
         
-        icon_dsc = lv.img_dsc_t(
-            {
-                "header": {"always_zero": 0, "w": xres, "h": yres, "cf": lv.img.CF.TRUE_COLOR_ALPHA},
-                "data": icon_data,
-                "data_size": len(icon_data),
-            }
-        )
-        return (icon_data,icon_dsc) 
-
+            icon_dsc = lv.img_dsc_t(
+                {
+                    "data_size": len(icon_data),
+                    "data": icon_data,
+                }
+            )
+            return icon_dsc 
+    
     def add_title(self,txt):
         title = lv.label(lv.scr_act(), None)
         self.theme.apply(title,LV_DEMO_PRINTER_THEME_TITLE)

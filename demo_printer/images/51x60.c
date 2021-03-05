@@ -1,1 +1,0 @@
-lv_demo_printer_img_scan.c
