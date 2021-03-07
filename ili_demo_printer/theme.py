@@ -29,7 +29,7 @@ LV_DEMO_PRINTER_THEME_BTN_BACK = lv.THEME.CUSTOM_START + 6
 LV_DEMO_PRINTER_THEME_DROPDOWN_BOX = lv.THEME.CUSTOM_START + 7
 
 class Theme():
-    def __init__(self):
+    def __init__(self,script_dir):
         self.LV_HOR_RES = lv.scr_act().get_disp().driver.hor_res
         self.LV_VER_RES = lv.scr_act().get_disp().driver.ver_res
         #
@@ -40,8 +40,9 @@ class Theme():
         fs_driver = Fs_driver()
         fs_driver.fs_register(fs_drv, 'S')
         
-        self.font_montserrat_10 = lv.font_load("S:font/montserrat-10.bin")
-        self.font_montserrat_14 = lv.font_load("S:font/montserrat-14.bin")        
+        print("script_dir: " + script_dir)
+        self.font_montserrat_10 = lv.font_load("S:" + script_dir + "font/montserrat-10.bin")
+        self.font_montserrat_14 = lv.font_load("S:" + script_dir + "font/montserrat-14.bin")        
         self.log = logging.getLogger("Theme")
         self.log.setLevel(logging.DEBUG)
         self.style_pad = lv.style_t()

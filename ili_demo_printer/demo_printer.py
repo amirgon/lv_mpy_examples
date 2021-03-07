@@ -110,7 +110,7 @@ class DemoPrinter(object):
         self.img_cloud_dsc       = self.get_icon("img_cloud_37x23")
         
         self.scan_example_dsc    = self.get_icon("scan_example_250x163")
-        self.theme = Theme()
+        self.theme = Theme(script_dir)
 
         self.home_open(0)
 
