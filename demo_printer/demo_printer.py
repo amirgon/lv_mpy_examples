@@ -24,7 +24,7 @@ class DemoPrinter(object):
     def __init__(self):
 
         # find the script directory
-        if sys.platform == "unix":
+        if sys.platform == "linux":
             path_dirs = __file__.split('/')
             script_dir = ''
             for i in range(len(path_dirs)-1):
@@ -39,7 +39,7 @@ class DemoPrinter(object):
             self.images_lib = script_dir + 'images/argb8888_bin/'
         else:
             self.images_lib = script_dir + 'images/png/'        
-
+        
         self.LV_HOR_RES = lv.scr_act().get_disp().driver.hor_res
         self.LV_VER_RES = lv.scr_act().get_disp().driver.ver_res
         # Bg positions
@@ -116,7 +116,7 @@ class DemoPrinter(object):
         self.img_cloud_dsc       = self.get_icon("img_cloud_93x59",93,59)
         
         self.scan_example_dsc    = self.get_icon("scan_example_522x340",522,340)
-        self.theme = Theme()
+        self.theme = Theme(script_dir)
 
         self.home_open(0)
 
