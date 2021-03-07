@@ -13,6 +13,10 @@ class Fs_driver():
     
     def fs_open_cb(self,drv, fs_file, path, mode):
 
+        if path [0] != '.':
+            path = '/'+ path
+        # print("Trying to open " + path)
+        
         p_mode = ''
         if mode == 1:
             p_mode = 'wb'

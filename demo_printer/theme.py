@@ -35,7 +35,6 @@ class Theme():
         fs_drv = lv.fs_drv_t()
         fs_driver = Fs_driver()
         fs_driver.fs_register(fs_drv, 'S')
-        
         self.font_montserrat_22 = lv.font_load("S:" + script_dir + "font/montserrat-22.bin")
         self.font_montserrat_28 = lv.font_load("S:" + script_dir + "font/montserrat-28.bin")
 
