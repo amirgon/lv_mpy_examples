@@ -2,7 +2,7 @@ import lvgl as lv
 from display_driver_utils import driver,ORIENT_LANDSCAPE
 from lv_colors import lv_colors
 import ulogging as logging
-from filesys_driver import Fs_driver
+import fs_driver
 
 LV_THEME_DEFAULT_COLOR_PRIMARY=lv.color_hex(0x01a2b1)
 LV_THEME_DEFAULT_COLOR_SECONDARY=lv.color_hex(0x44d1b6)
@@ -33,8 +33,8 @@ class Theme():
         #
         # FS driver init.
         fs_drv = lv.fs_drv_t()
-        fs_driver = Fs_driver()
         fs_driver.fs_register(fs_drv, 'S')
+        
         self.font_montserrat_22 = lv.font_load("S:" + script_dir + "font/montserrat-22.bin")
         self.font_montserrat_28 = lv.font_load("S:" + script_dir + "font/montserrat-28.bin")
 

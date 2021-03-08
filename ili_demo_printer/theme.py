@@ -1,7 +1,7 @@
 import lvgl as lv
 from display_driver_utils import driver,ORIENT_LANDSCAPE
 from lv_colors import lv_colors
-from filesys_driver import Fs_driver
+import fs_driver
 try:
     import logging
 except:
@@ -37,7 +37,6 @@ class Theme():
         #
         # FS driver init.
         fs_drv = lv.fs_drv_t()
-        fs_driver = Fs_driver()
         fs_driver.fs_register(fs_drv, 'S')
         
         print("script_dir: " + script_dir)
