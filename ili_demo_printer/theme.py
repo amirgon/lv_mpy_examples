@@ -38,8 +38,7 @@ class Theme():
         # FS driver init.
         fs_drv = lv.fs_drv_t()
         fs_driver.fs_register(fs_drv, 'S')
-        
-        print("script_dir: " + script_dir)
+
         self.font_montserrat_10 = lv.font_load("S:" + script_dir + "font/montserrat-10.bin")
         self.font_montserrat_14 = lv.font_load("S:" + script_dir + "font/montserrat-14.bin")        
         self.log = logging.getLogger("Theme")

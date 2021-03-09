@@ -22,6 +22,8 @@ def fs_open_cb(drv, fs_file, path, mode):
 
     cast_fs = lv.fs_file_t.cast(fs_file)
     
+    if path != './':
+        path = '/' + path
     print("Trying to open: " + path)
     try:
         f = open(path, p_mode)
