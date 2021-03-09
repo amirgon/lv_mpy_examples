@@ -7,7 +7,6 @@ import uerrno
 import ustruct as struct
 
 def fs_open_cb(drv, fs_file, path, mode):
-    print("fs_open")
     p_mode = ''
     if mode == 1:
         p_mode = 'wb'
@@ -16,19 +15,16 @@ def fs_open_cb(drv, fs_file, path, mode):
     elif mode == 3:
         p_mode = 'rb+'
 
+    if path[0:2] != './':
+        path = '/' + path
     if p_mode == '':
         print("fs_open_callback() - open mode error, {} is invalid mode".format(mode))
         return lv.FS_RES.INV_PARAM
 
-    cast_fs = lv.fs_file_t.cast(fs_file)
-    
-    if path != './':
-        path = '/' + path
-    print("Trying to open: " + path)
     try:
         f = open(path, p_mode)
-        print("Trying to open: " + path)
-        cast_fs.file_d = {'file': f}
+        ptr = lv.C_Pointer.cast(fs_file)
+        ptr.ptr_val = {'file' : f}
     except Exception as e:
         print("fs_open_callback() exception: ", uerrno.errorcode[e.args[0]])
         return lv.FS_RES.FS_ERR
@@ -37,7 +33,6 @@ def fs_open_cb(drv, fs_file, path, mode):
 
 
 def fs_close_cb(drv, fs_file):
-
     try:
         fs_file.cast()['file'].close()
     except Exception as e:
@@ -48,7 +43,6 @@ def fs_close_cb(drv, fs_file):
 
 
 def fs_read_cb(drv, fs_file, buf, btr, br):
-
     try:
         tmp_data = fs_file.cast()['file'].read(btr)
         # tmp_len = len(tmp_data)
@@ -63,7 +57,6 @@ def fs_read_cb(drv, fs_file, buf, btr, br):
 
 
 def fs_seek_cb(drv, fs_file, pos):
-
     try:
         # to =
         fs_file.cast()['file'].seek(pos, 0)
@@ -75,7 +68,6 @@ def fs_seek_cb(drv, fs_file, pos):
 
 
 def fs_tell_cb(drv, fs_file, pos):
-
     try:
         tpos = fs_file.cast()['file'].tell()
         pos.__dereference__(4)[0:4] = struct.pack("<L", tpos)
@@ -87,7 +79,6 @@ def fs_tell_cb(drv, fs_file, pos):
 
 
 def fs_write_cb(drv, fs_file, buf, btw, bw):
-
     try:
         wr = fs_file.cast()['file'].write(buf[0:btw])
         bw.__dereference__(4)[0:4] = struct.pack("<L", wr)
@@ -99,7 +90,7 @@ def fs_write_cb(drv, fs_file, buf, btw, bw):
 
 
 def fs_register(fs_drv, letter):
-    
+
     fs_drv.init()
     fs_drv.letter = ord(letter)
     fs_drv.open_cb = fs_open_cb
@@ -110,4 +101,3 @@ def fs_register(fs_drv, letter):
     fs_drv.close_cb = fs_close_cb
 
     fs_drv.register()
-    print("fs driver registered")
