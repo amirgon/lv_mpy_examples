@@ -23,9 +23,10 @@ LV_DEMO_PRINTER_THEME_BTN_BORDER = lv.THEME.CUSTOM_START + 3
 LV_DEMO_PRINTER_THEME_BTN_CIRCLE = lv.THEME.CUSTOM_START + 4
 LV_DEMO_PRINTER_THEME_BOX_BORDER = lv.THEME.CUSTOM_START + 5
 LV_DEMO_PRINTER_THEME_BTN_BACK = lv.THEME.CUSTOM_START + 6
+LV_DEMO_PRINTER_THEME_DROPDOWN_BOX = lv.THEME.CUSTOM_START + 7
 
 class Theme():
-    def __init__(self,script_dir):
+    def __init__(self,script_dir,high_res):
         self.LV_HOR_RES = lv.scr_act().get_disp().driver.hor_res
         self.LV_VER_RES = lv.scr_act().get_disp().driver.ver_res
         #
@@ -36,12 +37,22 @@ class Theme():
         fs_driver.fs_register(fs_drv, 'S')
         # print( script_dir)
         # print("S:" + script_dir + "font/montserrat-22.bin")
-        self.font_montserrat_22 = lv.font_load("S:" + script_dir + "font/montserrat-22.bin")
-        self.font_montserrat_28 = lv.font_load("S:" + script_dir + "font/montserrat-28.bin")
-
+        if high_res:
+            self.font_montserrat_small = lv.font_load("S:" + script_dir + "font/montserrat-22.bin")
+            self.font_montserrat_big = lv.font_load("S:" + script_dir + "font/montserrat-28.bin")
+        else:
+            self.font_montserrat_small = lv.font_load("S:" + script_dir + "font/montserrat-10.bin")
+            self.font_montserrat_big = lv.font_load("S:" + script_dir + "font/montserrat-14.bin")
+    
         self.log = logging.getLogger("Theme")
         self.log.setLevel(logging.ERROR)
-
+        
+        self.style_ddbox_pad = lv.style_t()
+        self.style_ddbox_pad.init()
+        self.style_ddbox_pad.set_pad_left(lv.STATE.DEFAULT, 5)
+        self.style_ddbox_pad.set_pad_right(lv.STATE.DEFAULT, 5)
+        self.style_ddbox_pad.set_pad_inner(lv.STATE.DEFAULT, 5)
+        
         self.style_pad = lv.style_t()
         self.style_pad.init()
         self.style_pad.set_pad_top(lv.STATE.DEFAULT, self.LV_VER_RES // 30)
@@ -178,11 +189,11 @@ class Theme():
         self.style_ddlist_bg.set_bg_color(lv.STATE.DEFAULT,LV_DEMO_PRINTER_BLUE)
         self.style_ddlist_bg.set_text_color(lv.STATE.DEFAULT,lv_colors.WHITE)
         self.style_ddlist_bg.set_text_color(lv.STATE.PRESSED,LV_DEMO_PRINTER_WHITE)
-        self.style_ddlist_bg.set_text_font(lv.STATE.DEFAULT,self.font_montserrat_22)
+        self.style_ddlist_bg.set_text_font(lv.STATE.DEFAULT,self.font_montserrat_small)
 
         self.style_ddlist_list = lv.style_t()
         self.style_ddlist_list.init()
-        self.style_ddlist_list.set_text_font(lv.STATE.DEFAULT,self.font_montserrat_22)
+        self.style_ddlist_list.set_text_font(lv.STATE.DEFAULT,self.font_montserrat_small)
         self.style_ddlist_list.set_shadow_width(lv.STATE.DEFAULT, self.LV_VER_RES // 20)
         self.style_ddlist_list.set_shadow_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_GRAY)
         
@@ -221,14 +232,20 @@ class Theme():
         self.style_slider_knob.set_border_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
         self.style_slider_knob.set_border_width(lv.STATE.DEFAULT, 3)
         self.style_slider_knob.set_radius(lv.STATE.DEFAULT, LV_RADIUS_CIRCLE)
-        self.style_slider_knob.set_pad_top(lv.STATE.DEFAULT, 10)
-        self.style_slider_knob.set_pad_bottom(lv.STATE.DEFAULT, 10)
-        self.style_slider_knob.set_pad_left(lv.STATE.DEFAULT, 10)
-        self.style_slider_knob.set_pad_right(lv.STATE.DEFAULT,  10)
-        self.style_slider_knob.set_pad_top(lv.STATE.PRESSED, 14)
-        self.style_slider_knob.set_pad_bottom(lv.STATE.PRESSED, 14)
-        self.style_slider_knob.set_pad_left(lv.STATE.PRESSED, 14)
-        self.style_slider_knob.set_pad_right(lv.STATE.PRESSED,  14)
+        if high_res:
+            knob_size = 10
+            pressed_knob_size = 14
+        else:
+            knob_size = 5
+            pressed_knob_size = 8        
+        self.style_slider_knob.set_pad_top(lv.STATE.DEFAULT, knob_size)
+        self.style_slider_knob.set_pad_bottom(lv.STATE.DEFAULT, knob_size)
+        self.style_slider_knob.set_pad_left(lv.STATE.DEFAULT, knob_size)
+        self.style_slider_knob.set_pad_right(lv.STATE.DEFAULT, knob_size)
+        self.style_slider_knob.set_pad_top(lv.STATE.PRESSED,  pressed_knob_size)
+        self.style_slider_knob.set_pad_bottom(lv.STATE.PRESSED, pressed_knob_size)
+        self.style_slider_knob.set_pad_left(lv.STATE.PRESSED, pressed_knob_size)
+        self.style_slider_knob.set_pad_right(lv.STATE.PRESSED, pressed_knob_size)
         self.style_slider_knob.set_transition_time(lv.STATE.DEFAULT, 150)
         self.style_slider_knob.set_transition_delay(lv.STATE.PRESSED, 0)
         self.style_slider_knob.set_transition_delay(lv.STATE.DEFAULT, 70)
@@ -239,7 +256,10 @@ class Theme():
         
         self.style_arc_indic = lv.style_t()
         self.style_arc_indic.init()
-        self.style_arc_indic.set_line_width(lv.STATE.DEFAULT, 5)
+        if high_res:
+            self.style_arc_indic.set_line_width(lv.STATE.DEFAULT, 5)
+        else:
+            self.style_arc_indic.set_line_width(lv.STATE.DEFAULT, 3)
         self.style_arc_indic.set_line_color(lv.STATE.DEFAULT, LV_DEMO_PRINTER_WHITE)
 
         self.style_arc_bg = lv.style_t()
@@ -336,7 +356,10 @@ class Theme():
             obj.add_style(lv.switch.PART.INDIC, self.style_sw_indic)
             obj.add_style(lv.switch.PART.KNOB, self.style_sw_knob)
             return
-
+        
+        if name == LV_DEMO_PRINTER_THEME_DROPDOWN_BOX:
+            obj.add_style(lv.cont.PART.MAIN, self.style_ddbox_pad)
+            
         if name == lv.THEME.DROPDOWN:
             obj.add_style(lv.dropdown.PART.MAIN, self.style_btn)
             obj.add_style(lv.dropdown.PART.MAIN, self.style_ddlist_bg)
@@ -350,8 +373,8 @@ class Theme():
 
         
     def get_font_normal(self):
-        return self.font_montserrat_22
+        return self.font_montserrat_small
 
     def get_font_subtitle(self):
-        return self.font_montserrat_28
+        return self.font_montserrat_big
 
